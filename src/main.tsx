@@ -7,7 +7,7 @@ import ErrorPage from "./components/pages/ErrorPage.tsx";
 import {SignupRoute} from "./routes/SignupRoute.tsx";
 import {LoginRoute} from "./routes/LoginRoute.tsx";
 import {DashboardRoute} from "./routes/DashboardRoute.tsx";
-import {GamesStoreRoute} from './routes/GamesStoreRoute.tsx';
+import {VideoRoute} from './routes/VideoRoute.tsx';
 
 const router = createBrowserRouter([
     {
@@ -28,8 +28,8 @@ const router = createBrowserRouter([
                 element: <SignupRoute/>,
             },
             {
-                path: 'gamesStore',
-                element: <GamesStoreRoute/>,
+                path: 'video',
+                element: <VideoRoute/>,
             },
             {
                 path: 'error',
