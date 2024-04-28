@@ -41,45 +41,72 @@ const SignupPage = () => {
       }
     }
   };
-
+  const handelIconClick = () => {
+    navigate("/");
+  };
   return (
-    <div className="mt-[25vh] p-[40px] translate-x--1/2 translate-y--1/2 bg-[rgba(0,0,0,.6)] box-border rounded-[10px]">
-      <h2 className="mt-0 mx-0 mb-[30px] p-0 text-white text-center text-4xl">Sign Up</h2>
-      <form className="flex justify-center items-center flex-col gap-6">
-        <TextField
-          className="w-[400px]"
-          label="Full Name"
-          variant="outlined"
-          onChange={(event: ChangeEvent<HTMLInputElement>) => {
-            setFullName(event.target.value);
-          }}
-        />
-        <TextField
-          className="w-[400px]"
-          label="Username"
-          variant="outlined"
-          onChange={(event: ChangeEvent<HTMLInputElement>) => {
-            setUsername(event.target.value);
-          }}
-        />
-        <TextField
-          className="w-[400px]"
-          label="Password"
-          type="password"
-          autoComplete="current-password"
-          onChange={(event: ChangeEvent<HTMLInputElement>) => {
-            setPassword(event.target.value);
-          }}
-        />
-        {error && <p className="text-red-700">{error}</p>}
-        <Button className="w-[200px]" variant="contained" onClick={handleSignup}>
-          הרשם
-        </Button>
-        <Link to="/" className="text-blue-400 hover:underline">
-          Back to Landing Page
-        </Link>
-      </form>
+    <div>
+      <div>
+          <button
+              onClick={handelIconClick}
+              className="bg-blue-500 mt-4 ml-3 text-white py-2 px-4 rounded-lg">
+                GuideTube
+          </button>
+      </div>
+      <div className="mb-5">
+          <h2 className="mt-0 mx-0 p-0 text-white text-center text-2xl mt-[5vh] p-[15px] translate-x--1/2 translate-y--1/3">
+              Join to GuideTube
+          </h2>
+          <h3 className="text-center">Create and share videos in seconds.</h3>
+          
+      </div>
+
+      <div className="p-[30px] bg-[rgba(0,0,0,.6)] box-border m-auto rounded-[10px]">
+        
+        <form className="flex justify-center items-center flex-col gap-6">
+          <TextField
+            className="w-[400px]"
+            label="Full Name"
+            variant="outlined"
+            onChange={(event: ChangeEvent<HTMLInputElement>) => {
+              setFullName(event.target.value);
+            }}
+          />
+          <TextField
+            className="w-[400px]"
+            label="Username"
+            variant="outlined"
+            onChange={(event: ChangeEvent<HTMLInputElement>) => {
+              setUsername(event.target.value);
+            }}
+          />
+          <TextField
+            className="w-[400px]"
+            label="Password"
+            type="password"
+            autoComplete="current-password"
+            onChange={(event: ChangeEvent<HTMLInputElement>) => {
+              setPassword(event.target.value);
+            }}
+          />
+          {error && <p className="text-red-700">{error}</p>}
+          <Button className="w-[200px]" variant="contained" onClick={handleSignup}>
+            הרשם
+          </Button>
+          <Link
+              dir="rtl"
+              to={"../login"}
+              className="text-blue-400 hover:underline"
+          >
+              Already have an account? Log in
+          </Link>
+          <span className="text-center">
+            By joining GuidApp, you agree to our Terms of Service, Privacy Policy and Cookie Policy
+          </span>
+        </form>
+      </div>
     </div>
+    
   );
 };
 
