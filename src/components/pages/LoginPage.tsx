@@ -93,21 +93,23 @@ const LoginPage = () => {
               Log in to GuideTube
             </h2>
           </div>
-          <div className="p-[30px] bg-[rgba(0,0,0,.6)] box-border mx-auto rounded-[10px]" style={{ width: '90%' }}>
-            <GoogleLogin
-              width={"95%"}
-              onSuccess={(credentialResponse) => {
-                if (credentialResponse.credential) {
-                  const decodedRes = jwtDecode(
-                    credentialResponse.credential
-                  );
-                  handelGoogleLogin(decodedRes);
-                } else redirect("error");
-              }}
-              onError={() => {
-                console.log("login failed");
-              }}
-            />
+          <div className="p-[30px] bg-[rgba(0,0,0,.6)] box-border mx-auto rounded-[10px]" style={{ width: '90%'}}>
+            <div  className="flex justify-center">
+              <GoogleLogin
+                onSuccess={(credentialResponse) => {
+                  if (credentialResponse.credential) {
+                    const decodedRes = jwtDecode(
+                      credentialResponse.credential
+                    );
+                    handelGoogleLogin(decodedRes);
+                  } else redirect("error");
+                }}
+                onError={() => {
+                  console.log("login failed");
+                }}
+              />
+            </div>
+            
             <div className="text-center mt-7 mb-7">OR</div>
       
             <form className="flex justify-center items-center flex-col gap-6">
