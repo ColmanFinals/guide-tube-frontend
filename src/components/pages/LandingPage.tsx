@@ -69,9 +69,9 @@ const LandingPage = () => {
       </div>
 
       <div className="container mx-auto mt-20 relative flex-grow">
-        <img src="../../public/image 3.png" alt="Image 3" className="rounded-lg h-auto max-w-full" style={{ zIndex: 0, position: 'absolute', top: 10}} />
-        <img src="../../public/image 4.png" alt="Image 4" className="absolute top-0 left-20 rounded-lg shadow-lg transform scale-75 mt-[-60px] h-auto max-w-full" style={{ zIndex: 1}} />
-        <img src="../../public/image 5.png" alt="Image 5" className="absolute top-0 left-12 rounded-lg shadow-lg transform scale-75 mt-80 h-auto max-w-full" style={{ zIndex: 1 }} />
+        <img src="/image 3.png" alt="Image 3" className="rounded-lg h-auto max-w-full" style={{ zIndex: 0, position: 'absolute', top: 10}} />
+        <img src="/image 4.png" alt="Image 4" className="absolute top-0 left-20 rounded-lg shadow-lg transform scale-75 mt-[-60px] h-auto max-w-full" style={{ zIndex: 1}} />
+        <img src="/image 5.png" alt="Image 5" className="absolute top-0 left-12 rounded-lg shadow-lg transform scale-75 mt-80 h-auto max-w-full" style={{ zIndex: 1 }} />
       </div>
     </div>
   );
