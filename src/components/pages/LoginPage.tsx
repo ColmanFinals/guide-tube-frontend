@@ -80,81 +80,84 @@ const LoginPage = () => {
 
     return (
         <div>
-            <div>
-                <button
-                    onClick={handelIconClick}
-                    className="bg-blue-500 mt-4 ml-3 text-white py-2 px-4 rounded-lg"
-                >
-                    GuideTube
-                </button>
-            </div>
-            <div>
-                <h2 className="mt-0 mx-0 p-0 text-white text-center text-2xl mt-[5vh] p-[15px] translate-x--1/2 translate-y--1/3">
-                    Log in to GuideTube
-                </h2>
-            </div>
-            <div className="p-[30px] bg-[rgba(0,0,0,.6)] box-border m-auto rounded-[10px]">
-                <GoogleLogin
-                    width={"350px"}
-                    onSuccess={(credentialResponse) => {
-                        if (credentialResponse.credential) {
-                            const decodedRes = jwtDecode(
-                                credentialResponse.credential
-                            );
-                            handelGoogleLogin(decodedRes);
-                        } else redirect("error");
-                    }}
-                    onError={() => {
-                        console.log("login failed");
-                    }}
-                />
-                <div className="text-center w-400px mt-7 mb-7">OR</div>
+          <div>
+            <button
+              onClick={handelIconClick}
+              className="bg-blue-500 mt-4 ml-3 text-white py-2 px-4 rounded-lg"
+            >
+              GuideTube
+            </button>
+          </div>
+          <div>
+            <h2 className="mt-0 mx-0 p-0 text-white text-center text-2xl mt-[5vh] p-[15px] translate-x--1/2 translate-y--1/3">
+              Log in to GuideTube
+            </h2>
+          </div>
+          <div className="p-[30px] bg-[rgba(0,0,0,.6)] box-border mx-auto rounded-[10px]" style={{ width: '90%' }}>
+            <GoogleLogin
+              width={"95%"}
+              onSuccess={(credentialResponse) => {
+                if (credentialResponse.credential) {
+                  const decodedRes = jwtDecode(
+                    credentialResponse.credential
+                  );
+                  handelGoogleLogin(decodedRes);
+                } else redirect("error");
+              }}
+              onError={() => {
+                console.log("login failed");
+              }}
+            />
+            <div className="text-center mt-7 mb-7">OR</div>
+      
+            <form className="flex justify-center items-center flex-col gap-6">
+              <TextField
+                className="w-full"
+                label="Username"
+                variant="outlined"
+                onChange={(event: ChangeEvent<HTMLInputElement>) => {
+                  setUsername(event.target.value);
+                }}
+              />
+              <TextField
+                className="w-full"
+                label="Password"
+                type="password"
+                autoComplete="current-password"
+                onChange={(event: ChangeEvent<HTMLInputElement>) => {
+                  setPassword(event.target.value);
+                }}
+              />
+      
+              <Link
+                dir="rtl"
+                to={"../signup"}
+                className="text-blue-400 hover:underline"
+              >
+                Forget your password?
+              </Link>
+              <Button
+                className="w-full"
+                variant="contained"
+                onClick={handleLogin}
+                style={{ textTransform: 'none' }}
 
-                <form className="flex justify-center items-center flex-col gap-6">
-                    <TextField
-                        className="w-[400px]"
-                        label="Username"
-                        variant="outlined"
-                        onChange={(event: ChangeEvent<HTMLInputElement>) => {
-                            setUsername(event.target.value);
-                        }}
-                    />
-                    <TextField
-                        className="w-[400px]"
-                        label="Password"
-                        type="password"
-                        autoComplete="current-password"
-                        onChange={(event: ChangeEvent<HTMLInputElement>) => {
-                            setPassword(event.target.value);
-                        }}
-                    />
-
-                    <Link
-                        dir="rtl"
-                        to={"../signup"}
-                        className="text-blue-400 hover:underline"
-                    >
-                        Forget yout password?
-                    </Link>
-                    <Button
-                        className="w-[200px]"
-                        variant="contained"
-                        onClick={handleLogin}
-                    >
-                        Log in with an email
-                    </Button>
-
-                    <Link
-                        dir="rtl"
-                        to={"../signup"}
-                        className="text-blue-400 hover:underline"
-                    >
-                        Don't have an account yet? Join GuideApp
-                    </Link>
-                </form>
-            </div>
+              >
+                Log in with an email
+              </Button>
+      
+              <Link
+                dir="rtl"
+                to={"../signup"}
+                className="text-blue-400 hover:underline"
+              >
+                Don't have an account yet? Join GuideApp
+              </Link>
+            </form>
+          </div>
         </div>
-    );
+      );
+      
 };
 
 export default LoginPage;
