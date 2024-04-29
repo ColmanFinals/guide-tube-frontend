@@ -130,14 +130,6 @@ const LoginPage = () => {
                   setPassword(event.target.value);
                 }}
               />
-      
-              <Link
-                dir="rtl"
-                to={"../signup"}
-                className="text-blue-400 hover:underline"
-              >
-                Forget your password?
-              </Link>
               <Button
                 className="w-full"
                 variant="contained"
