@@ -93,6 +93,7 @@ const Sidebar = () => {
                 {!isAuthenticated && (
                     <NavLinkOption name="הרשמה" link="signup"/>
                 )}
+                <NavLinkOption name="וידאו" link="video"/>
                 {isAuthenticated && <NavLinkOption name="חדשות" link="news"/>}
                 {isAuthenticated && (
                     <NavLinkOption name="חנות" link="gamesStore"/>
