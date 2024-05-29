@@ -71,7 +71,7 @@ const LoginPage = () => {
         // Update the authentication status
         authenticationDispatch({ type: "set-isAuthenticated", payload: true });
 
-        navigate("/dashboard");
+        navigate("/video");
     };
 
     const handelIconClick = () => {
