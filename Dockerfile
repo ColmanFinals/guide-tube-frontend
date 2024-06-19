@@ -1,5 +1,5 @@
 # Use official Node.js image as base
-FROM node:18-alpine AS build
+FROM node:18-alpine
 
 # Set working directory
 WORKDIR /app
@@ -13,17 +13,14 @@ RUN npm install
 # Copy the rest of the application code
 COPY . .
 
+# Replace .env with .env-prod
+RUN cp .env-prod .env
+
 # Build the React app
 RUN npm run build
-
-# Use nginx as the production server
-FROM nginx:alpine
-
-# Copy the built app from the build stage to the nginx server's default public directory
-COPY --from=build /app/dist /usr/share/nginx/html
 
 # Expose port 80
 EXPOSE 80
 
-# Start nginx server
-CMD ["nginx", "-g", "daemon off;"]
+# Start the Vite preview server
+CMD ["npx", "vite", "preview", "--host"]
