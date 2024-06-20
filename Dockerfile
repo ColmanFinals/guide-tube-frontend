@@ -23,4 +23,4 @@ RUN npm run build
 EXPOSE 80
 
 # Start the Vite preview server
-CMD ["npx", "vite", "preview", "--host"]
+CMD ["npx", "npm", "run", "prod"]
