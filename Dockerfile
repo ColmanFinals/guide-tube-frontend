@@ -1,14 +1,26 @@
-# Stage 1 - the build process
-FROM node:lts as build-stage
-WORKDIR /usr/src/app
-COPY package.json package-lock.json ./
+# Use official Node.js image as base
+FROM node:18-alpine
+
+# Set working directory
+WORKDIR /app
+
+# Copy package.json and package-lock.json
+COPY package*.json ./
+
+# Install dependencies
 RUN npm install
-COPY . ./
+
+# Copy the rest of the application code
+COPY . .
+
+# Replace .env with .env-prod
+RUN cp .env-prod .env
+
+# Build the React app
 RUN npm run build
 
-# Stage 2 - the production environment
-FROM nginx:stable-alpine as production-stage
-COPY --from=build-stage /usr/src/app/dist /usr/share/nginx/html
-COPY nginx.conf /etc/nginx/nginx.conf
+# Expose port 80
 EXPOSE 80
-CMD ["nginx", "-g", "daemon off;"]
+
+# Start the Vite preview server
+CMD ["npx", "vite", "preview", "--host"]
