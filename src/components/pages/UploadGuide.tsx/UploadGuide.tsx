@@ -146,7 +146,7 @@ const UploadGuidePage = () => {
             <Box
                 sx={{
                     position: 'fixed',
-                    bottom: 68,
+                    bottom: 85,
                     left: 0,
                     right: 0,
                     zIndex: 1200,

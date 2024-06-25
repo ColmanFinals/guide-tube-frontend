@@ -1,0 +1,149 @@
+import React, { useEffect, useRef, useState, MutableRefObject } from 'react';
+import SiriWave from 'react-siriwave';
+import { Box, CircularProgress, Typography } from '@mui/material';
+
+interface SpeechRecognitionProps {
+    onCommand: (command: string) => void;
+}
+
+const SpeechRecognition: React.FC<SpeechRecognitionProps> = ({ onCommand }) => {
+    const mediaRecorderRef: MutableRefObject<MediaRecorder | null> = useRef(null);
+    const audioChunksRef: MutableRefObject<Blob[]> = useRef([]);
+    const intervalIdRef: MutableRefObject<NodeJS.Timeout | null> = useRef(null);
+    const [isUploading, setIsUploading] = useState(false);
+    const [checkGuyTube, setCheckGuyTube] = useState(true);
+    const [isRecording, setIsRecording] = useState(false);
+
+    useEffect(() => {
+        const startListening = async () => {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                mediaRecorderRef.current = new MediaRecorder(stream);
+
+                mediaRecorderRef.current.ondataavailable = (event: BlobEvent) => {
+                    audioChunksRef.current.push(event.data);
+                };
+
+                mediaRecorderRef.current.onstop = async () => {
+                    if (audioChunksRef.current.length > 0 && !isUploading) {
+                        const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/webm' });
+                        audioChunksRef.current = [];
+                        setIsUploading(true);
+                        await sendAudioToBackend(audioBlob);
+                        setIsUploading(false);
+                    }
+                };
+
+                const startRecording = () => {
+                    if (mediaRecorderRef.current && mediaRecorderRef.current.state !== 'recording') {
+                        mediaRecorderRef.current.start();
+                        setIsRecording(true);
+                    }
+                };
+
+                const stopRecording = () => {
+                    if (mediaRecorderRef.current && mediaRecorderRef.current.state === 'recording') {
+                        mediaRecorderRef.current.stop();
+                        setIsRecording(false);
+                    }
+                };
+
+                intervalIdRef.current = setInterval(() => {
+                    if (!isUploading) {
+                        stopRecording();
+                    }
+                }, checkGuyTube ? 4000 : 6000); // Adjust the interval based on checkGuyTube
+
+                startRecording();
+            } catch (error) {
+                console.error('Error accessing microphone:', error);
+            }
+        };
+
+        startListening();
+
+        return () => {
+            if (mediaRecorderRef.current) {
+                mediaRecorderRef.current.stop();
+                mediaRecorderRef.current.stream.getTracks().forEach(track => track.stop());
+            }
+            if (intervalIdRef.current) {
+                clearInterval(intervalIdRef.current);
+            }
+        };
+    }, [isUploading, checkGuyTube]); // Add checkGuyTube to dependencies to reset interval when it changes
+
+    const sendAudioToBackend = async (audioBlob: Blob) => {
+        const formData = new FormData();
+        formData.append('file', audioBlob, 'audio.webm');
+
+        try {
+            console.log('Sending audio to backend...');
+            const endpoint = checkGuyTube ? 'http://localhost:8002/hi_guide_tube' : 'http://localhost:8002/uploadfile';
+            const response = await fetch(endpoint, {
+                method: 'PUT',
+                body: formData,
+            });
+
+            console.log('Received response from backend');
+            const responseData = await response.json();
+
+            if (checkGuyTube) {
+                if (responseData) {
+                    onCommand("stop");
+                    speak("What do you need me to do?");
+                    setCheckGuyTube(false);
+                }
+            } else {
+                onCommand(responseData);
+                setCheckGuyTube(true);
+            }
+        } catch (error) {
+            console.error('Error sending audio to backend:', error);
+        }
+    };
+
+    const speak = (text: string) => {
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.onstart = () => {
+            if (mediaRecorderRef.current && mediaRecorderRef.current.state === 'recording') {
+                mediaRecorderRef.current.stop();
+                setIsRecording(false);
+            }
+        };
+        utterance.onend = () => {
+            if (mediaRecorderRef.current && mediaRecorderRef.current.state !== 'recording') {
+                mediaRecorderRef.current.start();
+                setIsRecording(true);
+            }
+        };
+        speechSynthesis.speak(utterance);
+    };
+
+    return (
+        <>
+            {!checkGuyTube && (
+                <Box sx={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0, 0, 0, 0.8)', zIndex: 1200, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                    <Box sx={{ textAlign: 'center' }}>
+                        <SiriWave
+                            width={100}
+                            height={100}
+                            amplitude={1}
+                            speed={0.12}
+                            frequency={6}
+                            color="#ffffff"
+                        />
+                        <Typography variant="h6" color="white" sx={{ marginTop: 2 }}>Listening...</Typography>
+                    </Box>
+                </Box>
+            )}
+            {isUploading && (
+                <Box sx={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0, 0, 0, 0.5)', zIndex: 1100, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                    <CircularProgress color="primary" />
+                </Box>
+            )}
+        </>
+    );
+};
+
+export default SpeechRecognition;
