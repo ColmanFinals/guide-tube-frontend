@@ -1,13 +1,23 @@
-import ContextProvider from "../providers/ContextProvider.tsx";
-import {Outlet} from "react-router-dom";
-import MuiProvider from "../providers/MuiProvider.tsx";
+import React, { ReactNode } from 'react';
+import { Outlet } from 'react-router-dom'; // Ensure Outlet is imported
+import ContextProvider from "../providers/ContextProvider";
+import MuiProvider from "../providers/MuiProvider";
 
-export default function Root() {
-    return (
-        <ContextProvider>
-            <MuiProvider>
-                        <Outlet/>
-            </MuiProvider>
-        </ContextProvider>
-    );
+interface RootProps {
+    children?: ReactNode;  // This defines the type for children elements
 }
+
+class Root extends React.Component<RootProps> {
+    render() {
+        return (
+            <ContextProvider>
+                <MuiProvider>
+                    {/* Using Outlet here to render child routes */}
+                    <Outlet />
+                </MuiProvider>
+            </ContextProvider>
+        );
+    }
+}
+
+export default Root;
