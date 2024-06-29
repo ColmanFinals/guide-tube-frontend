@@ -5,7 +5,7 @@ import { Shake } from 'reshake';
 
 const LearnMore = () => {
     return (
-        <div className="flex flex-col items-center w-full" style={{margin:"2vh"}}>
+        <div className="flex flex-col items-center w-full" style={{margin:"2vh", maxHeight:"50%"}}>
             <p style={{ fontSize: "1.5em" }} className="text-center">Guidance. Voice-Activated.</p>
             <div className="bg-black p-6 rounded-lg ">
                 <p className="text-white-400" style={{ fontSize: "1em" }}>GuideTube is the premier voice-controlled platform for seamless, hands-free guide navigation, perfect for any task that requires your full attention.</p>
