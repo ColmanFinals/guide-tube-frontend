@@ -7,6 +7,7 @@ import { GoogleLogin } from "@react-oauth/google";
 import { jwtDecode, JwtPayload } from "jwt-decode";
 import api from "../../api/api.tsx";
 import { AxiosResponse } from "axios";
+import Logo from '../../assets/white_guidetube.png'
 
 const LoginPage = () => {
     const [username, setUsername] = useState("");
@@ -74,20 +75,11 @@ const LoginPage = () => {
         navigate("/video");
     };
 
-    const handelIconClick = () => {
-        navigate("/");
-    };
-
     return (
         <div>
-          <div>
-            <button
-              onClick={handelIconClick}
-              className="bg-blue-500 mt-4 ml-3 text-white py-2 px-4 rounded-lg"
-            >
-              GuideTube
-            </button>
-          </div>
+        <Link to="/" className="flex justify-center">
+          <img src={Logo} style={{width: 100, height: 100}}/>
+        </Link>
           <div>
             <h2 className="mt-0 mx-0 p-0 text-white text-center text-2xl mt-[5vh] p-[15px] translate-x--1/2 translate-y--1/3">
               Log in to GuideTube
