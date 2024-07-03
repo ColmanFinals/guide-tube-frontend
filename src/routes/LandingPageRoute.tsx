@@ -1,4 +1,4 @@
-import LandingPage from "../components/pages/LandingPage.tsx";
+import LandingPage from "../components/pages/LandingPage/LandingPage";
 
 export const LandingPageRoute = () => {
     return (

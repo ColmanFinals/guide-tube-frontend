@@ -1,7 +1,8 @@
 import {useRef, useState} from 'react';
 import YouTube, {YouTubePlayer, YouTubeProps} from 'react-youtube';
-
-export const VideoRoute = () => {
+import Navbar from './Navbar';
+import Button from '@mui/material/Button';
+const HomePage = () => {
     const videoIds = ['SSn1g1micfs', 'fnEPYg2cb1g', 'eyDk9MZ-odk'];
     const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
     const [isPlaying, setIsPlaying] = useState(false);
@@ -22,7 +23,7 @@ export const VideoRoute = () => {
         ApplyMute(isMuted);
     };
 
-    const ApplyMute = (toMute:boolean) =>
+    const ApplyMute = (toMute: boolean) =>
         toMute ? playerRef.current.unMute() : playerRef.current.mute();
 
     const playNextVideo = () => {
@@ -55,31 +56,30 @@ export const VideoRoute = () => {
     };
 
     return (
-        <div className='bg-[linear-gradient(#141e30, #243b55)] items-center'>
-            <div className='flex flex-col text-center items-center'>
-                <div className=''>
+        <div className="bg-[linear-gradient(#141e30, #243b55)] min-h-screen flex flex-col justify-between">
+            <div className='flex flex-col items-center text-center flex-grow pb-16'>
+                <div>
                     <YouTube videoId={videoIds[currentVideoIndex]} opts={opts} onReady={onPlayerReady}
                              onStateChange={(PlayerStateNumber) => syncStateChange(PlayerStateNumber.data)}/>
                 </div>
-                <div className='flex flex-row gap-2'>
-                    <button className="bg-blue-400 w-24 hover:bg-blue-500 text-gray-800 py-2 px-4 rounded"
-                            onClick={ApplyPlayPause}>
+                <div className='flex flex-row gap-2 '>
+                    <Button variant="contained" onClick={ApplyPlayPause}>
                         {isPlaying ? 'Pause' : 'Play'}
-                    </button>
-                    <button className="bg-blue-400 w-24 hover:bg-blue-500 text-gray-800 py-2 px-4 rounded"
-                            onClick={playPreviousVideo}>
+                    </Button>
+                    <Button variant="contained" onClick={playPreviousVideo}>
                         Previous
-                    </button>
-                    <button className="bg-blue-400 w-24 hover:bg-blue-500 text-gray-800 py-2 px-4 rounded"
-                            onClick={playNextVideo}>
+                    </Button>
+                    <Button variant="contained" onClick={playNextVideo}>
                         Next
-                    </button>
-                    <button className="bg-blue-400 w-24 hover:bg-blue-500 text-gray-800 py-2 px-4 rounded"
-                            onClick={toggleMute}>
+                    </Button>
+                    <Button variant="contained" onClick={toggleMute}>
                         {isMuted ? 'Unmute' : 'Mute'}
-                    </button>
+                    </Button>
                 </div>
             </div>
+            <Navbar />
         </div>
     );
 };
+
+export default HomePage;

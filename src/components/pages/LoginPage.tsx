@@ -72,7 +72,7 @@ const LoginPage = () => {
         // Update the authentication status
         authenticationDispatch({ type: "set-isAuthenticated", payload: true });
 
-        navigate("/video");
+        navigate("/home");
     };
 
     return (

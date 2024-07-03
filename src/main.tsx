@@ -7,7 +7,7 @@ import ErrorPage from "./components/pages/ErrorPage.tsx";
 import {SignupRoute} from "./routes/SignupRoute.tsx";
 import {LoginRoute} from "./routes/LoginRoute.tsx";
 import {DashboardRoute} from "./routes/DashboardRoute.tsx";
-import {VideoRoute} from './routes/VideoRoute.tsx';
+import {HomePageRoute} from './routes/HomePageRoute.tsx';
 import LandingPage from './components/pages/LandingPage/LandingPage.tsx';
 
 const router = createBrowserRouter([
@@ -33,8 +33,8 @@ const router = createBrowserRouter([
                 element: <SignupRoute/>,
             },
             {
-                path: 'video',
-                element: <VideoRoute/>,
+                path: 'home',
+                element: <HomePageRoute/>,
             },
             {
                 path: 'error',
