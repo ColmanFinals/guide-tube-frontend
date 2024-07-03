@@ -37,6 +37,10 @@ const router = createBrowserRouter([
                 element: <HomePageRoute/>,
             },
             {
+                path: 'add-video',
+                element: <HomePageRoute/>,
+            },
+            {
                 path: 'error',
                 element: <ErrorPage/>,
             },

@@ -1,6 +1,5 @@
 import {useRef, useState} from 'react';
 import YouTube, {YouTubePlayer, YouTubeProps} from 'react-youtube';
-import Navbar from './Navbar';
 import Button from '@mui/material/Button';
 const HomePage = () => {
     const videoIds = ['SSn1g1micfs', 'fnEPYg2cb1g', 'eyDk9MZ-odk'];
@@ -77,7 +76,6 @@ const HomePage = () => {
                     </Button>
                 </div>
             </div>
-            <Navbar />
         </div>
     );
 };
