@@ -1,4 +1,4 @@
-import { AppBar, Toolbar, IconButton, Typography } from '@mui/material';
+import { AppBar, Toolbar, IconButton } from '@mui/material';
 import HomeRoundedIcon from '@mui/icons-material/HomeRounded';
 import DataSaverOffRoundedIcon from '@mui/icons-material/DataSaverOffRounded';
 import SettingsRoundedIcon from '@mui/icons-material/SettingsRounded';
@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom';
 
 const Navbar = () => {
   return (
-    <AppBar position="fixed" sx={{ top: 'auto', bottom: 0, width: '100%', maxWidth: '100%'}}>
+    <AppBar position="fixed" sx={{ top: 'auto', bottom: 0, width: '100vw', maxWidth: '100vw'}}>
       <Toolbar className="flex justify-around">
         <IconButton edge="start" color="inherit" aria-label="home" component={Link} to="/home">
           <HomeRoundedIcon />

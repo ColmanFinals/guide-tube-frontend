@@ -51,15 +51,15 @@ const HomePage = () => {
     const opts: YouTubeProps['opts'] = {
         height: '640',
         width: '360',
-        playerVars: {'autoplay': 1, 'controls': 0,},
+        playerVars: {'autoplay': 1, 'controls': 0,},    
     };
 
     return (
-        <div className="bg-[linear-gradient(#141e30, #243b55)] min-h-screen flex flex-col justify-between">
-            <div className='flex flex-col items-center text-center flex-grow pb-16'>
-                <div>
+        <div className="w-full">
+            <div className=' flex flex-col flex-wrap justify-center items-center text-center w-full'>
+                <div className='w-full'>
                     <YouTube videoId={videoIds[currentVideoIndex]} opts={opts} onReady={onPlayerReady}
-                             onStateChange={(PlayerStateNumber) => syncStateChange(PlayerStateNumber.data)}/>
+                             onStateChange={(PlayerStateNumber: { data: number; }) => syncStateChange(PlayerStateNumber.data)}/>
                 </div>
                 <div className='flex flex-row gap-2 '>
                     <Button variant="contained" onClick={ApplyPlayPause}>

@@ -3,8 +3,7 @@
   @tailwind utilities;
 
   :root {
-    width: 100%;
-
+    --navbar-height: 64px;
     font-family: 'Wix Madefor Text', sans-serif;
     font-weight: 400;
 
@@ -40,4 +39,17 @@
     width: 12px;
   }
  
+  .main-content {
+    height: calc(100vh - var(--navbar-height));
+    overflow-y: auto;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
   
+  .hidden-navbar-content {
+    height: 100vh;
+    overflow-y: auto;
+    width: 100%;
+  }

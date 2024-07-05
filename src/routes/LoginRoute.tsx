@@ -1,4 +1,4 @@
-import LoginPage from "../components/pages/LoginPage.tsx";
+import LoginPage from "../components/pages/LoginPage/LoginPage.tsx";
 
 export const LoginRoute = () => {
     return (

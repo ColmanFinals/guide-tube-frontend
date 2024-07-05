@@ -10,9 +10,11 @@ export default function Root() {
     return (
         <ContextProvider>
             <MuiProvider>
-                <div className="flex flex-column justify-center w-full h-full">
+                <div className="flex flex-column flex-wrap justify-center items-center w-full h-full">
                     {!shouldHideNavbar && <Navbar />}
-                    <Outlet/>
+                    <div className={!shouldHideNavbar ? "main-content" : "hidden-navbar-content"}>
+                        <Outlet />
+                    </div>
                 </div>
             </MuiProvider>
         </ContextProvider>
