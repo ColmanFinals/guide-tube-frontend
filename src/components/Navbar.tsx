@@ -12,7 +12,7 @@ const Navbar = () => {
         <IconButton edge="start" color="inherit" aria-label="home" component={Link} to="/home">
           <HomeRoundedIcon />
         </IconButton>
-        <IconButton edge="start" color="inherit" aria-label="home" component={Link} to="/home">
+        <IconButton edge="start" color="inherit" aria-label="home" component={Link} to="/add-guide">
           <AddCircleRoundedIcon />
         </IconButton>
         <IconButton edge="start" color="inherit" aria-label="data-saver" component={Link} to="/data-saver">

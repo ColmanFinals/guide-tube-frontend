@@ -5,26 +5,26 @@ import { CssBaseline } from "@mui/material";
 // Create a theme instance.
 const theme = createTheme({
   palette: {
-    mode: 'dark', // This sets the color mode of the theme
+    mode: 'dark', 
     primary: {
-      main: '#FFB3A6', // equivalent to --md-sys-color-primary
-      contrastText: '#561F0F', // equivalent to --md-sys-color-on-primary
+      main: '#FFB3A6', 
+      contrastText: '#561F0F', 
     },
     secondary: {
-      main: '#E7BDB2', // equivalent to --md-sys-color-secondary
-      contrastText: '#442A22', // equivalent to --md-sys-color-on-secondary
+      main: '#E7BDB2',
+      contrastText: '#442A22', 
     },
     error: {
-      main: '#FFB4AB', // equivalent to --md-sys-color-error
-      contrastText: '#690005', // equivalent to --md-sys-color-on-error
+      main: '#FFB4AB', 
+      contrastText: '#690005', 
     },
     background: {
-      default: '#212121', // equivalent to --md-sys-color-background
-      paper: '#212121', // equivalent to --md-sys-color-surface
+      default: '#212121', 
+      paper: '#212121', 
     },
     text: {
-      primary: '#F1DFDE', // equivalent to --md-sys-color-on-background
-      secondary: '#DBC0C0', // equivalent to --md-sys-color-on-surface-variant
+      primary: '#F1DFDE', 
+      secondary: '#dbb8b8', 
     }
   },
 });

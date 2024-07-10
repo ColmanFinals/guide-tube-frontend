@@ -57,7 +57,7 @@ const HomePage = () => {
     return (
         <div className="w-full">
             <div className=' flex flex-col flex-wrap justify-center items-center text-center w-full'>
-                <div className='w-full'>
+                <div className='w-full flex justify-center items-center'>
                     <YouTube videoId={videoIds[currentVideoIndex]} opts={opts} onReady={onPlayerReady}
                              onStateChange={(PlayerStateNumber: { data: number; }) => syncStateChange(PlayerStateNumber.data)}/>
                 </div>
