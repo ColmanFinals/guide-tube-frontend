@@ -4,10 +4,11 @@ import './index.css'
 import {createBrowserRouter, Navigate, RouterProvider} from "react-router-dom";
 import Root from "./routes/Root.tsx";
 import ErrorPage from "./components/pages/ErrorPage.tsx";
-import {SignupRoute} from "./routes/SignupRoute.tsx";
-import {LoginRoute} from "./routes/LoginRoute.tsx";
-import {DashboardRoute} from "./routes/DashboardRoute.tsx";
-import {VideoRoute} from './routes/VideoRoute.tsx';
+import SignupPage from "./components/pages/SignupPage.tsx"
+import DashboardPage from './components/pages/DashboardPage.tsx';
+import LoginPage from './components/pages/LoginPage/LoginPage.tsx';
+import HomePage from './components/pages/HomePage.tsx';
+import UploadGuidePage from './components/pages/UploadGuide.tsx/UploadGuide.tsx';
 import LandingPage from './components/pages/LandingPage/LandingPage.tsx';
 
 const router = createBrowserRouter([
@@ -22,19 +23,23 @@ const router = createBrowserRouter([
             },
             {
                 path: 'dashboard',
-                element: <DashboardRoute/>,
+                element: <DashboardPage/>,
             },
             {
                 path: 'login',
-                element: <LoginRoute/>,
+                element: <LoginPage/>,
             },
             {
                 path: 'signup',
-                element: <SignupRoute/>,
+                element: <SignupPage/>,
             },
             {
-                path: 'video',
-                element: <VideoRoute/>,
+                path: 'home',
+                element: <HomePage/>,
+            },
+            {
+                path: 'add-guide',
+                element: <UploadGuidePage/>,
             },
             {
                 path: 'error',
