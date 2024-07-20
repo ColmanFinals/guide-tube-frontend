@@ -6,6 +6,7 @@ import AddCardRoundedIcon from '@mui/icons-material/AddCardRounded';
 import Fab from '@mui/material/Fab';
 import Alert from '@mui/material/Alert';
 import Snackbar from '@mui/material/Snackbar';
+import { Grid } from '@mui/material';
 
 const UploadGuidePage = () => {
     const [videoInputs, setVideoInputs] = useState<number[]>([1]);
@@ -25,7 +26,7 @@ const UploadGuidePage = () => {
 
 
     return (
-        <div className="h-full w-full relative">
+        <Grid className="h-full w-full relative">
             <div className="flex items-center justify-start flex-col w-full h-full">
                 <PageTopTitle pageTitle="Create a new guide" />
                 <Snackbar anchorOrigin={{ vertical: 'top', horizontal: 'center' }} open={snackbarOpen} autoHideDuration={3000} onClose={() => setSnackbarOpen(false)}>
@@ -46,7 +47,7 @@ const UploadGuidePage = () => {
                 style={{ position: 'absolute', bottom: '16px', right: '16px' }}>
                 <AddCardRoundedIcon fontSize="large" />
             </Fab>
-        </div>
+        </Grid>
     );
 }
 
