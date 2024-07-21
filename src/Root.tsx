@@ -1,8 +1,7 @@
-import ContextProvider from "../providers/ContextProvider.tsx";
+import ContextProvider from "./providers/ContextProvider.tsx";
 import {Outlet, useLocation} from "react-router-dom";
-import MuiProvider from "../providers/MuiProvider.tsx";
-import Navbar from '../components/Navbar.tsx'; // Adjust the path as needed
-import { Padding } from "@mui/icons-material";
+import MuiProvider from "./providers/MuiProvider.tsx";
+import Navbar from './components/Navbar.tsx'; // Adjust the path as needed
 import { Grid } from "@mui/material";
 
 export default function Root() {
