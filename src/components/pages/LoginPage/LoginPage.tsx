@@ -1,41 +1,52 @@
 
-import { useAuthenticationDispatch } from "../../../store/hook/useAuthentication.ts";
 import { Link, useNavigate } from "react-router-dom";
-import { useUserDataDispatch } from "../../../store/hook/useUserData.ts";
-import { AxiosResponse } from "axios";
 import Logo from '../../../assets/white_guidetube.png'
 import LoginForm from "./LoginForm.tsx";
-import GoogleLoginButton from "./GoogleLoginButton.tsx";
+import { CredentialResponse, GoogleLogin } from "@react-oauth/google";
+import { ToastContainer, toast } from 'react-toastify';
+import { jwtDecode } from "jwt-decode";
+import { useUser } from "../../../context/user-context";
+import { IUser } from "../../../services/user-service";
+import { isAxiosError } from "axios";
+
 const LoginPage = () => {
+  const { signinViaGoogle } = useUser();
+  const { login } = useUser();
 
-  const userDataDispatch = useUserDataDispatch();
-  const authenticationDispatch = useAuthenticationDispatch();
   const navigate = useNavigate();
-  
-  const handelLoginResponse = (response: AxiosResponse) => {
-    const userData = response.data.userData;
-    const accessToken = response.data.accessToken;
-    const refreshToken = response.data.refreshToken;
+  const onGoogleLoginSuccess = async (credentialResponse: CredentialResponse) => {
+    try {
+      if (credentialResponse.credential) {
+        const decodedRes = jwtDecode(
+          credentialResponse.credential
+        );
+        await signinViaGoogle(decodedRes);
+        navigate("/home")
+      } else {
+        toast.error("An error occured. Please try to login again")
+      }
+    } catch (e) {
+      toast.error("An error occured. Please try to login again")
+    }
+  }
 
-    userDataDispatch({
-      type: "set-userData",
-      payload: {
-        userId: userData._id,
-        fullName: userData.fullName,
-        imagePath: import.meta.env.VITE_SERVER + "/" + userData.picture,
-      },
-    });
+  const onGoogleLoginFailure = async () => {
+    toast.error("An error occured. Please try to login again")
+  }
 
-    // Store the token in localStorage
-    localStorage.setItem("authToken", accessToken);
-    localStorage.setItem("refreshToken", refreshToken);
-
-    // Update the authentication status
-    authenticationDispatch({ type: "set-isAuthenticated", payload: true });
-
-    navigate("/home");
-  };
-
+  const handleLogin = async (username: string, password: string) => {
+    const user: IUser = { username: username, password: password }
+    try {
+      await login(user)
+      navigate("/home")
+    } catch (e) {
+      if (isAxiosError(e)) {
+        toast.error(e.message)
+      } else {
+        toast.error("An error occured. Please try to login again")
+      }
+    }
+  }
   return (
     <div>
       <Link to="/" className="flex justify-center">
@@ -45,9 +56,12 @@ const LoginPage = () => {
         Log in to GuideTube
       </h2>
       <div className="p-[30px] bg-[rgba(0,0,0,.6)] box-border mx-auto rounded-[10px] " style={{ width: '90%' }}>
-        <GoogleLoginButton handelLoginResponse={handelLoginResponse} />
-        <LoginForm handelLoginResponse={handelLoginResponse} />
+
+        <LoginForm handleLogin={handleLogin} />
         <div className="text-center mt-7 mb-7">OR</div>
+        <div className="flex justify-center">
+          <GoogleLogin onSuccess={onGoogleLoginSuccess} onError={onGoogleLoginFailure} />
+        </div>
         <div>
           <Link
             dir="rtl"
@@ -58,9 +72,10 @@ const LoginPage = () => {
           </Link>
         </div>
       </div>
+      <ToastContainer theme="dark" position="top-center" autoClose={5000} hideProgressBar={false}
+        newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss pauseOnHover />
     </div>
   );
-
 };
 
 export default LoginPage;

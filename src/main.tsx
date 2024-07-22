@@ -1,15 +1,16 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import './index.css'
+import 'react-toastify/dist/ReactToastify.css';
 import {createBrowserRouter, Navigate, RouterProvider} from "react-router-dom";
-import Root from "./routes/Root.tsx";
+import Root from "./Root.tsx";
 import ErrorPage from "./components/pages/ErrorPage.tsx";
 import SignupPage from "./components/pages/SignupPage.tsx"
-import DashboardPage from './components/pages/DashboardPage.tsx';
 import LoginPage from './components/pages/LoginPage/LoginPage.tsx';
 import HomePage from './components/pages/HomePage.tsx';
 import UploadGuidePage from './components/pages/UploadGuide.tsx/UploadGuide.tsx';
 import LandingPage from './components/pages/LandingPage/LandingPage.tsx';
+import ProtectedRoute from './ProtectedRoute.tsx';
 
 const router = createBrowserRouter([
     {
@@ -22,10 +23,6 @@ const router = createBrowserRouter([
                 element: <LandingPage/>,
             },
             {
-                path: 'dashboard',
-                element: <DashboardPage/>,
-            },
-            {
                 path: 'login',
                 element: <LoginPage/>,
             },
@@ -35,15 +32,15 @@ const router = createBrowserRouter([
             },
             {
                 path: 'home',
-                element: <HomePage/>,
+                element: <ProtectedRoute> <HomePage/> </ProtectedRoute>,
             },
             {
                 path: 'add-guide',
-                element: <UploadGuidePage/>,
+                element: <ProtectedRoute> <UploadGuidePage/> </ProtectedRoute>,
             },
             {
                 path: 'error',
-                element: <ErrorPage/>,
+                element: <ProtectedRoute> <ErrorPage/> </ProtectedRoute>,
             },
             {
                 path: '*',
