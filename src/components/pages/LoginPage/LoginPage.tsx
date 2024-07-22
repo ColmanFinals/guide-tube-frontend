@@ -6,7 +6,7 @@ import { CredentialResponse, GoogleLogin } from "@react-oauth/google";
 import { ToastContainer, toast } from 'react-toastify';
 import { jwtDecode } from "jwt-decode";
 import { useUser } from "../../../context/user-context";
-import { IUser } from "../../../services/user-service";
+import { IUser } from "../../../services/userService.tsx";
 import { isAxiosError } from "axios";
 
 const LoginPage = () => {

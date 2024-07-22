@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, ReactNode } from 'react';
-import { loginUser, IUser, googleSignin, updateUser } from "../services/user-service";
+import { loginUser, IUser, googleSignin, updateUser } from "../services/userService";
 import { JwtPayload } from 'jwt-decode';
 
 interface IUserContext {

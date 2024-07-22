@@ -11,6 +11,7 @@ import Alert from '@mui/material/Alert';
 import Snackbar from '@mui/material/Snackbar';
 import { Grid, Box } from '@mui/material';
 import { useTheme, useMediaQuery } from '@mui/material';
+import { createPlaylist } from '../../../services/youtubeService';
 
 const UploadGuidePage = () => {
     const [videoInputs, setVideoInputs] = useState<number[]>([1]);
@@ -32,14 +33,12 @@ const UploadGuidePage = () => {
     };
 
     const handleSave = () => {
-        // Implement save logic here
+        createPlaylist("bar", "bar the queen")
         console.log('Save clicked');
     };
 
     const handleStartAgain = () => {
-        // Implement start again logic here
         console.log('Start Again clicked');
-        // Clear video inputs and sources
         setVideoInputs([1]);
         setVideoSources([]);
     };
