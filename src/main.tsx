@@ -12,6 +12,7 @@ import UploadGuidePage from './components/pages/UploadGuide.tsx/UploadGuide.tsx'
 import LandingPage from './components/pages/LandingPage/LandingPage.tsx';
 import ProtectedRoute from './ProtectedRoute.tsx';
 
+
 const router = createBrowserRouter([
     {
         path: '/',
@@ -55,3 +56,14 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
         <RouterProvider router={router}/>
     </React.StrictMode>,
 )
+
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function() {
+      navigator.serviceWorker.register('/serviceWorker.js').then(function(registration) {
+        console.log('Service Worker registered with scope: ', registration.scope);
+      }, function(err) {
+        console.log('Service Worker registration failed: ', err);
+      });
+    });
+  }
+  
