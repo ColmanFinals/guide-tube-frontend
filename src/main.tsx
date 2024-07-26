@@ -11,6 +11,7 @@ import HomePage from './components/pages/HomePage.tsx';
 import UploadGuidePage from './components/pages/UploadGuide.tsx/UploadGuide.tsx';
 import LandingPage from './components/pages/LandingPage/LandingPage.tsx';
 import ProtectedRoute from './ProtectedRoute.tsx';
+import CompanyManager from './components/pages/systemPage/Company.tsx'
 
 const router = createBrowserRouter([
     {
@@ -25,6 +26,10 @@ const router = createBrowserRouter([
             {
                 path: 'login',
                 element: <LoginPage/>,
+            },
+            {
+                path: 'system',
+                element: <CompanyManager/>,
             },
             {
                 path: 'signup',
