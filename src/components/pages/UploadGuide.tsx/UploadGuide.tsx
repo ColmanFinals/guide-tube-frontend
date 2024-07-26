@@ -11,13 +11,19 @@ import Alert from '@mui/material/Alert';
 import Snackbar from '@mui/material/Snackbar';
 import { Grid, Box } from '@mui/material';
 import { useTheme, useMediaQuery } from '@mui/material';
-import { createPlaylist } from '../../../services/youtubeService';
+import { createPlaylist } from '../../../services/guideService';
+import { ToastContainer, toast } from 'react-toastify';
 
+export interface FileObj {
+    "file" : File,
+    "fragment" : number
+}
 const UploadGuidePage = () => {
+    const defaultPlaylistName = "New Video"
     const [videoInputs, setVideoInputs] = useState<number[]>([1]);
     const [videoSources, setVideoSources] = useState<string[]>([]);
     const [snackbarOpen, setSnackbarOpen] = useState(false);
-
+    const [playlistName, setPlaylistName] = useState(defaultPlaylistName);
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
@@ -33,8 +39,17 @@ const UploadGuidePage = () => {
     };
 
     const handleSave = () => {
-        createPlaylist("bar", "bar the queen")
-        console.log('Save clicked');
+        try{
+            createPlaylist(playlistName, true, "Created by GuideTube!").then(
+                playlistID => {
+                    
+                }
+            );
+
+        } catch (e) {
+            toast.error("An error occured during guide creation.")
+        }
+            
     };
 
     const handleStartAgain = () => {
@@ -104,8 +119,9 @@ const UploadGuidePage = () => {
                         <Input
                             fullWidth
                             sx={{ fontSize: '1.2em', padding: '0.5em', mb: 2, border: 'none', maxWidth: isMobile ? '90%' : '300px' }}
-                            defaultValue="New Video"
+                            defaultValue= {defaultPlaylistName}
                             placeholder="Enter video title"
+                            onChange={(event) => setPlaylistName(event.target.value) }
                         />
                     </Grid>
 
@@ -174,6 +190,8 @@ const UploadGuidePage = () => {
             >
                 <AddCardRoundedIcon fontSize="large" />
             </Fab>
+        <ToastContainer theme="dark" position="top-center" autoClose={5000} hideProgressBar={false}
+        newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss pauseOnHover />
         </Box>
     );
 };

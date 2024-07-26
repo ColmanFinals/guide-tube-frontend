@@ -12,7 +12,6 @@ api.interceptors.response.use(
     (response: AxiosResponse) => response,
     async (error: AxiosError) => {
         const originalRequest: RetryableRequestConfig = error.config || {};
-        console.log("start");
         // If the error is due to an expired access token
         if (
             error.response &&
@@ -25,8 +24,6 @@ api.interceptors.response.use(
 
                 const authToken = localStorage.getItem('authToken');
                 const refreshToken = localStorage.getItem("refreshToken")
-                console.log(authToken);
-                console.log(refreshToken);
                 const response = await api.post(
                     import.meta.env.VITE_SERVER_GET_REFRESH_TOKEN,
                     null,
@@ -53,7 +50,6 @@ api.interceptors.response.use(
                 console.error("Error refreshing token:", refreshError);
             }
         }
-        console.log("after");
         // If the error is not due to an expired access token, handle it normally
         return Promise.reject(error);
     }

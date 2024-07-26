@@ -19,10 +19,8 @@ export interface IAuthResponse {
 export const registrUser = (user: IUser) => {
     return new Promise<IUser>((resolve, reject) => {
         api.post("/auth/register", user).then((response) => {
-            console.log(response)
             resolve(response.data)
         }).catch((error) => {
-            console.log(error)
             reject(error)
         })
     })
@@ -34,10 +32,8 @@ export const loginUser =  (user: IUser) => {
             { username: user.username, password: user.password  },
             { headers: { "Content-Type": "application/json" } }
           ).then((response) => {
-            console.log(response)
             resolve(response.data)
         }).catch((error) => {
-            console.log(error)
             reject(error)
         })
     })
@@ -48,10 +44,8 @@ export const updateUser = (user: IUser) => {
     return new Promise<IUser>((resolve, reject) => {
         api.post("/user", user, {headers: {'authorization': `Bearer ${accessToken}`}
         }).then((response) => {
-            console.log(response)
             resolve(response.data)
         }).catch((error) => {
-            console.log(error)
             reject(error)
         })
     })
@@ -62,10 +56,8 @@ export const googleSignin = (credentials: JwtPayload) => {
             { credentials },
             { headers: { "Content-Type": "application/json" } }
           ).then((response) => {
-            console.log(response.data)
             resolve(response.data)
         }).catch((error) => {
-            console.log(error)
             reject(error)
         })
     })

@@ -39,7 +39,7 @@ export default function VideoInput({ fragment, source, onDelete, onFileChange }:
     <Card
       sx={{
         maxWidth: '100%',
-        width: isMobile ? '95%' : '400px', // Set width for mobile and desktop
+        width: isMobile ? '95%' : '400px', 
         margin: '0.5em',
         position: 'relative',
         borderRadius: '10px',
@@ -83,7 +83,7 @@ export default function VideoInput({ fragment, source, onDelete, onFileChange }:
             sx={{
               padding: '0.5em',
               border: 'none',
-              backgroundColor: theme.palette.background.paper, // Ensure background matches theme
+              backgroundColor: theme.palette.background.paper, 
             }}
           />
         </Typography>
