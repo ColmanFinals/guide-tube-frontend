@@ -1,0 +1,11 @@
+.youtube-video iframe {
+    width: 100% !important;
+    height: auto !important;
+}
+
+@media (max-width: 600px) {
+    .youtube-video iframe {
+        width: 100% !important;
+        height: auto !important;
+    }
+}
