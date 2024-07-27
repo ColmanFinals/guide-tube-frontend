@@ -60,14 +60,8 @@ export const createPlaylist = async (playlistName: string, isPrivate: boolean, d
     }
 };
 
-
-export const uploadVideo = async (videoFile: File, videoName: string, isPrivate: boolean, description: string) => {
+export const uploadVideo = async (videoFile: File, videoName: string, isPrivate: boolean, description: string): Promise<string> => {
     const token = await getOauth2Token();
-    const xhr = new XMLHttpRequest();
-
-    // Set up the request
-    xhr.open('POST', 'https://www.googleapis.com/upload/youtube/v3/videos?uploadType=multipart&part=snippet,status', true);
-    xhr.setRequestHeader('Authorization', 'Bearer ' + token);
 
     // Construct the FormData
     const formData = new FormData();
@@ -88,21 +82,22 @@ export const uploadVideo = async (videoFile: File, videoName: string, isPrivate:
     // Append the video file
     formData.append('file', videoFile);
 
-    xhr.onload = () => {
-        if (xhr.status === 200) {
-            const response = JSON.parse(xhr.responseText);
-            return (response.id);
-        } else {
-            throw (new Error(`Failed to upload video: ${xhr.status} ${xhr.statusText}`));
+    const config = {
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'multipart/form-data',
         }
     };
 
-    // Set up the error event
-    xhr.onerror = () => {
-        throw (new Error('Network error occurred'));
-    };
-
-    // Send the request
-    xhr.send(formData);
-
+    try {
+        const response = await youtubeAPI.post(
+            '/upload/youtube/v3/videos?uploadType=multipart&part=snippet,status',
+            formData,
+            config
+        );
+        return response.data.id;
+    } catch (error) {
+        console.error('Failed to upload video:', error);
+        throw error;
+    }
 };

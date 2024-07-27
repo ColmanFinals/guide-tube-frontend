@@ -44,7 +44,9 @@ const UploadGuidePage = () => {
                 playlistID => {
                  videos.forEach(video => {
                     if(video.file){
-                        uploadVideo(video.file,String(video.fragment),true,"Created by GuideTube!")
+                        uploadVideo(video.file,String(video.fragment),true,"Created by GuideTube!").then(
+                            response => console.log(response)
+                        )
                     }
                  })   
                 }
