@@ -75,3 +75,56 @@ export const logoutUser = () => {
     })
 }
 
+export const changePassword = (currentPassword: string, newPassword: string) => {
+    const accessToken = localStorage.getItem('accessToken');
+    return new Promise<void>((resolve, reject) => {
+        api.post(
+            "/auth/changePassword",
+            { currentPassword, newPassword },
+            { headers: { 'authorization': `Bearer ${accessToken}` } }
+        ).then((response) => {
+            console.log(response)
+            resolve();
+        }).catch((error) => {
+            console.log(error)
+            reject(error)
+        });
+    });
+}
+
+export const getUserData = (userId: string) => {
+    const accessToken = localStorage.getItem('accessToken');
+    return new Promise<IUser>((resolve, reject) => {
+        api.get(`/user/getUserData/${userId}`, {
+            headers: { 'authorization': `Bearer ${accessToken}` }
+        }).then((response) => {
+            console.log(response)
+            resolve(response.data)
+        }).catch((error) => {
+            console.log(error)
+            reject(error)
+        });
+    });
+}
+
+export const updateProfilePicture = (userId: string, file: File) => {
+    const accessToken = localStorage.getItem('accessToken');
+    const formData = new FormData();
+    formData.append("userId", userId);
+    formData.append("file", file);
+
+    return new Promise<IUser>((resolve, reject) => {
+        api.put("/user/updatePicture", formData, {
+            headers: { 
+                'authorization': `Bearer ${accessToken}`,
+                'Content-Type': 'multipart/form-data' 
+            }
+        }).then((response) => {
+            console.log(response)
+            resolve(response.data)
+        }).catch((error) => {
+            console.log(error)
+            reject(error)
+        });
+    });
+}

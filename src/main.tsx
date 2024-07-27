@@ -12,6 +12,8 @@ import UploadGuidePage from './components/pages/UploadGuide/UploadGuide.tsx';
 import LandingPage from './components/pages/LandingPage/LandingPage.tsx';
 import ProtectedRoute from './ProtectedRoute.tsx';
 import CompanyManager from './components/pages/systemPage/Company.tsx';
+import AdminPage from './components/pages/AdminPage.tsx';
+import UserProfile from './components/pages/UserProfilePage.tsx';
 
 const router = createBrowserRouter([
     {
@@ -42,6 +44,14 @@ const router = createBrowserRouter([
             {
                 path: 'add-guide',
                 element: <ProtectedRoute> <UploadGuidePage/> </ProtectedRoute>,
+            },
+            {
+                path: 'admin',
+                element: <ProtectedRoute> <AdminPage/> </ProtectedRoute>,
+            },
+            {
+                path: 'profile',
+                element: <ProtectedRoute> <UserProfile/> </ProtectedRoute>,
             },
             {
                 path: 'error',
