@@ -61,37 +61,48 @@ export const createPlaylist = async (playlistName: string, isPrivate: boolean, d
 };
 
 
-export const uploadVideo = async (videoFile: File, videoName: string, isPrivate: boolean, description: string): Promise<string> => {
-    try {
-        const googleOauth2AccessToken = await getOauth2Token();
-        console.log(googleOauth2AccessToken);
+export const uploadVideo = async (videoFile: File, videoName: string, isPrivate: boolean, description: string) => {
+    const token = await getOauth2Token();
+    const xhr = new XMLHttpRequest();
 
-        // Create a FormData object to include the video file and metadata
-        const formData = new FormData();
-        formData.append('file', videoFile);
-        formData.append('snippet', JSON.stringify({
+    // Set up the request
+    xhr.open('POST', 'https://www.googleapis.com/upload/youtube/v3/videos?uploadType=multipart&part=snippet,status', true);
+    xhr.setRequestHeader('Authorization', 'Bearer ' + token);
+
+    // Construct the FormData
+    const formData = new FormData();
+    const snippet = {
+        snippet: {
             title: videoName,
             description: description,
-            defaultLanguage: "en"
-        }));
-        formData.append('status', JSON.stringify({
-            privacyStatus: isPrivate ? "private" : "public"
-        }));
+            defaultLanguage: 'en',
+        },
+        status: {
+            privacyStatus: isPrivate ? 'private' : 'public',
+        }
+    };
 
-        const response = await axios.post(
-            `https://www.googleapis.com/upload/youtube/v3/videos?uploadType=multipart&part=snippet,status&key=${import.meta.env.VITE_YOUTUBE_API_KEY}`,
-            formData,
-            {
-                headers: {
-                    "Authorization": `Bearer ${googleOauth2AccessToken}`,
-                    "Content-Type": "multipart/form-data"
-                }
-            }
-        );
+    // Append the snippet and status as JSON blob
+    formData.append('snippet', new Blob([JSON.stringify(snippet)], { type: 'application/json' }));
 
-        return response.data.id;
-    } catch (e) {
-        console.error("Failed to upload video:", e);
-        throw e;
-    }
+    // Append the video file
+    formData.append('file', videoFile);
+
+    xhr.onload = () => {
+        if (xhr.status === 200) {
+            const response = JSON.parse(xhr.responseText);
+            return (response.id);
+        } else {
+            throw (new Error(`Failed to upload video: ${xhr.status} ${xhr.statusText}`));
+        }
+    };
+
+    // Set up the error event
+    xhr.onerror = () => {
+        throw (new Error('Network error occurred'));
+    };
+
+    // Send the request
+    xhr.send(formData);
+
 };

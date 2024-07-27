@@ -8,17 +8,15 @@ import Input from '@mui/material/Input';
 import DeleteIcon from '@mui/icons-material/Delete';
 import VideoCallRoundedIcon from '@mui/icons-material/VideoCallRounded';
 import { useTheme, useMediaQuery } from '@mui/material';
-
+import { Video } from "./UploadGuide";
 type VideoInputProps = {
-  fragment: number;
-  source?: string;
+  video: Video;
+  setVideos: React.Dispatch<React.SetStateAction<Video[]>>;
   onDelete: () => void;
-  onFileChange: (url: string) => void;
 };
 
-export default function VideoInput({ fragment, source, onDelete, onFileChange }: VideoInputProps) {
+export default function VideoInput({ video, setVideos, onDelete }: VideoInputProps) {
   const inputRef = useRef<HTMLInputElement>(null);
-  const [localSource, setLocalSource] = useState<string | undefined>(source);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
@@ -26,9 +24,10 @@ export default function VideoInput({ fragment, source, onDelete, onFileChange }:
     if (event.target.files && event.target.files[0]) {
       const file = event.target.files[0];
       const url = URL.createObjectURL(file);
-      setLocalSource(url);
-      onFileChange(url);
-    }
+      const newVideo = {"fragment": video.fragment, "file": file, "source": url}
+      setVideos(prevVideosList => prevVideosList.map(video => 
+        video.fragment === newVideo.fragment ? newVideo : video));
+      }
   };
 
   const handleChoose = () => {
@@ -58,11 +57,11 @@ export default function VideoInput({ fragment, source, onDelete, onFileChange }:
           backgroundColor: theme.palette.grey[500],
         }}
       >
-        {localSource ? (
+        {video.source != "" ? (
           <video
             style={{ width: '100%', height: 'auto' }}
             controls
-            src={localSource}
+            src={video.source}
           />
         ) : (
           <IconButton sx={{ width: '60%', height: '60%', position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)' }}>
@@ -77,7 +76,7 @@ export default function VideoInput({ fragment, source, onDelete, onFileChange }:
           sx={{ marginBottom: '0.5em' }}
         >
           <Input
-            defaultValue={`New title ${fragment}`}
+            defaultValue={`New title ${video.fragment}`}
             fullWidth
             disableUnderline
             sx={{
@@ -88,7 +87,7 @@ export default function VideoInput({ fragment, source, onDelete, onFileChange }:
           />
         </Typography>
         <Typography variant="body2" color="text.secondary">
-          part #{fragment}
+          part #{video.fragment}
         </Typography>
       </CardContent>
       <input

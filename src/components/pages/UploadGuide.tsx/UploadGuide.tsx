@@ -11,26 +11,26 @@ import Alert from '@mui/material/Alert';
 import Snackbar from '@mui/material/Snackbar';
 import { Grid, Box } from '@mui/material';
 import { useTheme, useMediaQuery } from '@mui/material';
-import { createPlaylist } from '../../../services/guideService';
+import { createPlaylist, uploadVideo } from '../../../services/guideService';
 import { ToastContainer, toast } from 'react-toastify';
 
-export interface FileObj {
-    "file" : File,
-    "fragment" : number
+export interface Video {
+    "file"?: File,
+    "fragment" : number,
+    "source" : string
 }
 const UploadGuidePage = () => {
     const defaultPlaylistName = "New Video"
-    const [videoInputs, setVideoInputs] = useState<number[]>([1]);
-    const [videoSources, setVideoSources] = useState<string[]>([]);
+    const [videos, setVideos] = useState<Video[]>([{"file": undefined, "fragment": 1, "source": ""}]);
     const [snackbarOpen, setSnackbarOpen] = useState(false);
     const [playlistName, setPlaylistName] = useState(defaultPlaylistName);
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
     const addVideoInput = () => {
-        setVideoInputs(prevVideosList => {
+        setVideos(prevVideosList => {
             if (prevVideosList.length < 10) {
-                return [...prevVideosList, prevVideosList.length + 1];
+                return [...prevVideosList, {"file": undefined, "fragment": prevVideosList.length + 1, "source":""}];
             } else {
                 setSnackbarOpen(true);
                 return prevVideosList;
@@ -42,7 +42,11 @@ const UploadGuidePage = () => {
         try{
             createPlaylist(playlistName, true, "Created by GuideTube!").then(
                 playlistID => {
-                    
+                 videos.forEach(video => {
+                    if(video.file){
+                        uploadVideo(video.file,String(video.fragment),true,"Created by GuideTube!")
+                    }
+                 })   
                 }
             );
 
@@ -54,21 +58,12 @@ const UploadGuidePage = () => {
 
     const handleStartAgain = () => {
         console.log('Start Again clicked');
-        setVideoInputs([1]);
-        setVideoSources([]);
+        setVideos([{"file": undefined, "fragment": 1, "source": ""}])
     };
 
-    const handleDeleteVideo = (fragment: number) => {
-        // Remove video input from state
-        setVideoInputs(prevVideos => {
-            const updatedVideos = prevVideos.filter(frag => frag !== fragment);
-            return updatedVideos.map((_, index) => index + 1);
-        });
-        // Remove video source from state
-        setVideoSources(prevSources => {
-            const updatedSources = prevSources.filter((_, index) => index !== fragment - 1);
-            return updatedSources;
-        });
+    const handleDeleteVideo = (videoToRemove: Video) => {
+        const fragmentToRemove = videoToRemove.fragment;
+        setVideos(prevVideosList => prevVideosList.filter(video => video.fragment !== fragmentToRemove));
     };
 
     return (
@@ -131,7 +126,7 @@ const UploadGuidePage = () => {
                             color="secondary"
                             startIcon={<RestartAltIcon />}
                             onClick={handleStartAgain}
-                            sx={{ mt: 2 }} // Margin top
+                            sx={{ mt: 2 }} 
                         >
                             Start Again
                         </Button>
@@ -139,19 +134,12 @@ const UploadGuidePage = () => {
                 </Grid>
 
                 <Grid container spacing={3} justifyContent="center">
-                    {videoInputs.map(fragment => (
-                        <Grid item key={fragment} xs={12} sm={6} md={4} lg={3}>
+                    {videos.map(video => (
+                        <Grid item key={video.fragment} xs={12} sm={6} md={4} lg={3}>
                             <VideoInput
-                                fragment={fragment}
-                                source={videoSources[fragment - 1]}
-                                onDelete={() => handleDeleteVideo(fragment)}
-                                onFileChange={(url) => {
-                                    setVideoSources(prevSources => {
-                                        const newSources = [...prevSources];
-                                        newSources[fragment - 1] = url;
-                                        return newSources;
-                                    });
-                                }}
+                                video={video}
+                                setVideos={setVideos}
+                                onDelete={() => handleDeleteVideo(video)}
                             />
                         </Grid>
                     ))}
