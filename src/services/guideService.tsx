@@ -101,3 +101,37 @@ export const uploadVideo = async (videoFile: File, videoName: string, isPrivate:
         throw error;
     }
 };
+
+export const addVideoToPlaylist = async (playlistID: string, videoID:string, fragment: number): Promise<string> => {
+    try {
+        const googleOauth2AccessToken = await getOauth2Token();
+        console.log(googleOauth2AccessToken);
+        
+        const response = await youtubeAPI.post(
+            `/youtube/v3/playlistItems?part=snippet,status&key=${import.meta.env.VITE_YOUTUBE_API_KEY}`, 
+            {
+                snippet: {
+                    playlistId: playlistID,
+                    position: fragment,
+                    resourceId: {
+                    kind: "youtube#video",
+                    videoId: videoID
+                },
+                    defaultLanguage: "en"
+                },
+            },
+            {
+                headers: {
+                    "Content-Type": "application/json",
+                    "Accept": "application/json",
+                    "Authorization": `Bearer ${googleOauth2AccessToken}`
+                }
+            }
+        );
+        
+        return response.data.id;
+    } catch (e) {
+        console.error("Failed to create playlist:", e);
+        throw e;
+    }
+};

@@ -11,7 +11,7 @@ import Alert from '@mui/material/Alert';
 import Snackbar from '@mui/material/Snackbar';
 import { Grid, Box } from '@mui/material';
 import { useTheme, useMediaQuery } from '@mui/material';
-import { createPlaylist, uploadVideo } from '../../../services/guideService';
+import { createPlaylist, uploadVideo, addVideoToPlaylist } from '../../../services/guideService';
 import { ToastContainer, toast } from 'react-toastify';
 
 export interface Video {
@@ -45,10 +45,10 @@ const UploadGuidePage = () => {
                 playlistID => {
                  videos.forEach(video => {
                     if(video.file){
-                        var title = video.title != "" ? video.title : video.fragment
-                        uploadVideo(video.file,video.title,true,"Created by GuideTube!").then(
+                        var title = video.title != "" ? video.title : String(video.fragment)
+                        uploadVideo(video.file,title,true,"Created by GuideTube!").then(
                             videoID => {
-
+                                addVideoToPlaylist(playlistID,videoID,video.fragment - 1)
                             }
                         )
                     }
