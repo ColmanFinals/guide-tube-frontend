@@ -1,38 +1,37 @@
-import axios, { AxiosInstance } from "axios";
+import { youtubeAPI } from "./youtubeAPI"; 
 
-const youtubeAPI: AxiosInstance = axios.create({
-    baseURL: 'https://youtube.googleapis.com',
-});
+export const generateOauth2Token = async (): Promise<string> => {
+    return new Promise((resolve, reject) => {
+        google.accounts.oauth2.initTokenClient({
+            client_id: import.meta.env.VITE_GOOGLE_CLIENT_ID,
+            scope: 'email profile https://www.googleapis.com/auth/youtube https://www.googleapis.com/auth/youtube.force-ssl',
+            callback: (response) => {
+                if (response.access_token) {
+                    localStorage.setItem('googleOauth2AccessToken', response.access_token);
+                    resolve(response.access_token);
+                } else {
+                    reject(new Error("Unable to generate an access token"));
+                }
+            },
+        }).requestAccessToken();
+    });
+};
 
-export const getOauth2Token = async () => {
-    const googleOauth2AccessToken = localStorage.getItem('googleOauth2AccessToken');
-    if (googleOauth2AccessToken) {
-        return googleOauth2AccessToken;
-    } else {
-        return new Promise((resolve, reject) => {
-            google.accounts.oauth2.initTokenClient({
-                client_id: import.meta.env.VITE_GOOGLE_CLIENT_ID,
-                scope: 'email profile https://www.googleapis.com/auth/youtube https://www.googleapis.com/auth/youtube.force-ssl',
-                callback: (response) => {
-                    if (response.access_token) {
-                        localStorage.setItem('googleOauth2AccessToken', response.access_token);
-                        resolve(response.access_token);
-                    } else {
-                        reject(new Error("Unable to generate an access token"));
-                    }
-                },
-            }).requestAccessToken();
-        });
-    }
+export const getOauth2Token = async (): Promise<string> => {
+    var googleOauth2AccessToken = localStorage.getItem('googleOauth2AccessToken');
+    if (!googleOauth2AccessToken) {
+        googleOauth2AccessToken = await generateOauth2Token()       
+    } 
+    return googleOauth2AccessToken;
 };
 
 export const createPlaylist = async (playlistName: string, isPrivate: boolean, description: string): Promise<string> => {
     try {
         const googleOauth2AccessToken = await getOauth2Token();
         console.log(googleOauth2AccessToken);
-        
+
         const response = await youtubeAPI.post(
-            `/youtube/v3/playlists?part=snippet,status&key=${import.meta.env.VITE_YOUTUBE_API_KEY}`, 
+            `/youtube/v3/playlists?part=snippet,status&key=${import.meta.env.VITE_YOUTUBE_API_KEY}`,
             {
                 snippet: {
                     title: playlistName,
@@ -52,7 +51,7 @@ export const createPlaylist = async (playlistName: string, isPrivate: boolean, d
                 }
             }
         );
-        
+
         return response.data.id;
     } catch (e) {
         console.error("Failed to create playlist:", e);
@@ -102,21 +101,21 @@ export const uploadVideo = async (videoFile: File, videoName: string, isPrivate:
     }
 };
 
-export const addVideoToPlaylist = async (playlistID: string, videoID:string, fragment: number): Promise<string> => {
+export const addVideoToPlaylist = async (playlistID: string, videoID: string, fragment: number): Promise<string> => {
     try {
         const googleOauth2AccessToken = await getOauth2Token();
         console.log(googleOauth2AccessToken);
-        
+
         const response = await youtubeAPI.post(
-            `/youtube/v3/playlistItems?part=snippet,status&key=${import.meta.env.VITE_YOUTUBE_API_KEY}`, 
+            `/youtube/v3/playlistItems?part=snippet,status&key=${import.meta.env.VITE_YOUTUBE_API_KEY}`,
             {
                 snippet: {
                     playlistId: playlistID,
                     position: fragment,
                     resourceId: {
-                    kind: "youtube#video",
-                    videoId: videoID
-                },
+                        kind: "youtube#video",
+                        videoId: videoID
+                    },
                     defaultLanguage: "en"
                 },
             },
@@ -128,7 +127,7 @@ export const addVideoToPlaylist = async (playlistID: string, videoID:string, fra
                 }
             }
         );
-        
+
         return response.data.id;
     } catch (e) {
         console.error("Failed to create playlist:", e);
