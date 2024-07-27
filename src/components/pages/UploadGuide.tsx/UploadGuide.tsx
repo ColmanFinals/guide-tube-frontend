@@ -17,11 +17,12 @@ import { ToastContainer, toast } from 'react-toastify';
 export interface Video {
     "file"?: File,
     "fragment" : number,
-    "source" : string
+    "source" : string,
+    "title": string
 }
 const UploadGuidePage = () => {
-    const defaultPlaylistName = "New Video"
-    const [videos, setVideos] = useState<Video[]>([{"file": undefined, "fragment": 1, "source": ""}]);
+    const defaultPlaylistName = "New Guide"
+    const [videos, setVideos] = useState<Video[]>([{"file": undefined, "fragment": 1, "source": "", "title":""}]);
     const [snackbarOpen, setSnackbarOpen] = useState(false);
     const [playlistName, setPlaylistName] = useState(defaultPlaylistName);
     const theme = useTheme();
@@ -30,7 +31,7 @@ const UploadGuidePage = () => {
     const addVideoInput = () => {
         setVideos(prevVideosList => {
             if (prevVideosList.length < 10) {
-                return [...prevVideosList, {"file": undefined, "fragment": prevVideosList.length + 1, "source":""}];
+                return [...prevVideosList, {"file": undefined, "fragment": prevVideosList.length + 1, "source":"", "title":""}];
             } else {
                 setSnackbarOpen(true);
                 return prevVideosList;
@@ -44,8 +45,11 @@ const UploadGuidePage = () => {
                 playlistID => {
                  videos.forEach(video => {
                     if(video.file){
-                        uploadVideo(video.file,String(video.fragment),true,"Created by GuideTube!").then(
-                            response => console.log(response)
+                        var title = video.title != "" ? video.title : video.fragment
+                        uploadVideo(video.file,video.title,true,"Created by GuideTube!").then(
+                            videoID => {
+
+                            }
                         )
                     }
                  })   
@@ -60,7 +64,7 @@ const UploadGuidePage = () => {
 
     const handleStartAgain = () => {
         console.log('Start Again clicked');
-        setVideos([{"file": undefined, "fragment": 1, "source": ""}])
+        setVideos([{"file": undefined, "fragment": 1, "source": "","title":""}])
     };
 
     const handleDeleteVideo = (videoToRemove: Video) => {

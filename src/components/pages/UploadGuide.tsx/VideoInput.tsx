@@ -20,11 +20,16 @@ export default function VideoInput({ video, setVideos, onDelete }: VideoInputPro
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
+  const setTitle = (title: string) => {
+    const newVideo = {"fragment": video.fragment, "file": video.file, "source": video.source , "title": title}
+    setVideos(prevVideosList => prevVideosList.map(video => 
+      video.fragment === newVideo.fragment ? newVideo : video));
+  }
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
       const file = event.target.files[0];
       const url = URL.createObjectURL(file);
-      const newVideo = {"fragment": video.fragment, "file": file, "source": url}
+      const newVideo = {"fragment": video.fragment, "file": file, "source": url , "title": video.title}
       setVideos(prevVideosList => prevVideosList.map(video => 
         video.fragment === newVideo.fragment ? newVideo : video));
       }
@@ -55,11 +60,12 @@ export default function VideoInput({ video, setVideos, onDelete }: VideoInputPro
           paddingBottom: '56.25%', 
           position: 'relative',
           backgroundColor: theme.palette.grey[500],
+          height: '10vh'
         }}
       >
         {video.source != "" ? (
           <video
-            style={{ width: '100%', height: 'auto' }}
+            style={{ width: '100%', height: '100%' , position: 'absolute', top: 0, left: 0 }}
             controls
             src={video.source}
           />
@@ -77,6 +83,7 @@ export default function VideoInput({ video, setVideos, onDelete }: VideoInputPro
         >
           <Input
             defaultValue={`New title ${video.fragment}`}
+            onChange={(event) => setTitle(event.target.value)}
             fullWidth
             disableUnderline
             sx={{
