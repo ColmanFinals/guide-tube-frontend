@@ -40,7 +40,7 @@ export const createPlaylist = async (playlistName: string, isPrivate: boolean, d
                     defaultLanguage: "en"
                 },
                 status: {
-                    privacyStatus: isPrivate ? "private" : "public"
+                    privacyStatus: isPrivate ? "unlisted" : "public"
                 }
             },
             {
@@ -71,7 +71,7 @@ export const uploadVideo = async (videoFile: File, videoName: string, isPrivate:
             defaultLanguage: 'en',
         },
         status: {
-            privacyStatus: isPrivate ? 'private' : 'public',
+            privacyStatus: isPrivate ? 'unlisted' : 'public',
         }
     };
 

@@ -7,65 +7,64 @@ import SaveIcon from '@mui/icons-material/Save';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import Fab from '@mui/material/Fab';
 import Button from '@mui/material/Button';
-import Alert from '@mui/material/Alert';
-import Snackbar from '@mui/material/Snackbar';
 import { Grid, Box } from '@mui/material';
 import { useTheme, useMediaQuery } from '@mui/material';
 import { createPlaylist, uploadVideo, addVideoToPlaylist } from '../../../services/guideService';
 import { ToastContainer, toast } from 'react-toastify';
+import PlaylistConfiguration from './PlaylistConfiguration';
 
 export interface Video {
     "file"?: File,
-    "fragment" : number,
-    "source" : string,
+    "fragment": number,
+    "source": string,
     "title": string
 }
 const UploadGuidePage = () => {
     const defaultPlaylistName = "New Guide"
-    const [videos, setVideos] = useState<Video[]>([{"file": undefined, "fragment": 1, "source": "", "title":""}]);
-    const [snackbarOpen, setSnackbarOpen] = useState(false);
+    const [videos, setVideos] = useState<Video[]>([{ "file": undefined, "fragment": 1, "source": "", "title": "" }]);
     const [playlistName, setPlaylistName] = useState(defaultPlaylistName);
     const theme = useTheme();
+    const [isPrivate, setIsPrivate] = useState(false);
+    const [company, setCompany] = useState("");
+    const [userCompanies, setUserCompanies] = useState(["Company1", "Company2", "Company3"]);
+    const [openModal, setOpenModal] = useState(false);
     const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
     const addVideoInput = () => {
         setVideos(prevVideosList => {
             if (prevVideosList.length < 10) {
-                return [...prevVideosList, {"file": undefined, "fragment": prevVideosList.length + 1, "source":"", "title":""}];
+                return [...prevVideosList, { "file": undefined, "fragment": prevVideosList.length + 1, "source": "", "title": "" }];
             } else {
-                setSnackbarOpen(true);
+                toast.error("You can only add up to 10 videos");
                 return prevVideosList;
             }
         });
     };
 
-    const handleSave = () => {
-        try{
-            createPlaylist(playlistName, true, "Created by GuideTube!").then(
-                playlistID => {
-                 videos.forEach(video => {
-                    if(video.file){
-                        var title = video.title != "" ? video.title : String(video.fragment)
-                        uploadVideo(video.file,title,true,"Created by GuideTube!").then(
-                            videoID => {
-                                addVideoToPlaylist(playlistID,videoID,video.fragment - 1)
-                            }
-                        )
-                    }
-                 })   
+    const handleSave = async () => {
+        try {
+            const playlistID = await createPlaylist(playlistName, isPrivate, "Created by GuideTube!");
+            for (const video of videos) {
+                if (video.file) {
+                    const title = video.title !== "" ? video.title : String(video.fragment);
+                    const videoID = await uploadVideo(video.file, title, isPrivate, "Created by GuideTube!");
+                    await addVideoToPlaylist(playlistID, videoID, video.fragment - 1);
                 }
-            );
+            }
+
+            toast.success("Guide created successfully!");
 
         } catch (e) {
-            toast.error("An error occured during guide creation.")
+            toast.error("An error occurred during guide creation.");
         }
-            
     };
 
     const handleStartAgain = () => {
         console.log('Start Again clicked');
-        setVideos([{"file": undefined, "fragment": 1, "source": "","title":""}])
+        setIsPrivate(false);
+        setVideos([{ "file": undefined, "fragment": 1, "source": "", "title": "" }])
     };
+
 
     const handleDeleteVideo = (videoToRemove: Video) => {
         const fragmentToRemove = videoToRemove.fragment;
@@ -104,35 +103,23 @@ const UploadGuidePage = () => {
                     paddingBottom: '6rem', // Space for the fixed footer
                 }}
             >
-                <Snackbar
-                    anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-                    open={snackbarOpen}
-                    autoHideDuration={3000}
-                    onClose={() => setSnackbarOpen(false)}
-                >
-                    <Alert variant="outlined" severity="info">
-                        You can only add up to 10 videos
-                    </Alert>
-                </Snackbar>
-
                 <Grid container spacing={3} alignItems="center" justifyContent="center" sx={{ width: '100%', marginBottom: 2, marginTop: 5 }}>
                     <Grid item xs={11} lg={4} container alignItems="center" justifyContent="center">
                         <Input
                             fullWidth
                             sx={{ fontSize: '1.2em', padding: '0.5em', mb: 2, border: 'none', maxWidth: isMobile ? '90%' : '300px' }}
-                            defaultValue= {defaultPlaylistName}
+                            defaultValue={defaultPlaylistName}
                             placeholder="Enter video title"
-                            onChange={(event) => setPlaylistName(event.target.value) }
+                            onChange={(event) => setPlaylistName(event.target.value)}
                         />
                     </Grid>
-
                     <Grid item xs={12} lg={3} container justifyContent="center">
                         <Button
                             variant="outlined"
                             color="secondary"
                             startIcon={<RestartAltIcon />}
                             onClick={handleStartAgain}
-                            sx={{ mt: 2 }} 
+                            sx={{ mt: 2 }}
                         >
                             Start Again
                         </Button>
@@ -169,10 +156,10 @@ const UploadGuidePage = () => {
                     variant="contained"
                     color="primary"
                     startIcon={<SaveIcon />}
-                    onClick={handleSave}
-                    sx={{ width: '100%', maxWidth: '300px' }}
+                    onClick={() => setOpenModal(true)}
+                    sx={{ width: '50%', maxWidth: '300px' }}
                 >
-                    Save
+                    Finish
                 </Button>
             </Box>
 
@@ -180,12 +167,14 @@ const UploadGuidePage = () => {
                 size="large"
                 color="secondary"
                 onClick={addVideoInput}
-                sx={{ position: 'fixed', right: '16px', bottom: '80px', zIndex: 1000 }}
+                sx={{ position: 'fixed', right: '2em', bottom: '80px', zIndex: 1000 }}
             >
                 <AddCardRoundedIcon fontSize="large" />
             </Fab>
-        <ToastContainer theme="dark" position="top-center" autoClose={5000} hideProgressBar={false}
-        newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss pauseOnHover />
+            <PlaylistConfiguration handleSave={handleSave} isPrivate={isPrivate} open={openModal} setCompany={setCompany}
+                setIsOpen={setOpenModal} setIsPrivate={setIsPrivate} userCompanies={userCompanies} />
+            <ToastContainer theme="dark" position="top-center" autoClose={5000} hideProgressBar={false}
+                newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss pauseOnHover />
         </Box>
     );
 };
