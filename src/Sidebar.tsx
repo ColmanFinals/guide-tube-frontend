@@ -4,7 +4,7 @@ import {useAuthentication, useAuthenticationDispatch,} from "./store/hook/useAut
 import {useEffect} from "react";
 import {useUserDataDispatch} from "./store/hook/useUserData";
 import {extractUserIdFromToken} from "./utillity/jwt";
-import api from "./services/api";
+import api from "./services/serverApi";
 
 interface INavLinkOption {
     name: string;

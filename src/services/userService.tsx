@@ -1,4 +1,4 @@
-import api from "./api"
+import api from "./serverApi"
 import { JwtPayload } from "jwt-decode"; 
 
 export interface IUser {

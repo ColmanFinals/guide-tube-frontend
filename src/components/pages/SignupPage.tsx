@@ -2,7 +2,7 @@ import { ChangeEvent, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button, TextField } from "@mui/material";
 import axios from "axios";
-import api from "../../services/api";
+import api from "../../services/serverApi";
 import Logo from '../../assets/white_guidetube.png'
 
 const SignupPage = () => {
