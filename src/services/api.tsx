@@ -25,8 +25,6 @@ api.interceptors.response.use(
 
                 const authToken = localStorage.getItem('authToken');
                 const refreshToken = localStorage.getItem("refreshToken")
-                console.log(authToken);
-                console.log(refreshToken);
                 const response = await api.post(
                     import.meta.env.VITE_SERVER_GET_REFRESH_TOKEN,
                     null,
@@ -38,10 +36,6 @@ api.interceptors.response.use(
                 );
                 localStorage.setItem('authToken', response.data.accessToken)
                 localStorage.setItem('authToken', response.data.refreshToken)
-                console.log(response.data.accessToken);
-                console.log(response.data.refreshToken);
-
-
                 // Update the original request headers with the new access token
                 if (originalRequest.headers != null) {
                     originalRequest.headers.authorization = `JWT ${response.data.accessToken} ${response.data.refreshToken}`;
