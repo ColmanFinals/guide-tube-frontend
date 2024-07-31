@@ -8,7 +8,7 @@ interface Props{
 const ProtectedRoute = ({ children} : Props) => {
   const { user } = useUser(); 
   const accessToken = localStorage.getItem('accessToken');
-  const isLoggedIn = (user?._id  != "undefined") && (accessToken != "undefined");
+  const isLoggedIn = (user?._id  != "undefined") && (accessToken != "undefined") && (user != null);
 
   if (!isLoggedIn) {
     return <Navigate to="/login" />;

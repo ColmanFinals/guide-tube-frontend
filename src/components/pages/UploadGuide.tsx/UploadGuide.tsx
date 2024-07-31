@@ -9,9 +9,10 @@ import Fab from '@mui/material/Fab';
 import Button from '@mui/material/Button';
 import { Grid, Box } from '@mui/material';
 import { useTheme, useMediaQuery } from '@mui/material';
-import { createPlaylist, uploadVideo, addVideoToPlaylist } from '../../../services/guideService';
+import { createPlaylist, uploadVideo, addVideoToPlaylist, addGuideToCompany} from '../../../services/guideService';
 import { ToastContainer, toast } from 'react-toastify';
 import PlaylistConfiguration from './PlaylistConfiguration';
+import { IGuide, INewGuideRequest, IVideo } from '../../../utillity/types';
 
 export interface Video {
     "file"?: File,
@@ -25,8 +26,8 @@ const UploadGuidePage = () => {
     const [playlistName, setPlaylistName] = useState(defaultPlaylistName);
     const theme = useTheme();
     const [isPrivate, setIsPrivate] = useState(false);
-    const [company, setCompany] = useState("");
-    const [userCompanies, setUserCompanies] = useState(["Company1", "Company2", "Company3"]);
+    const [userCompanies, setUserCompanies] = useState(["new", "Company2", "Company3"]);
+    const [company, setCompany] = useState(userCompanies[0]);
     const [openModal, setOpenModal] = useState(false);
     const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
@@ -40,27 +41,40 @@ const UploadGuidePage = () => {
             }
         });
     };
-
+    
     const handleSave = async () => {
         try {
-            const playlistID = await createPlaylist(playlistName, isPrivate, "Created by GuideTube!");
+            const privacy = isPrivate ? "unlisted" : "public";
+            const guideData: IGuide = { createdAt: new Date().toISOString(), name: playlistName, views: 0 , privacyStatus:privacy};
+            let videosData: IVideo[] = [];
+
+            // Create the playlist
+            const playlist = await createPlaylist(playlistName, isPrivate, "Created by GuideTube!");
+            
+            // Iterate over videos and upload them
             for (const video of videos) {
                 if (video.file) {
                     const title = video.title !== "" ? video.title : String(video.fragment);
+                    
+                    // Upload video
                     const videoID = await uploadVideo(video.file, title, isPrivate, "Created by GuideTube!");
-                    await addVideoToPlaylist(playlistID, videoID, video.fragment - 1);
+    
+                    // Add video to playlist
+                    const videoData = await addVideoToPlaylist(playlist.id, videoID, video.fragment - 1);
+                    videosData.push({...videoData});
                 }
             }
-
+            const newGuideRequest: INewGuideRequest = { guideData: guideData, companyName: company, playlistData: playlist,
+                 videoData: videosData}
+            await addGuideToCompany(newGuideRequest);
             toast.success("Guide created successfully!");
-
         } catch (e) {
+            // Handle any errors that occur during the guide creation process
             toast.error("An error occurred during guide creation.");
         }
     };
-
+    
     const handleStartAgain = () => {
-        console.log('Start Again clicked');
         setIsPrivate(false);
         setVideos([{ "file": undefined, "fragment": 1, "source": "", "title": "" }])
     };

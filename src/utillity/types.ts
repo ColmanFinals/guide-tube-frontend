@@ -1,12 +1,11 @@
-interface IGuide {
-    createdAt: Date;
+export interface IGuide {
+    createdAt: string;
     name: string;
     views: number;
-    playlist: IPlaylist;
-    videos: IVideo[];
+    privacyStatus: string;
 }
 
-interface IVideo {
+export interface IVideo {
     index: number;
     id: string;
     playlistItemId: string;
@@ -16,14 +15,18 @@ interface IVideo {
     description: string;
 }
 
-interface IPlaylistStatus extends Document {
-    privacyStatus: string;
-}
 
-interface IPlaylist extends Document {  
+export interface IPlaylist {
+    id: string;  
     publishedAt: Date;
     channelId: string;
     title: string;
     description: string;
-    status: IPlaylistStatus;
+}
+
+export interface INewGuideRequest {
+        companyName: string;
+        guideData: IGuide;
+        playlistData: IPlaylist;
+        videoData: IVideo[];
 }

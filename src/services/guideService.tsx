@@ -1,4 +1,6 @@
-import { youtubeAPI } from "./youtubeAPI"; 
+import { youtubeAPI } from "./youtubeAPI";
+import { INewGuideRequest, IPlaylist, IVideo } from "../utillity/types";
+import serverApi from "./serverApi";
 
 export const generateOauth2Token = async (): Promise<string> => {
     return new Promise((resolve, reject) => {
@@ -20,12 +22,12 @@ export const generateOauth2Token = async (): Promise<string> => {
 export const getOauth2Token = async (): Promise<string> => {
     var googleOauth2AccessToken = localStorage.getItem('googleOauth2AccessToken');
     if (!googleOauth2AccessToken) {
-        googleOauth2AccessToken = await generateOauth2Token()       
-    } 
+        googleOauth2AccessToken = await generateOauth2Token()
+    }
     return googleOauth2AccessToken;
 };
 
-export const createPlaylist = async (playlistName: string, isPrivate: boolean, description: string): Promise<string> => {
+export const createPlaylist = async (playlistName: string, isPrivate: boolean, description: string): Promise<IPlaylist> => {
     try {
         const googleOauth2AccessToken = await getOauth2Token();
         console.log(googleOauth2AccessToken);
@@ -51,8 +53,16 @@ export const createPlaylist = async (playlistName: string, isPrivate: boolean, d
                 }
             }
         );
-
-        return response.data.id;
+        const playlist: IPlaylist = {
+            channelId: response.data.snippet.channelId,
+            description: response.data.snippet.description,
+            publishedAt: response.data.snippet.publishedAt,
+            title: response.data.snippet.title,
+            id: response.data.id
+        }
+        console.log(response.data)
+        console.log(playlist)
+        return playlist;
     } catch (e) {
         console.error("Failed to create playlist:", e);
         throw e;
@@ -101,7 +111,7 @@ export const uploadVideo = async (videoFile: File, videoName: string, isPrivate:
     }
 };
 
-export const addVideoToPlaylist = async (playlistID: string, videoID: string, fragment: number): Promise<string> => {
+export const addVideoToPlaylist = async (playlistID: string, videoID: string, fragment: number): Promise<IVideo> => {
     try {
         const googleOauth2AccessToken = await getOauth2Token();
         console.log(googleOauth2AccessToken);
@@ -127,10 +137,28 @@ export const addVideoToPlaylist = async (playlistID: string, videoID: string, fr
                 }
             }
         );
-
-        return response.data.id;
+        const video: IVideo = {
+            channelId: response.data.snippet.channelId,
+            description: response.data.snippet.description,
+            publishedAt: response.data.snippet.publishedAt,
+            id: response.data.snippet.resourceId.videoId,
+            index: response.data.snippet.position,
+            playlistItemId: response.data.id,
+            title: response.data.snippet.title
+        }
+        console.log(response.data)
+        console.log(video)
+        return video;
     } catch (e) {
         console.error("Failed to create playlist:", e);
         throw e;
     }
 };
+
+export const addGuideToCompany = async (guide: INewGuideRequest) => {
+    serverApi.post("/guide", guide).then((response) => {
+        return response.data
+    }).catch(e => {
+        return e
+    })
+}
