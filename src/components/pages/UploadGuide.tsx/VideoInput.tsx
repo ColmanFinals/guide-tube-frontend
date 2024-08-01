@@ -44,7 +44,7 @@ export default function VideoInput({ video, setVideos, onDelete }: VideoInputPro
       sx={{
         maxWidth: '100%',
         width: isMobile ? '95%' : '400px', 
-        margin: '0.5em',
+        margin: '0.3em',
         position: 'relative',
         borderRadius: '10px',
         boxShadow: 1,

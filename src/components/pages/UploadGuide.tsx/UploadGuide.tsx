@@ -81,17 +81,25 @@ const UploadGuidePage = () => {
 
 
     const handleDeleteVideo = (videoToRemove: Video) => {
-        const fragmentToRemove = videoToRemove.fragment;
-        setVideos(prevVideosList => prevVideosList.filter(video => video.fragment !== fragmentToRemove));
+        setVideos(prevVideosList => {
+            const updatedVideos = prevVideosList.filter(video => video.fragment !== videoToRemove.fragment);
+            return updatedVideos.map((video, index) => ({
+                ...video,
+                fragment: index + 1,
+            }));
+        });
     };
+    
 
     return (
         <Box
             sx={{
                 display: 'flex',
                 flexDirection: 'column',
+                flexWrap: 'wrap',
                 height: '100vh',
                 width: '100%',
+                overflowX: 'hidden'
             }}
         >
             <Box
@@ -112,9 +120,8 @@ const UploadGuidePage = () => {
                     display: 'flex',
                     flexDirection: 'column',
                     flex: 1,
-                    overflowY: 'auto',
-                    paddingTop: '4rem', // Space for the fixed header
-                    paddingBottom: '6rem', // Space for the fixed footer
+                    paddingTop: '4rem', 
+                    paddingBottom: '6rem', 
                 }}
             >
                 <Grid container spacing={3} alignItems="center" justifyContent="center" sx={{ width: '100%', marginBottom: 2, marginTop: 5 }}>
