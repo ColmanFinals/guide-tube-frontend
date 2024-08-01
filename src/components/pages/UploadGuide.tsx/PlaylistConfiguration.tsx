@@ -26,9 +26,10 @@ const PlaylistConfiguration: React.FC<PlaylistConfigurationProps> = ({ isPrivate
             open={open}
             aria-labelledby="modal-modal-title"
             aria-describedby="modal-modal-description"
-            className="h-full w-full"
+            className="h-full w-full flex justify-center align-center"
         >
-            <Box>
+            
+            <Box className="flex justify-center items-center flex-col"  >
                 <Typography id="modal-modal-title" variant="h6" component="h2">
                     A few configurations before uploading...
                 </Typography>

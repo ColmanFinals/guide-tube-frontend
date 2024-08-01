@@ -1,4 +1,4 @@
-import { youtubeAPI } from "./youtubeAPI";
+import { youtubeAPI } from "./youtubeApi";
 import { INewGuideRequest, IPlaylist, IVideo } from "../utillity/types";
 import serverApi from "./serverApi";
 
