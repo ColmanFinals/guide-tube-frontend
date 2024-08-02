@@ -1,4 +1,4 @@
-import { useRef, useState, ChangeEvent } from "react";
+import { useRef, ChangeEvent } from "react";
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
@@ -8,27 +8,31 @@ import Input from '@mui/material/Input';
 import DeleteIcon from '@mui/icons-material/Delete';
 import VideoCallRoundedIcon from '@mui/icons-material/VideoCallRounded';
 import { useTheme, useMediaQuery } from '@mui/material';
-
+import { Video } from "./UploadGuide";
 type VideoInputProps = {
-  fragment: number;
-  source?: string;
+  video: Video;
+  setVideos: React.Dispatch<React.SetStateAction<Video[]>>;
   onDelete: () => void;
-  onFileChange: (url: string) => void;
 };
 
-export default function VideoInput({ fragment, source, onDelete, onFileChange }: VideoInputProps) {
+export default function VideoInput({ video, setVideos, onDelete }: VideoInputProps) {
   const inputRef = useRef<HTMLInputElement>(null);
-  const [localSource, setLocalSource] = useState<string | undefined>(source);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
+  const setTitle = (title: string) => {
+    const newVideo = {"fragment": video.fragment, "file": video.file, "source": video.source , "title": title}
+    setVideos(prevVideosList => prevVideosList.map(video => 
+      video.fragment === newVideo.fragment ? newVideo : video));
+  }
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
       const file = event.target.files[0];
       const url = URL.createObjectURL(file);
-      setLocalSource(url);
-      onFileChange(url);
-    }
+      const newVideo = {"fragment": video.fragment, "file": file, "source": url , "title": video.title}
+      setVideos(prevVideosList => prevVideosList.map(video => 
+        video.fragment === newVideo.fragment ? newVideo : video));
+      }
   };
 
   const handleChoose = () => {
@@ -39,8 +43,8 @@ export default function VideoInput({ fragment, source, onDelete, onFileChange }:
     <Card
       sx={{
         maxWidth: '100%',
-        width: isMobile ? '95%' : '400px', // Set width for mobile and desktop
-        margin: '0.5em',
+        width: isMobile ? '95%' : '400px', 
+        margin: '0.3em',
         position: 'relative',
         borderRadius: '10px',
         boxShadow: 1,
@@ -56,13 +60,14 @@ export default function VideoInput({ fragment, source, onDelete, onFileChange }:
           paddingBottom: '56.25%', 
           position: 'relative',
           backgroundColor: theme.palette.grey[500],
+          height: '10vh'
         }}
       >
-        {localSource ? (
+        {video.source != "" ? (
           <video
-            style={{ width: '100%', height: 'auto' }}
+            style={{ width: '100%', height: '100%' , position: 'absolute', top: 0, left: 0 }}
             controls
-            src={localSource}
+            src={video.source}
           />
         ) : (
           <IconButton sx={{ width: '60%', height: '60%', position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)' }}>
@@ -77,18 +82,19 @@ export default function VideoInput({ fragment, source, onDelete, onFileChange }:
           sx={{ marginBottom: '0.5em' }}
         >
           <Input
-            defaultValue={`New title ${fragment}`}
+            defaultValue={`New title ${video.fragment}`}
+            onChange={(event) => setTitle(event.target.value)}
             fullWidth
             disableUnderline
             sx={{
               padding: '0.5em',
               border: 'none',
-              backgroundColor: theme.palette.background.paper, // Ensure background matches theme
+              backgroundColor: theme.palette.background.paper, 
             }}
           />
         </Typography>
         <Typography variant="body2" color="text.secondary">
-          part #{fragment}
+          part #{video.fragment}
         </Typography>
       </CardContent>
       <input
