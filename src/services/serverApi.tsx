@@ -1,4 +1,4 @@
-import axios, {AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse,} from "axios";
+import axios, {AxiosError, AxiosInstance, AxiosRequestConfig, AxiosRequestHeaders, AxiosResponse, InternalAxiosRequestConfig,} from "axios";
 
 interface RetryableRequestConfig extends AxiosRequestConfig {
     _retry?: boolean;
@@ -7,6 +7,22 @@ interface RetryableRequestConfig extends AxiosRequestConfig {
 const api: AxiosInstance = axios.create({
     baseURL: import.meta.env.VITE_SERVER + "/",
 });
+
+api.interceptors.request.use(
+    (config: InternalAxiosRequestConfig) => {
+        const accessToken = localStorage.getItem('accessToken');
+        const refreshToken = localStorage.getItem('refreshToken');
+
+        if (accessToken && refreshToken) {
+            config.headers = config.headers || {} as AxiosRequestHeaders;
+            (config.headers as AxiosRequestHeaders).Authorization = `Bearer ${accessToken} ${refreshToken}`;
+        }
+        return config;
+    },
+    (error: AxiosError) => {
+        return Promise.reject(error);
+    }
+);
 
 api.interceptors.response.use(
     (response: AxiosResponse) => response,
@@ -22,26 +38,26 @@ api.interceptors.response.use(
             try {
                 // Refresh the access token using your refresh token
 
-                const authToken = localStorage.getItem('authToken');
-                const refreshToken = localStorage.getItem("refreshToken")
+                const accessToken = localStorage.getItem('accessToken');
+                const refreshToken = localStorage.getItem("refreshToken");
                 const response = await api.post(
                     import.meta.env.VITE_SERVER_GET_REFRESH_TOKEN,
                     null,
                     {
                         headers: {
-                            authorization: `JWT ${authToken} ${refreshToken}`,
+                            authorization: `Bearer ${accessToken} ${refreshToken}`,
                         },
                     }
                 );
-                localStorage.setItem('authToken', response.data.accessToken)
-                localStorage.setItem('authToken', response.data.refreshToken)
+                localStorage.setItem('accessToken', response.data.accessToken)
+                localStorage.setItem('accessToken', response.data.refreshToken)
                 console.log(response.data.accessToken);
                 console.log(response.data.refreshToken);
 
 
                 // Update the original request headers with the new access token
                 if (originalRequest.headers != null) {
-                    originalRequest.headers.authorization = `JWT ${response.data.accessToken} ${response.data.refreshToken}`;
+                    originalRequest.headers.authorization = `Bearer ${response.data.accessToken} ${response.data.refreshToken}`;
 
                     // Retry the original request with the new access token
                     return api(originalRequest);

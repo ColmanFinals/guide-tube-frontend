@@ -1,11 +1,11 @@
 import { createContext, useContext, useState, ReactNode } from 'react';
-import { loginUser, IUser, googleSignin, updateUser } from "../services/userService";
+import { loginUser, IUser, googleSignin, updateUser, logoutUser } from "../services/userService";
 import { JwtPayload } from 'jwt-decode';
 
 interface IUserContext {
   user: IUser | null;
   login: (user: IUser) => Promise<void>;
-  //logout: () => void;
+  logout: () => void;
   signinViaGoogle: (credentials: JwtPayload) => Promise<void>;
   //updateUserDetails: (user: IUser) => Promise<void>;
 }
@@ -44,12 +44,18 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
-  // const logout = () => {
-  //   localStorage.removeItem('accessToken');
-  //   localStorage.removeItem('refreshToken');
-  //   localStorage.removeItem('user');
-  //   setUser(null);
-  // };
+  const logout = async () => {
+    try{
+      await logoutUser();
+      localStorage.removeItem('accessToken');
+      localStorage.removeItem('refreshToken');
+      localStorage.removeItem('user');
+      localStorage.removeItem('googleOauth2AccessToken');
+      setUser(null);
+    } catch(e) {
+      console.log(e)
+    }
+  };
 
   // const updateUserDetails = async(user: IUser) => {
   //   const response: IUser = await updateUser(user);
@@ -57,7 +63,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
   //   setUser(response);
   // }
   return (
-    <UserContext.Provider value={{ user, login, signinViaGoogle }}>
+    <UserContext.Provider value={{ user, login, signinViaGoogle, logout }}>
       {children}
     </UserContext.Provider>
   );

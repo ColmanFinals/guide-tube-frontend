@@ -1,4 +1,4 @@
-import { youtubeAPI } from "./youtubeApi";
+import { youtubeApi } from "./youtubeApi";
 import { INewGuideRequest, IPlaylist, IVideo } from "../utillity/types";
 import serverApi from "./serverApi";
 
@@ -32,7 +32,7 @@ export const createPlaylist = async (playlistName: string, isPrivate: boolean, d
         const googleOauth2AccessToken = await getOauth2Token();
         console.log(googleOauth2AccessToken);
 
-        const response = await youtubeAPI.post(
+        const response = await youtubeApi.post(
             `/youtube/v3/playlists?part=snippet,status&key=${import.meta.env.VITE_YOUTUBE_API_KEY}`,
             {
                 snippet: {
@@ -99,7 +99,7 @@ export const uploadVideo = async (videoFile: File, videoName: string, isPrivate:
     };
 
     try {
-        const response = await youtubeAPI.post(
+        const response = await youtubeApi.post(
             '/upload/youtube/v3/videos?uploadType=multipart&part=snippet,status',
             formData,
             config
@@ -116,7 +116,7 @@ export const addVideoToPlaylist = async (playlistID: string, videoID: string, fr
         const googleOauth2AccessToken = await getOauth2Token();
         console.log(googleOauth2AccessToken);
 
-        const response = await youtubeAPI.post(
+        const response = await youtubeApi.post(
             `/youtube/v3/playlistItems?part=snippet,status&key=${import.meta.env.VITE_YOUTUBE_API_KEY}`,
             {
                 snippet: {

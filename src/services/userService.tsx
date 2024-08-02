@@ -63,3 +63,15 @@ export const googleSignin = (credentials: JwtPayload) => {
     })
 }
 
+export const logoutUser = () => {
+    return new Promise((resolve,reject)=> {       
+        api.post(import.meta.env.VITE_SERVER_LOGOUT_PATH, null, {
+        })
+        .then((response) => {
+            resolve(response.data)
+        }).catch((error) => {
+            reject(error)
+        })
+    })
+}
+

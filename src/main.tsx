@@ -8,7 +8,7 @@ import ErrorPage from "./components/pages/ErrorPage.tsx";
 import SignupPage from "./components/pages/SignupPage.tsx"
 import LoginPage from './components/pages/LoginPage/LoginPage.tsx';
 import HomePage from './components/pages/HomePage.tsx';
-import UploadGuidePage from './components/pages/UploadGuide.tsx/UploadGuide.tsx';
+import UploadGuidePage from './components/pages/UploadGuide/UploadGuide.tsx';
 import LandingPage from './components/pages/LandingPage/LandingPage.tsx';
 import ProtectedRoute from './ProtectedRoute.tsx';
 
