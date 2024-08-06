@@ -9,11 +9,11 @@ let serverConfig;
 // Configure HTTPS only for production environment
 if (isProduction) {
   serverConfig = {
-    port: 80, // Default port
-    // https: {
-    //   key: fs.readFileSync(path.resolve('/home/st111/cert/server.key')),
-    //   cert: fs.readFileSync(path.resolve('/home/st111/cert/server.crt')),
-    // },
+    port: 443,
+    https: {
+       key: fs.readFileSync(path.resolve('/home/st111/cert/client-key.pem')),
+       cert: fs.readFileSync(path.resolve('/home/st111/cert/client-cert.pem')),
+     },
   };
 } else {
   serverConfig = {
