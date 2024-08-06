@@ -20,7 +20,7 @@ RUN cp .env-prod .env
 RUN npm run build
 
 # Expose port 80
-EXPOSE 80
+EXPOSE 443
 
 # Start the Vite preview server
 CMD ["npx", "npm", "run", "prod"]
