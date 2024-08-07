@@ -188,7 +188,7 @@ const UploadGuidePage = () => {
                 size="large"
                 color="secondary"
                 onClick={addVideoInput}
-                sx={{ position: 'fixed', right: '2em', bottom: '80px', zIndex: 1000 }}
+                sx={{ position: 'fixed', right: '2em', bottom: '80px', zIndex: 1300 }}
             >
                 <AddCardRoundedIcon fontSize="large" />
             </Fab>
