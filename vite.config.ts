@@ -1,5 +1,7 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
+import fs from 'fs';
+import path from 'path';
 
 // Check if running in production mode
 const isProduction = process.env.NODE_ENV === 'PRODUCTION';
