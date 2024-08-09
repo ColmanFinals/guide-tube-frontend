@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import api from '../../../services/api';
+import api from '../../../services/serverApi';
 
 interface Company {
     _id: string;
     name: string;
     users: string[];
-    admin: string[]; // Ensure admin IDs are strings
+    admin: string[];
     videos: string[];
 }
 
