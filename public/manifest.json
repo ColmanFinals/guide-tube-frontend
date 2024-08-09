@@ -1,0 +1,52 @@
+{
+    "name": "GuideTube",
+    "icons": [
+        {
+            "src": "/guidetube_with_bckg.png",
+            "type": "image/png",
+            "sizes": "1024x1024",
+            "purpose": "any maskable"
+        },
+        {
+            "src": "/guidetube_with_bckg.png",
+            "type": "image/png",
+            "sizes": "512x512",
+            "purpose": "any maskable"
+        },
+        {
+            "src": "/guidetube_with_bckg.png",
+            "type": "image/png",
+            "sizes": "384x384",
+            "purpose": "any maskable"
+        },
+        {
+            "src": "/guidetube_with_bckg.png",
+            "type": "image/png",
+            "sizes": "256x256",
+            "purpose": "any maskable"
+        },
+        {
+            "src": "/guidetube_with_bckg.png",
+            "type": "image/png",
+            "sizes": "192x192",
+            "purpose": "any maskable"
+        },
+        {
+            "src": "/favicon-16x16.png",
+            "type": "image/png",
+            "sizes": "16x16",
+            "purpose": "any maskable"
+        },
+        {
+            "src": "/favicon-32x32.png",
+            "type": "image/png",
+            "sizes": "32x32",
+            "purpose": "any maskable"
+        }
+    ],
+    "start_url": ".",
+    "short_name": "GuideTube",
+    "display": "standalone",
+    "theme_color": "#000000",
+    "background_color": "#ffffff"
+}
