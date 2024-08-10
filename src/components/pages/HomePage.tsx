@@ -170,7 +170,11 @@ const VideoRoute: React.FC = () => {
                         </Grid>
                     </Grid>
                 </Grid>
+                <Box mt={4}>
+                    <SpeechRecognition onCommand={handleCommand} />
+                </Box>
             </Box>
+            
         </Box>
     );
 };
