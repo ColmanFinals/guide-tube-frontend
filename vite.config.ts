@@ -13,8 +13,8 @@ if (isProduction) {
   serverConfig = {
     port: 443,
     https: {
-       key: fs.readFileSync(path.resolve('/cert/server.key')),
-       cert: fs.readFileSync(path.resolve('/cert/server.crt')),
+       key: fs.readFileSync(path.resolve('/cert/key.pem')),
+       cert: fs.readFileSync(path.resolve('/cert/server.pem')),
      },
   };
 } else {
