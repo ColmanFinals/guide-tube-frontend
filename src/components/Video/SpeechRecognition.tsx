@@ -79,7 +79,7 @@ const SpeechRecognition: React.FC<SpeechRecognitionProps> = ({ onCommand }) => {
 
         try {
             console.log('Sending audio to backend...');
-            const endpoint = checkGuyTube ? 'https://guidetube-ai.cs.colman.ac.il:4000/en/hi_guide_tube' : 'https://guidetube-ai.cs.colman.ac.il:4000/en/transcribe';
+            const endpoint = checkGuyTube ? 'https://guidetube-ai.cs.colman.ac.il/en/hi_guide_tube' : 'https://guidetube-ai.cs.colman.ac.il/en/transcribe';
             const response = await fetch(endpoint, {
                 method: 'PUT',
                 body: formData,

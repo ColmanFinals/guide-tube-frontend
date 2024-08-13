@@ -128,3 +128,8 @@ export const updateProfilePicture = (userId: string, file: File) => {
         });
     });
 }
+
+export const fetchAllUsers = async () => {
+    const response = await api.get('/user/fetch');
+    return response.data;
+};

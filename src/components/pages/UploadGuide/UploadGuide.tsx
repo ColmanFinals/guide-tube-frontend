@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import VideoInput from './VideoInput';
 import PageTopTitle from '../../PageTopTitle';
 import Input from '@mui/material/Input';
@@ -12,7 +12,8 @@ import { useTheme, useMediaQuery } from '@mui/material';
 import { createPlaylist, uploadVideo, addVideoToPlaylist, addGuideToCompany} from '../../../services/guideService';
 import { ToastContainer, toast } from 'react-toastify';
 import PlaylistConfiguration from './PlaylistConfiguration';
-import { IGuide, INewGuideRequest, IVideo } from '../../../utillity/types';
+import { IGuide, INewGuideRequest, IVideo, ICompany } from '../../../utillity/types';
+import { fetchMyCompanies } from '../../../services/companiesService';
 
 export interface Video {
     "file"?: File,
@@ -26,10 +27,24 @@ const UploadGuidePage = () => {
     const [playlistName, setPlaylistName] = useState(defaultPlaylistName);
     const theme = useTheme();
     const [isPrivate, setIsPrivate] = useState(false);
-    const [userCompanies, setUserCompanies] = useState(["new", "Company2", "Company3"]);
-    const [company, setCompany] = useState(userCompanies[0]);
+    const [userCompanies, setUserCompanies] = useState<string[]>([]);
+    const [company, setCompany] = useState<string>("");
     const [openModal, setOpenModal] = useState(false);
     const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+
+    useEffect(() => {
+        const loadCompanies = async () => {
+            try {
+                const companyData: ICompany[] = await fetchMyCompanies();
+                const companyNames = companyData.map(company => company.name);
+                setUserCompanies(companyNames);
+                setCompany(userCompanies[0])
+            } catch (error) {
+                console.error("Error fetching companies:", error);
+            }
+        };
+        loadCompanies();
+    }, []);
 
     const addVideoInput = () => {
         setVideos(prevVideosList => {

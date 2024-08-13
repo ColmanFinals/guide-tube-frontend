@@ -1,23 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { Box, Grid, FormControl, InputLabel, CircularProgress, IconButton, TextField, MenuItem, Select, Autocomplete, InputAdornment } from '@mui/material';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
-import api, { fetchMyCompanies, getCompanyById, removeUser, fetchAllUsers, addUser } from '../../services/serverApi'; // Adjust the path as necessary
+import { fetchMyCompanies, getCompanyById, removeUser, addUser } from '../../services/companiesService'; 
+import {fetchAllUsers} from "../../services/userService";
 import PageTopTitle from '../PageTopTitle';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
+import { ICompany, IUser } from '../../utillity/types';
 
-interface IUser {
-    _id: string;
-    username: string;
-    fullName: string;
-    imgUrl: string;
-    role: string;
-}
 
-interface ICompany {
-    _id: string;
-    name: string;
-}
 
 const AdminPage: React.FC = () => {
     const [companies, setCompanies] = useState<ICompany[]>([]);
@@ -212,10 +203,9 @@ const AdminPage: React.FC = () => {
                         <DataGrid
                             rows={users}
                             columns={columns}
-                            pageSize={5}
-                            rowsPerPageOptions={[5]}
+                            paginationModel={{ pageSize: 5, page: 0 }} 
                             autoHeight
-                            disableSelectionOnClick
+                            disableRowSelectionOnClick
                             getRowId={(row) => row._id}
                             loading={loading}
                             sx={{

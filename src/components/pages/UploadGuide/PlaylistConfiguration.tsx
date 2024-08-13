@@ -31,9 +31,9 @@ const PlaylistConfiguration: React.FC<PlaylistConfigurationProps> = ({ isPrivate
             open={open}
             aria-labelledby="modal-modal-title"
             aria-describedby="modal-modal-description"
-            className="h-full w-full flex justify-center items-center"
+            className="h-full w-full flex justify-center items-center min-w-fit"
         >
-            <Box className="flex justify-center items-center flex-col" sx={{ backgroundColor: "black", width: '30vw', height: '40vh' }}>
+            <Box className="flex justify-center items-center flex-col min-w-fit" sx={{ backgroundColor: "black", width: '30vw', height: '40vh' }}>
                 <Typography id="modal-modal-title" variant="h6" component="h2" sx={{ fontSize: '1em' }}>
                     Almoust finished...
                 </Typography>
@@ -64,7 +64,7 @@ const PlaylistConfiguration: React.FC<PlaylistConfigurationProps> = ({ isPrivate
                         variant="outlined"
                         color="primary"
                         onClick={handleUpload}
-                        sx={{ maxWidth: '300px', margin: 'auto' }}
+                        sx={{ maxWidth: '300px', margin: 'auto', width: '7em' }}
                     >
                         <FileUploadRoundedIcon />
                         Done
@@ -73,7 +73,7 @@ const PlaylistConfiguration: React.FC<PlaylistConfigurationProps> = ({ isPrivate
                         variant="outlined"
                         aria-label="close"
                         onClick={handleClose}
-                        sx={{ maxWidth: '300px', margin: 'auto'}}
+                        sx={{ maxWidth: '300px', margin: 'auto', width: '7em'}}
                     >
                         <CloseIcon />
                         Cancle

@@ -30,3 +30,16 @@ export interface INewGuideRequest {
         playlistData: IPlaylist;
         videoData: IVideo[];
 }
+
+export interface IUser {
+    _id: string;
+    username: string;
+    fullName: string;
+    imgUrl: string;
+    role: string;
+}
+
+export interface ICompany {
+    _id: string;
+    name: string;
+}
