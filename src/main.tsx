@@ -39,7 +39,7 @@ const router = createBrowserRouter([
             },
             {
                 path: 'system',
-                element: <CompanyManager/>,
+                element: <ProtectedRoute> <CompanyManager/> </ProtectedRoute>,
             },
             {
                 path: 'add-guide',

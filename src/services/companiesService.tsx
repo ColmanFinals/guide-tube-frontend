@@ -30,3 +30,8 @@ export const addUser = async (companyId: string, userId: string) => {
     const response = await api.put(`/company/addUser`, { companyId, userId });
     return response.data;
 };
+
+export const fetchCompanies = async () => {
+    const response = await api.get("/company/getAll");
+    return response.data;
+}

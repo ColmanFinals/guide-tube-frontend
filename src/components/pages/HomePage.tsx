@@ -108,73 +108,76 @@ const VideoRoute: React.FC = () => {
     };
 
     return (
-        <Box sx={{ flexGrow: 1, padding: 2 }}>
+        <Box
+            sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                height: '100vh',
+                width: '100%',
+                paddingTop: '35px',
+            }}
+        >
+            <PageTopTitle pageTitle="Companies manager" />
             <Box
                 sx={{
-                    position: 'fixed',
-                    top: 0,
-                    left: 0,
-                    right: 0,
-                    backgroundColor: 'background.paper',
-                    zIndex: 1200,
-                }}
-            >
-                <PageTopTitle pageTitle="Video Guide" />
-            </Box>
-
-            <Box
-                sx={{
-                    display: 'flex',
-                    flexDirection: 'column',
                     flex: 1,
-                    overflowY: 'auto',
-                    paddingTop: '4rem', // Space for the fixed header
-                    paddingBottom: '6rem', // Space for the fixed footer
+                    padding: 2,
                 }}
             >
-                <Grid container spacing={2} justifyContent="center" alignItems="center">
-                    <Grid item xs={12} sm={10} md={8}>
-                        <Card>
-                            <CardContent>
-                                <YouTube
-                                    videoId={videoIds[currentVideoIndex]}
-                                    opts={opts}
-                                    onReady={onPlayerReady}
-                                    onStateChange={syncStateChange}
-                                />
-                            </CardContent>
-                        </Card>
-                    </Grid>
-                    <Grid item xs={12} sm={10} md={8}>
-                        <Grid container spacing={2} justifyContent="center">
-                            <Grid item>
-                                <Button variant="contained" color="primary" onClick={ApplyPlayPause}>
-                                    {isPlaying ? 'Pause' : 'Play'}
-                                </Button>
-                            </Grid>
-                            <Grid item>
-                                <Button variant="contained" color="primary" onClick={playPreviousVideo}>
-                                    Previous
-                                </Button>
-                            </Grid>
-                            <Grid item>
-                                <Button variant="contained" color="primary" onClick={playNextVideo}>
-                                    Next
-                                </Button>
-                            </Grid>
-                            <Grid item>
-                                <Button variant="contained" color="primary" onClick={toggleMute}>
-                                    {isMuted ? 'Unmute' : 'Mute'}
-                                </Button>
+
+                <Box
+                    sx={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        flex: 1,
+                        overflowY: 'auto',
+                        paddingTop: '4rem', // Space for the fixed header
+                        paddingBottom: '6rem', // Space for the fixed footer
+                    }}
+                >
+                    <Grid container spacing={2} justifyContent="center" alignItems="center">
+                        <Grid item xs={12} sm={10} md={8}>
+                            <Card>
+                                <CardContent>
+                                    <YouTube
+                                        videoId={videoIds[currentVideoIndex]}
+                                        opts={opts}
+                                        onReady={onPlayerReady}
+                                        onStateChange={syncStateChange}
+                                    />
+                                </CardContent>
+                            </Card>
+                        </Grid>
+                        <Grid item xs={12} sm={10} md={8}>
+                            <Grid container spacing={2} justifyContent="center">
+                                <Grid item>
+                                    <Button variant="contained" color="primary" onClick={ApplyPlayPause}>
+                                        {isPlaying ? 'Pause' : 'Play'}
+                                    </Button>
+                                </Grid>
+                                <Grid item>
+                                    <Button variant="contained" color="primary" onClick={playPreviousVideo}>
+                                        Previous
+                                    </Button>
+                                </Grid>
+                                <Grid item>
+                                    <Button variant="contained" color="primary" onClick={playNextVideo}>
+                                        Next
+                                    </Button>
+                                </Grid>
+                                <Grid item>
+                                    <Button variant="contained" color="primary" onClick={toggleMute}>
+                                        {isMuted ? 'Unmute' : 'Mute'}
+                                    </Button>
+                                </Grid>
                             </Grid>
                         </Grid>
                     </Grid>
-                </Grid>
-                <Box mt={4}>
-                    <SpeechRecognition onCommand={handleCommand} />
+                    <Box mt={4}>
+                        <SpeechRecognition onCommand={handleCommand} />
+                    </Box>
                 </Box>
             </Box>
-            
         </Box>
     );
 };

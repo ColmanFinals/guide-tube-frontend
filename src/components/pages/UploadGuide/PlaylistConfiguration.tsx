@@ -47,7 +47,7 @@ const PlaylistConfiguration: React.FC<PlaylistConfigurationProps> = ({ isPrivate
                         onChange={handleCompanyChange}
                     >
                         {userCompanies.map(company => (
-                            <MenuItem value={company}>{company}</MenuItem>
+                            <MenuItem value={company} key={company}>{company}</MenuItem>
                         ))}
                     </Select>
                 </FormControl>
