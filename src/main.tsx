@@ -14,6 +14,7 @@ import ProtectedRoute from './ProtectedRoute.tsx';
 import CompanyManager from './components/pages/systemPage/Company.tsx';
 import AdminPage from './components/pages/AdminPage.tsx';
 import UserProfile from './components/pages/UserProfilePage.tsx';
+import FeedPage from "./components/pages/FeedPage.tsx";
 
 const router = createBrowserRouter([
     {
@@ -36,6 +37,10 @@ const router = createBrowserRouter([
             {
                 path: 'home',
                 element: <ProtectedRoute> <HomePage/> </ProtectedRoute>,
+            },
+            {
+                path: 'feed',
+                element: <ProtectedRoute> <FeedPage/> </ProtectedRoute>,
             },
             {
                 path: 'system',

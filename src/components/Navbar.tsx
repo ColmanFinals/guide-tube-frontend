@@ -17,7 +17,7 @@ const Navbar = () => {
     return (
         <AppBar position="fixed" sx={{top: 'auto', bottom: 0, width: '100vw', maxWidth: '100vw'}}>
             <Toolbar className="flex justify-around">
-                <IconButton edge="start" color="inherit" aria-label="home" component={Link} to="/home">
+                <IconButton edge="start" color="inherit" aria-label="home" component={Link} to="/feed">
                     <HomeRoundedIcon/>
                 </IconButton>
                 <IconButton edge="start" color="inherit" aria-label="add-guide" component={Link} to="/add-guide">

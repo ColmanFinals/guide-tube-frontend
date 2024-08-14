@@ -5,7 +5,7 @@ export interface IUser {
     email?: string,
     username?: string,
     password?: string,
-    userData: { _id?: string },
+    userData?: { _id?: string },
     imgUrl?: string,
     _id?: string,
     accessToken?: string,
@@ -18,7 +18,7 @@ export interface IAuthResponse {
     refreshToken: string;
 }
 
-export const registrUser = (user: IUser) => {
+export const registerUser = (user: IUser) => {
     return new Promise<IUser>((resolve, reject) => {
         api.post("/auth/register", user).then((response) => {
             resolve(response.data)
@@ -53,7 +53,7 @@ export const updateUser = (user: IUser) => {
         })
     })
 }
-export const googleSignin = (credentials: JwtPayload) => {
+export const googleSignIn = (credentials: JwtPayload) => {
     return new Promise<IUser>((resolve, reject) => {
         api.post(import.meta.env.VITE_SERVER_GOOGLE_LOGIN_PATH,
             {credentials},
