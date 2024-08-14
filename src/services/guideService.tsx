@@ -1,5 +1,5 @@
-import { youtubeApi } from "./youtubeApi";
-import { INewGuideRequest, IPlaylist, IVideo } from "../utillity/types";
+import {youtubeApi} from "./youtubeApi";
+import {INewGuideRequest, IPlaylist, IVideo} from "../utillity/types";
 import serverApi from "./serverApi";
 
 export const generateOauth2Token = async (): Promise<string> => {
@@ -86,7 +86,7 @@ export const uploadVideo = async (videoFile: File, videoName: string, isPrivate:
     };
 
     // Append the snippet and status as JSON blob
-    formData.append('snippet', new Blob([JSON.stringify(snippet)], { type: 'application/json' }));
+    formData.append('snippet', new Blob([JSON.stringify(snippet)], {type: 'application/json'}));
 
     // Append the video file
     formData.append('file', videoFile);

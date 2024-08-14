@@ -1,6 +1,5 @@
-
-import axios, { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
-import { generateOauth2Token } from "./guideService";
+import axios, {AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse} from "axios";
+import {generateOauth2Token} from "./guideService";
 
 interface RetryableRequestConfig extends AxiosRequestConfig {
     _retry?: boolean;

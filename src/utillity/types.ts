@@ -17,7 +17,7 @@ export interface IVideo {
 
 
 export interface IPlaylist {
-    id: string;  
+    id: string;
     publishedAt: Date;
     channelId: string;
     title: string;
@@ -25,10 +25,10 @@ export interface IPlaylist {
 }
 
 export interface INewGuideRequest {
-        companyName: string;
-        guideData: IGuide;
-        playlistData: IPlaylist;
-        videoData: IVideo[];
+    companyName: string;
+    guideData: IGuide;
+    playlistData: IPlaylist;
+    videoData: IVideo[];
 }
 
 export interface IUser {

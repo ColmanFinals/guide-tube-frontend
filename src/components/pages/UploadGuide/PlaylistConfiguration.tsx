@@ -1,4 +1,15 @@
-import { Box, Button, FormControl, InputLabel, MenuItem, Modal, Select, SelectChangeEvent, Switch, Typography } from "@mui/material";
+import {
+    Box,
+    Button,
+    FormControl,
+    InputLabel,
+    MenuItem,
+    Modal,
+    Select,
+    SelectChangeEvent,
+    Switch,
+    Typography
+} from "@mui/material";
 import React from "react";
 import FileUploadRoundedIcon from '@mui/icons-material/FileUploadRounded';
 import CloseIcon from '@mui/icons-material/Close';
@@ -12,7 +23,16 @@ export interface PlaylistConfigurationProps {
     setIsOpen: React.Dispatch<React.SetStateAction<boolean>>,
     handleSave: () => void
 }
-const PlaylistConfiguration: React.FC<PlaylistConfigurationProps> = ({ isPrivate, setIsPrivate, setCompany, userCompanies, open, setIsOpen, handleSave }) => {
+
+const PlaylistConfiguration: React.FC<PlaylistConfigurationProps> = ({
+                                                                         isPrivate,
+                                                                         setIsPrivate,
+                                                                         setCompany,
+                                                                         userCompanies,
+                                                                         open,
+                                                                         setIsOpen,
+                                                                         handleSave
+                                                                     }) => {
     const handleSwitchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setIsPrivate(event.target.checked);
     };
@@ -33,11 +53,12 @@ const PlaylistConfiguration: React.FC<PlaylistConfigurationProps> = ({ isPrivate
             aria-describedby="modal-modal-description"
             className="h-full w-full flex justify-center items-center min-w-fit"
         >
-            <Box className="flex justify-center items-center flex-col min-w-fit" sx={{ backgroundColor: "black", width: '30vw', height: '40vh' }}>
-                <Typography id="modal-modal-title" variant="h6" component="h2" sx={{ fontSize: '1em' }}>
+            <Box className="flex justify-center items-center flex-col min-w-fit"
+                 sx={{backgroundColor: "black", width: '30vw', height: '40vh'}}>
+                <Typography id="modal-modal-title" variant="h6" component="h2" sx={{fontSize: '1em'}}>
                     Almoust finished...
                 </Typography>
-                <FormControl required sx={{ m: 1, minWidth: 120 }}>
+                <FormControl required sx={{m: 1, minWidth: 120}}>
                     <InputLabel id="demo-simple-select-required-label">company</InputLabel>
                     <Select
                         labelId="demo-simple-select-required-label"
@@ -51,11 +72,11 @@ const PlaylistConfiguration: React.FC<PlaylistConfigurationProps> = ({ isPrivate
                         ))}
                     </Select>
                 </FormControl>
-                <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                <Typography id="modal-modal-description" sx={{mt: 2}}>
                     <Switch
                         checked={isPrivate}
                         onChange={handleSwitchChange}
-                        inputProps={{ 'aria-label': 'controlled' }}
+                        inputProps={{'aria-label': 'controlled'}}
                     />
                     <span>Private</span>
                 </Typography>
@@ -64,18 +85,18 @@ const PlaylistConfiguration: React.FC<PlaylistConfigurationProps> = ({ isPrivate
                         variant="outlined"
                         color="primary"
                         onClick={handleUpload}
-                        sx={{ maxWidth: '300px', margin: 'auto', width: '7em' }}
+                        sx={{maxWidth: '300px', margin: 'auto', width: '7em'}}
                     >
-                        <FileUploadRoundedIcon />
+                        <FileUploadRoundedIcon/>
                         Done
                     </Button>
                     <Button
                         variant="outlined"
                         aria-label="close"
                         onClick={handleClose}
-                        sx={{ maxWidth: '300px', margin: 'auto', width: '7em'}}
+                        sx={{maxWidth: '300px', margin: 'auto', width: '7em'}}
                     >
-                        <CloseIcon />
+                        <CloseIcon/>
                         Cancle
                     </Button>
                 </Typography>

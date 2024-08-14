@@ -1,8 +1,8 @@
-import { ReactElement } from "react";
-import { GoogleOAuthProvider } from '@react-oauth/google'
-import { UserProvider } from '../context/user-context'
+import {ReactElement} from "react";
+import {GoogleOAuthProvider} from '@react-oauth/google'
+import {UserProvider} from '../context/user-context'
 
-const ContextProvider = ({ children }: { children: ReactElement }) => {
+const ContextProvider = ({children}: { children: ReactElement }) => {
 
 
     return (

@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
+import React, {useEffect, useState} from 'react';
+import SpeechRecognition, {useSpeechRecognition} from 'react-speech-recognition';
 import SiriWave from 'react-siriwave';
 import './SpeechRecognition.css'; // Import your custom CSS if needed
 
@@ -7,8 +7,8 @@ interface SpeechRecognitionProps {
     onCommand: (command: string) => void;
 }
 
-const SpeechRecognitionComponent: React.FC<SpeechRecognitionProps> = ({ onCommand }) => {
-    const { transcript, listening, resetTranscript, browserSupportsSpeechRecognition } = useSpeechRecognition();
+const SpeechRecognitionComponent: React.FC<SpeechRecognitionProps> = ({onCommand}) => {
+    const {transcript, listening, resetTranscript, browserSupportsSpeechRecognition} = useSpeechRecognition();
     const [checkGuyTube, setCheckGuyTube] = useState(true);
 
     useEffect(() => {
@@ -34,7 +34,7 @@ const SpeechRecognitionComponent: React.FC<SpeechRecognitionProps> = ({ onComman
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ text })
+                body: JSON.stringify({text})
             });
 
             console.log('Received response from backend');
@@ -65,12 +65,12 @@ const SpeechRecognitionComponent: React.FC<SpeechRecognitionProps> = ({ onComman
             SpeechRecognition.stopListening();
         };
         utterance.onend = () => {
-            SpeechRecognition.startListening({ continuous: true });
+            SpeechRecognition.startListening({continuous: true});
         };
         speechSynthesis.speak(utterance);
     };
 
-    const startListening = () => SpeechRecognition.startListening({ continuous: true });
+    const startListening = () => SpeechRecognition.startListening({continuous: true});
     const stopListening = () => SpeechRecognition.stopListening();
 
     useEffect(() => {

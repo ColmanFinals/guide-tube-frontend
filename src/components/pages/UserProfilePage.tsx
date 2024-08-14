@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import { Box, Button, TextField, Typography, Avatar, IconButton } from '@mui/material';
-import { getUserData, changePassword, updateProfilePicture } from '../../services/userService';
-import { useUser } from '../../context/user-context';
+import React, {useEffect, useState} from 'react';
+import {Avatar, Box, Button, IconButton, TextField, Typography} from '@mui/material';
+import {changePassword, getUserData, updateProfilePicture} from '../../services/userService';
+import {useUser} from '../../context/user-context';
 import EditIcon from '@mui/icons-material/Edit';
 import PageTopTitle from '../PageTopTitle';
 
 const UserProfile: React.FC = () => {
-    const { user: contextUser } = useUser();
+    const {user: contextUser} = useUser();
     const [user, setUser] = useState(contextUser || {});
     const [currentPassword, setCurrentPassword] = useState('');
     const [newPassword, setNewPassword] = useState('');
@@ -16,9 +16,11 @@ const UserProfile: React.FC = () => {
     useEffect(() => {
         const loadUserData = async () => {
             try {
-                const userData = await getUserData(contextUser?.userData._id!);
+                if (contextUser?.userData._id == null) return;
+                const userData = await getUserData(contextUser.userData._id);
                 setUser(userData);
-                setImgUrl(`${import.meta.env.VITE_SERVER}/${userData.picture || ''}`);
+                const pictureUrl: string = userData?.picture === null ? userData?.picture : '';
+                setImgUrl(`${import.meta.env.VITE_SERVER}/${pictureUrl}`);
 
             } catch (error) {
                 console.error('Error fetching user data:', error);
@@ -68,16 +70,16 @@ const UserProfile: React.FC = () => {
                 padding: 2,
             }}
         >
-            <PageTopTitle pageTitle="My Profile" />
-            <Box sx={{ marginTop: 3, width: '100%', maxWidth: 600 }}>
-                <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 3 }}>
+            <PageTopTitle pageTitle="My Profile"/>
+            <Box sx={{marginTop: 3, width: '100%', maxWidth: 600}}>
+                <Box sx={{display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 3}}>
                     <Avatar
                         src={imgUrl}
-                        sx={{ width: 120, height: 120, marginRight: 2 }}
+                        sx={{width: 120, height: 120, marginRight: 2}}
                     />
                     <IconButton color="primary" component="label">
-                        <EditIcon />
-                        <input type="file" hidden onChange={handleProfilePictureChange} />
+                        <EditIcon/>
+                        <input type="file" hidden onChange={handleProfilePictureChange}/>
                     </IconButton>
                 </Box>
                 <Typography variant="h5" gutterBottom>
@@ -101,7 +103,7 @@ const UserProfile: React.FC = () => {
                         readOnly: true,
                     }}
                 />
-                <Box sx={{ marginTop: 4 }}>
+                <Box sx={{marginTop: 4}}>
                     <Typography variant="h6">Change Password</Typography>
                     <TextField
                         label="Current Password"
@@ -128,11 +130,11 @@ const UserProfile: React.FC = () => {
                         margin="normal"
                     />
                     <Button
-                    
+
                         variant="contained"
                         color="primary"
                         onClick={handlePasswordChange}
-                        sx={{ marginTop: 2 }}
+                        sx={{marginTop: 2}}
                         fullWidth
                     >
                         Update Password

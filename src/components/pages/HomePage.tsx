@@ -1,7 +1,7 @@
-import React, { useCallback, useRef, useState } from 'react';
-import YouTube, { YouTubePlayer, YouTubeProps } from 'react-youtube';
+import React, {useCallback, useRef, useState} from 'react';
+import YouTube, {YouTubePlayer, YouTubeProps} from 'react-youtube';
 import 'regenerator-runtime/runtime';
-import { Button, Grid, Box, Card, CardContent, useMediaQuery, useTheme } from '@mui/material';
+import {Box, Button, Card, CardContent, Grid, useMediaQuery, useTheme} from '@mui/material';
 import SpeechRecognition from '../Video/SpeechRecognition';
 import PageTopTitle from '../PageTopTitle'; // Adjust the path if necessary
 import './Homepage.css';
@@ -104,11 +104,11 @@ const VideoRoute: React.FC = () => {
     const opts: YouTubeProps['opts'] = {
         height: isMobile ? '300' : '400',
         width: '100%',
-        playerVars: { 'autoplay': 1, 'controls': 0 },
+        playerVars: {'autoplay': 1, 'controls': 0},
     };
 
     return (
-        <Box sx={{ flexGrow: 1, padding: 2 }}>
+        <Box sx={{flexGrow: 1, padding: 2}}>
             <Box
                 sx={{
                     position: 'fixed',
@@ -119,7 +119,7 @@ const VideoRoute: React.FC = () => {
                     zIndex: 1200,
                 }}
             >
-                <PageTopTitle pageTitle="Video Guide" />
+                <PageTopTitle pageTitle="Video Guide"/>
             </Box>
 
             <Box
@@ -171,10 +171,10 @@ const VideoRoute: React.FC = () => {
                     </Grid>
                 </Grid>
                 <Box mt={4}>
-                    <SpeechRecognition onCommand={handleCommand} />
+                    <SpeechRecognition onCommand={handleCommand}/>
                 </Box>
             </Box>
-            
+
         </Box>
     );
 };

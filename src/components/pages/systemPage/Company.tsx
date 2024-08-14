@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { ToastContainer, toast } from "react-toastify";
+import {useEffect, useState} from "react";
+import {toast, ToastContainer} from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import api from "../../../services/serverApi";
 
@@ -67,8 +67,8 @@ const CompanyManager = () => {
     const handleAddAdmin = async (companyId: string) => {
         try {
             // Ensure adminId is a string
-            if (typeof adminId === "string" && adminId.trim() !== "") {
-                await api.put("/company/addAdmin", { companyId, adminId });
+            if (adminId.trim() !== "") {
+                await api.put("/company/addAdmin", {companyId, adminId});
                 toast.success("Admin added successfully!");
                 setAdminId(""); // Clear the input field
                 setShowAddAdminInput(null); // Hide the input field
@@ -86,7 +86,7 @@ const CompanyManager = () => {
 
     const handleRemoveAdmin = async (companyId: string, adminId: string) => {
         try {
-            await api.put("/company/removeAdmin", { companyId, adminId });
+            await api.put("/company/removeAdmin", {companyId, adminId});
             toast.success("Admin removed successfully!");
             // Fetch updated list of companies
             const response = await api.get("/company/getAll");
@@ -100,7 +100,7 @@ const CompanyManager = () => {
     return (
         <div
             className="p-[30px] bg-[rgba(0,0,0,.6)] box-border mx-auto rounded-[10px] text-white"
-            style={{ width: "90%" }}
+            style={{width: "90%"}}
         >
             <h1 className="text-3xl font-bold text-center mb-5">
                 Company Manager
@@ -113,7 +113,7 @@ const CompanyManager = () => {
                     placeholder="Company Name"
                     value={newCompany.name || ""}
                     onChange={(e) =>
-                        setNewCompany({ ...newCompany, name: e.target.value })
+                        setNewCompany({...newCompany, name: e.target.value})
                     }
                     className="p-2 rounded-md bg-white text-black w-full mb-3"
                 />

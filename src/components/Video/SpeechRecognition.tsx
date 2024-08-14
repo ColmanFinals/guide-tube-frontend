@@ -1,12 +1,12 @@
-import React, { useEffect, useRef, useState, MutableRefObject } from 'react';
+import React, {MutableRefObject, useEffect, useRef, useState} from 'react';
 import SiriWave from 'react-siriwave';
-import { Box, CircularProgress, Typography } from '@mui/material';
+import {Box, Typography} from '@mui/material';
 
 interface SpeechRecognitionProps {
     onCommand: (command: string) => void;
 }
 
-const SpeechRecognition: React.FC<SpeechRecognitionProps> = ({ onCommand }) => {
+const SpeechRecognition: React.FC<SpeechRecognitionProps> = ({onCommand}) => {
     const mediaRecorderRef: MutableRefObject<MediaRecorder | null> = useRef(null);
     const audioChunksRef: MutableRefObject<Blob[]> = useRef([]);
     const intervalIdRef: MutableRefObject<NodeJS.Timeout | null> = useRef(null);
@@ -17,7 +17,7 @@ const SpeechRecognition: React.FC<SpeechRecognitionProps> = ({ onCommand }) => {
     useEffect(() => {
         const startListening = async () => {
             try {
-                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                const stream = await navigator.mediaDevices.getUserMedia({audio: true});
                 mediaRecorderRef.current = new MediaRecorder(stream);
 
                 mediaRecorderRef.current.ondataavailable = (event: BlobEvent) => {
@@ -26,7 +26,7 @@ const SpeechRecognition: React.FC<SpeechRecognitionProps> = ({ onCommand }) => {
 
                 mediaRecorderRef.current.onstop = async () => {
                     if (audioChunksRef.current.length > 0 && !isUploading) {
-                        const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/webm' });
+                        const audioBlob = new Blob(audioChunksRef.current, {type: 'audio/webm'});
                         audioChunksRef.current = [];
                         setIsUploading(true);
                         await sendAudioToBackend(audioBlob);
@@ -123,8 +123,19 @@ const SpeechRecognition: React.FC<SpeechRecognitionProps> = ({ onCommand }) => {
     return (
         <>
             {!checkGuyTube && (
-                <Box sx={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0, 0, 0, 0.8)', zIndex: 1200, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                    <Box sx={{ textAlign: 'center' }}>
+                <Box sx={{
+                    position: 'fixed',
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                    zIndex: 1200,
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center'
+                }}>
+                    <Box sx={{textAlign: 'center'}}>
                         <SiriWave
                             width={100}
                             height={100}
@@ -133,7 +144,7 @@ const SpeechRecognition: React.FC<SpeechRecognitionProps> = ({ onCommand }) => {
                             frequency={6}
                             color="#ffffff"
                         />
-                        <Typography variant="h6" color="white" sx={{ marginTop: 2 }}>Listening...</Typography>
+                        <Typography variant="h6" color="white" sx={{marginTop: 2}}>Listening...</Typography>
                     </Box>
                 </Box>
             )}

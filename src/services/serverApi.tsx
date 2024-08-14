@@ -1,4 +1,11 @@
-import axios, {AxiosError, AxiosInstance, AxiosRequestConfig, AxiosRequestHeaders, AxiosResponse, InternalAxiosRequestConfig,} from "axios";
+import axios, {
+    AxiosError,
+    AxiosInstance,
+    AxiosRequestConfig,
+    AxiosRequestHeaders,
+    AxiosResponse,
+    InternalAxiosRequestConfig,
+} from "axios";
 
 interface RetryableRequestConfig extends AxiosRequestConfig {
     _retry?: boolean;

@@ -1,14 +1,16 @@
 import api from "./serverApi"
-import { JwtPayload } from "jwt-decode"; 
+import {JwtPayload} from "jwt-decode";
 
 export interface IUser {
     email?: string,
     username?: string,
     password?: string,
+    userData: { _id?: string },
     imgUrl?: string,
     _id?: string,
     accessToken?: string,
-    refreshToken?: string
+    refreshToken?: string,
+    picture?: string
 }
 
 export interface IAuthResponse {
@@ -26,23 +28,24 @@ export const registrUser = (user: IUser) => {
     })
 }
 
-export const loginUser =  (user: IUser) => {
+export const loginUser = (user: IUser) => {
     return new Promise<IUser>((resolve, reject) => {
         api.post(import.meta.env.VITE_SERVER_LOGIN_PATH,
-            { username: user.username, password: user.password  },
-            { headers: { "Content-Type": "application/json" } }
-          ).then((response) => {
+            {username: user.username, password: user.password},
+            {headers: {"Content-Type": "application/json"}}
+        ).then((response) => {
             resolve(response.data)
         }).catch((error) => {
             reject(error)
         })
     })
-  };
-  
+};
+
 export const updateUser = (user: IUser) => {
     const accessToken = localStorage.getItem('accessToken');
     return new Promise<IUser>((resolve, reject) => {
-        api.post("/user", user, {headers: {'authorization': `Bearer ${accessToken}`}
+        api.post("/user", user, {
+            headers: {'authorization': `Bearer ${accessToken}`}
         }).then((response) => {
             resolve(response.data)
         }).catch((error) => {
@@ -53,9 +56,9 @@ export const updateUser = (user: IUser) => {
 export const googleSignin = (credentials: JwtPayload) => {
     return new Promise<IUser>((resolve, reject) => {
         api.post(import.meta.env.VITE_SERVER_GOOGLE_LOGIN_PATH,
-            { credentials },
-            { headers: { "Content-Type": "application/json" } }
-          ).then((response) => {
+            {credentials},
+            {headers: {"Content-Type": "application/json"}}
+        ).then((response) => {
             resolve(response.data)
         }).catch((error) => {
             reject(error)
@@ -64,12 +67,11 @@ export const googleSignin = (credentials: JwtPayload) => {
 }
 
 export const logoutUser = () => {
-    return new Promise((resolve,reject)=> {       
-        api.post(import.meta.env.VITE_SERVER_LOGOUT_PATH, null, {
-        })
-        .then((response) => {
-            resolve(response.data)
-        }).catch((error) => {
+    return new Promise((resolve, reject) => {
+        api.post(import.meta.env.VITE_SERVER_LOGOUT_PATH, null, {})
+            .then((response) => {
+                resolve(response.data)
+            }).catch((error) => {
             reject(error)
         })
     })
@@ -80,8 +82,8 @@ export const changePassword = (currentPassword: string, newPassword: string) => 
     return new Promise<void>((resolve, reject) => {
         api.post(
             "/auth/changePassword",
-            { currentPassword, newPassword },
-            { headers: { 'authorization': `Bearer ${accessToken}` } }
+            {currentPassword, newPassword},
+            {headers: {'authorization': `Bearer ${accessToken}`}}
         ).then((response) => {
             console.log(response)
             resolve();
@@ -96,7 +98,7 @@ export const getUserData = (userId: string) => {
     const accessToken = localStorage.getItem('accessToken');
     return new Promise<IUser>((resolve, reject) => {
         api.get(`/user/getUserData/${userId}`, {
-            headers: { 'authorization': `Bearer ${accessToken}` }
+            headers: {'authorization': `Bearer ${accessToken}`}
         }).then((response) => {
             console.log(response)
             resolve(response.data)
@@ -115,9 +117,9 @@ export const updateProfilePicture = (userId: string, file: File) => {
 
     return new Promise<IUser>((resolve, reject) => {
         api.put("/user/updatePicture", formData, {
-            headers: { 
+            headers: {
                 'authorization': `Bearer ${accessToken}`,
-                'Content-Type': 'multipart/form-data' 
+                'Content-Type': 'multipart/form-data'
             }
         }).then((response) => {
             console.log(response)

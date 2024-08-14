@@ -1,8 +1,8 @@
-  @tailwind base;
-  @tailwind components;
-  @tailwind utilities;
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-  :root {
+:root {
     --navbar-height: 64px;
     font-family: 'Wix Madefor Text', sans-serif;
     font-weight: 400;
@@ -16,40 +16,40 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     -webkit-text-size-adjust: 100%;
-  }
+}
 
-  body {
+body {
     min-height: 100vh;
-  }
+}
 
-  td {
+td {
     @apply border border-white p-1;
-  }
+}
 
-  th {
+th {
     @apply border border-white p-1;
-  }
+}
 
-  body {
+body {
     scrollbar-width: thin;
     scrollbar-color: rgba(255, 255, 255, 0.15) rgba(255, 255, 255, 0.05);
-  }
+}
 
-  *::-webkit-scrollbar {
+*::-webkit-scrollbar {
     width: 12px;
-  }
- 
-  .main-content {
+}
+
+.main-content {
     height: calc(100vh - var(--navbar-height));
     overflow-y: auto;
     width: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
-  }
-  
-  .hidden-navbar-content {
+}
+
+.hidden-navbar-content {
     height: 100vh;
     overflow-y: auto;
     width: 100%;
-  }
+}

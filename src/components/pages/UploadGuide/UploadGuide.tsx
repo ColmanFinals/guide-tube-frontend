@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import {useEffect, useState} from 'react';
 import VideoInput from './VideoInput';
 import PageTopTitle from '../../PageTopTitle';
 import Input from '@mui/material/Input';
@@ -7,13 +7,12 @@ import SaveIcon from '@mui/icons-material/Save';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import Fab from '@mui/material/Fab';
 import Button from '@mui/material/Button';
-import { Grid, Box } from '@mui/material';
-import { useTheme, useMediaQuery } from '@mui/material';
-import { createPlaylist, uploadVideo, addVideoToPlaylist, addGuideToCompany} from '../../../services/guideService';
-import { ToastContainer, toast } from 'react-toastify';
+import {Box, Grid, useMediaQuery, useTheme} from '@mui/material';
+import {addGuideToCompany, addVideoToPlaylist, createPlaylist, uploadVideo} from '../../../services/guideService';
+import {toast, ToastContainer} from 'react-toastify';
 import PlaylistConfiguration from './PlaylistConfiguration';
-import { IGuide, INewGuideRequest, IVideo, ICompany } from '../../../utillity/types';
-import { fetchMyCompanies } from '../../../services/companiesService';
+import {ICompany, IGuide, INewGuideRequest, IVideo} from '../../../utillity/types';
+import {fetchMyCompanies} from '../../../services/companiesService';
 
 export interface Video {
     "file"?: File,
@@ -21,9 +20,10 @@ export interface Video {
     "source": string,
     "title": string
 }
+
 const UploadGuidePage = () => {
     const defaultPlaylistName = "New Guide"
-    const [videos, setVideos] = useState<Video[]>([{ "file": undefined, "fragment": 1, "source": "", "title": "" }]);
+    const [videos, setVideos] = useState<Video[]>([{"file": undefined, "fragment": 1, "source": "", "title": ""}]);
     const [playlistName, setPlaylistName] = useState(defaultPlaylistName);
     const theme = useTheme();
     const [isPrivate, setIsPrivate] = useState(false);
@@ -49,38 +49,50 @@ const UploadGuidePage = () => {
     const addVideoInput = () => {
         setVideos(prevVideosList => {
             if (prevVideosList.length < 10) {
-                return [...prevVideosList, { "file": undefined, "fragment": prevVideosList.length + 1, "source": "", "title": "" }];
+                return [...prevVideosList, {
+                    "file": undefined,
+                    "fragment": prevVideosList.length + 1,
+                    "source": "",
+                    "title": ""
+                }];
             } else {
                 toast.error("You can only add up to 10 videos");
                 return prevVideosList;
             }
         });
     };
-    
+
     const handleSave = async () => {
         try {
             const privacy = isPrivate ? "unlisted" : "public";
-            const guideData: IGuide = { createdAt: new Date().toISOString(), name: playlistName, views: 0 , privacyStatus:privacy};
-            let videosData: IVideo[] = [];
+            const guideData: IGuide = {
+                createdAt: new Date().toISOString(),
+                name: playlistName,
+                views: 0,
+                privacyStatus: privacy
+            };
+            const videosData: IVideo[] = [];
 
             // Create the playlist
             const playlist = await createPlaylist(playlistName, isPrivate, "Created by GuideTube!");
-            
+
             // Iterate over videos and upload them
             for (const video of videos) {
                 if (video.file) {
                     const title = video.title !== "" ? video.title : String(video.fragment);
-                    
+
                     // Upload video
                     const videoID = await uploadVideo(video.file, title, isPrivate, "Created by GuideTube!");
-    
+
                     // Add video to playlist
                     const videoData = await addVideoToPlaylist(playlist.id, videoID, video.fragment - 1);
                     videosData.push({...videoData});
                 }
             }
-            const newGuideRequest: INewGuideRequest = { guideData: guideData, companyName: company, playlistData: playlist,
-                 videoData: videosData}
+            const newGuideRequest: INewGuideRequest = {
+                guideData: guideData, companyName: company, playlistData: playlist,
+                videoData: videosData
+            }
             await addGuideToCompany(newGuideRequest);
             toast.success("Guide created successfully!");
         } catch (e) {
@@ -88,10 +100,10 @@ const UploadGuidePage = () => {
             toast.error("An error occurred during guide creation.");
         }
     };
-    
+
     const handleStartAgain = () => {
         setIsPrivate(false);
-        setVideos([{ "file": undefined, "fragment": 1, "source": "", "title": "" }])
+        setVideos([{"file": undefined, "fragment": 1, "source": "", "title": ""}])
     };
 
 
@@ -104,7 +116,7 @@ const UploadGuidePage = () => {
             }));
         });
     };
-    
+
 
     return (
         <Box
@@ -127,7 +139,7 @@ const UploadGuidePage = () => {
                     zIndex: 1200,
                 }}
             >
-                <PageTopTitle pageTitle="Create a new guide" />
+                <PageTopTitle pageTitle="Create a new guide"/>
             </Box>
 
             <Box
@@ -135,15 +147,22 @@ const UploadGuidePage = () => {
                     display: 'flex',
                     flexDirection: 'column',
                     flex: 1,
-                    paddingTop: '4rem', 
-                    paddingBottom: '6rem', 
+                    paddingTop: '4rem',
+                    paddingBottom: '6rem',
                 }}
             >
-                <Grid container spacing={3} alignItems="center" justifyContent="center" sx={{ width: '100%', marginBottom: 2, marginTop: 5 }}>
+                <Grid container spacing={3} alignItems="center" justifyContent="center"
+                      sx={{width: '100%', marginBottom: 2, marginTop: 5}}>
                     <Grid item xs={11} lg={4} container alignItems="center" justifyContent="center">
                         <Input
                             fullWidth
-                            sx={{ fontSize: '1.2em', padding: '0.5em', mb: 2, border: 'none', maxWidth: isMobile ? '90%' : '300px' }}
+                            sx={{
+                                fontSize: '1.2em',
+                                padding: '0.5em',
+                                mb: 2,
+                                border: 'none',
+                                maxWidth: isMobile ? '90%' : '300px'
+                            }}
                             defaultValue={defaultPlaylistName}
                             placeholder="Enter video title"
                             onChange={(event) => setPlaylistName(event.target.value)}
@@ -153,9 +172,9 @@ const UploadGuidePage = () => {
                         <Button
                             variant="outlined"
                             color="secondary"
-                            startIcon={<RestartAltIcon />}
+                            startIcon={<RestartAltIcon/>}
                             onClick={handleStartAgain}
-                            sx={{ mt: 2 }}
+                            sx={{mt: 2}}
                         >
                             Start Again
                         </Button>
@@ -191,9 +210,9 @@ const UploadGuidePage = () => {
                 <Button
                     variant="contained"
                     color="primary"
-                    startIcon={<SaveIcon />}
+                    startIcon={<SaveIcon/>}
                     onClick={() => setOpenModal(true)}
-                    sx={{ width: '50%', maxWidth: '300px' }}
+                    sx={{width: '50%', maxWidth: '300px'}}
                 >
                     Finish
                 </Button>
@@ -203,14 +222,15 @@ const UploadGuidePage = () => {
                 size="large"
                 color="secondary"
                 onClick={addVideoInput}
-                sx={{ position: 'fixed', right: '2em', bottom: '80px', zIndex: 1300 }}
+                sx={{position: 'fixed', right: '2em', bottom: '80px', zIndex: 1300}}
             >
-                <AddCardRoundedIcon fontSize="large" />
+                <AddCardRoundedIcon fontSize="large"/>
             </Fab>
-            <PlaylistConfiguration handleSave={handleSave} isPrivate={isPrivate} open={openModal} setCompany={setCompany}
-                setIsOpen={setOpenModal} setIsPrivate={setIsPrivate} userCompanies={userCompanies} />
+            <PlaylistConfiguration handleSave={handleSave} isPrivate={isPrivate} open={openModal}
+                                   setCompany={setCompany}
+                                   setIsOpen={setOpenModal} setIsPrivate={setIsPrivate} userCompanies={userCompanies}/>
             <ToastContainer theme="dark" position="top-center" autoClose={5000} hideProgressBar={false}
-                newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss pauseOnHover />
+                            newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss pauseOnHover/>
         </Box>
     );
 };

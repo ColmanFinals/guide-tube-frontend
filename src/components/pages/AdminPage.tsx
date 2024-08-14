@@ -1,13 +1,23 @@
-import React, { useState, useEffect } from 'react';
-import { Box, Grid, FormControl, InputLabel, CircularProgress, IconButton, TextField, MenuItem, Select, Autocomplete, InputAdornment } from '@mui/material';
-import { DataGrid, GridColDef } from '@mui/x-data-grid';
-import { fetchMyCompanies, getCompanyById, removeUser, addUser } from '../../services/companiesService'; 
+import React, {useEffect, useState} from 'react';
+import {
+    Autocomplete,
+    Box,
+    FormControl,
+    Grid,
+    IconButton,
+    InputAdornment,
+    InputLabel,
+    MenuItem,
+    Select,
+    TextField
+} from '@mui/material';
+import {DataGrid, GridColDef} from '@mui/x-data-grid';
+import {addUser, fetchMyCompanies, getCompanyById, removeUser} from '../../services/companiesService';
 import {fetchAllUsers} from "../../services/userService";
 import PageTopTitle from '../PageTopTitle';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
-import { ICompany, IUser } from '../../utillity/types';
-
+import {ICompany, IUser} from '../../utillity/types';
 
 
 const AdminPage: React.FC = () => {
@@ -79,22 +89,22 @@ const AdminPage: React.FC = () => {
     };
 
     const handleAddUser = async (userId: string) => {
-    try {
-        const userExists = users.some(user => user._id === userId);
-        if (userExists) {
-            console.log("User already added.");
-            return;
-        }
+        try {
+            const userExists = users.some(user => user._id === userId);
+            if (userExists) {
+                console.log("User already added.");
+                return;
+            }
 
-        const userToAdd = availableUsers.find(user => user._id === userId);
-        if (userToAdd) {
-            await addUser(selectedCompany, userId);
-            setUsers(prevUsers => [...prevUsers, userToAdd]);
+            const userToAdd = availableUsers.find(user => user._id === userId);
+            if (userToAdd) {
+                await addUser(selectedCompany, userId);
+                setUsers(prevUsers => [...prevUsers, userToAdd]);
+            }
+        } catch (error) {
+            console.error("Error adding user:", error);
         }
-    } catch (error) {
-        console.error("Error adding user:", error);
-    }
-};
+    };
 
 
     const columns: GridColDef[] = [
@@ -115,16 +125,16 @@ const AdminPage: React.FC = () => {
                 />
             ),
         },
-        { field: 'username', headerName: 'Username', width: 150 },
-        { field: 'fullName', headerName: 'Full Name', width: 200 },
-        { field: 'role', headerName: 'Role', width: 150 },
+        {field: 'username', headerName: 'Username', width: 150},
+        {field: 'fullName', headerName: 'Full Name', width: 200},
+        {field: 'role', headerName: 'Role', width: 150},
         {
             field: 'actions',
             headerName: 'Actions',
             width: 80,
             renderCell: (params) => (
                 <IconButton color="error" onClick={() => handleDeleteUser(params.row._id)}>
-                    <DeleteIcon />
+                    <DeleteIcon/>
                 </IconButton>
             ),
         },
@@ -140,7 +150,7 @@ const AdminPage: React.FC = () => {
                 paddingTop: '35px',
             }}
         >
-            <PageTopTitle pageTitle="Admin Dashboard" />
+            <PageTopTitle pageTitle="Admin Dashboard"/>
             <Box
                 sx={{
                     flex: 1,
@@ -155,7 +165,7 @@ const AdminPage: React.FC = () => {
                                 value={selectedCompany}
                                 onChange={(e) => setSelectedCompany(e.target.value as string)}
                                 label="Select Company"
-                                sx={{ minWidth: 200 }}
+                                sx={{minWidth: 200}}
                             >
                                 {companies.map((company) => (
                                     <MenuItem key={company._id} value={company._id}>
@@ -169,7 +179,7 @@ const AdminPage: React.FC = () => {
                 <Grid container spacing={2} alignItems="center" marginTop={2} justifyContent="center">
                     <Grid item xs={12} md={4} container justifyContent="center">
                         <Autocomplete
-                            sx={{ width: '100%' }}
+                            sx={{width: '100%'}}
                             freeSolo
                             options={filteredUsers}
                             getOptionLabel={(option) => typeof option === 'string' ? option : `${option.username} (${option.fullName})`}
@@ -183,14 +193,14 @@ const AdminPage: React.FC = () => {
                                         ...params.InputProps,
                                         startAdornment: (
                                             <InputAdornment position="start">
-                                                <AddIcon />
+                                                <AddIcon/>
                                             </InputAdornment>
                                         ),
                                     }}
                                     disabled={!selectedCompany} // Disable until company is selected
                                 />
                             )}
-                            onChange={(event, value) => {
+                            onChange={(_event, value) => {
                                 if (typeof value !== 'string') {
                                     handleAddUser(value?._id || '');
                                 }
@@ -203,7 +213,7 @@ const AdminPage: React.FC = () => {
                         <DataGrid
                             rows={users}
                             columns={columns}
-                            paginationModel={{ pageSize: 5, page: 0 }} 
+                            paginationModel={{pageSize: 5, page: 0}}
                             autoHeight
                             disableRowSelectionOnClick
                             getRowId={(row) => row._id}
