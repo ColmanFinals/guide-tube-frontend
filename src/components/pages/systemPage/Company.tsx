@@ -3,21 +3,23 @@ import {toast, ToastContainer} from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import api from "../../../services/serverApi";
 
-interface Company {
+interface ICompanyCreator {
     _id: string;
     name: string;
+    logo: string;
     users: string[];
     admins: { _id: string; username: string }[];
     videos: string[];
 }
 
 const CompanyManager = () => {
-    const [newCompany, setNewCompany] = useState<Partial<Company>>({
+    const [newCompany, setNewCompany] = useState<Partial<ICompanyCreator>>({
         name: "",
+        logo: "",
         admins: [],
         videos: [],
     });
-    const [companies, setCompanies] = useState<Company[]>([]);
+    const [companies, setCompanies] = useState<ICompanyCreator[]>([]);
     const [adminId, setAdminId] = useState<string>("");
     const [showAddAdminInput, setShowAddAdminInput] = useState<string | null>(
         null
@@ -41,7 +43,7 @@ const CompanyManager = () => {
     const handleCreateCompany = async () => {
         try {
             await api.post("/company/create", newCompany);
-            toast.success("Company created successfully!");
+            toast.success("ICompanyCreator created successfully!");
             // Fetch updated list of companies
             const response = await api.get("/company/getAll");
             setCompanies(response.data.companies);
@@ -54,7 +56,7 @@ const CompanyManager = () => {
     const handleDeleteCompany = async (id: string) => {
         try {
             await api.delete(`/company/delete/${id}`); // Pass companyId as part of the URL
-            toast.success("Company deleted successfully!");
+            toast.success("ICompanyCreator deleted successfully!");
             // Fetch updated list of companies
             const response = await api.get("/company/getAll");
             setCompanies(response.data.companies);
@@ -117,7 +119,13 @@ const CompanyManager = () => {
                     }
                     className="p-2 rounded-md bg-white text-black w-full mb-3"
                 />
-                {/* Add inputs for videos */}
+                <input
+                    type="text"
+                    placeholder="Company Logo URL"
+                    value={newCompany.logo || ""}
+                    onChange={(e) => setNewCompany({ ...newCompany, logo: e.target.value })}
+                    className="p-2 rounded-md bg-white text-black w-full mb-3"
+                />
                 <button
                     onClick={handleCreateCompany}
                     className="bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600"
@@ -136,6 +144,7 @@ const CompanyManager = () => {
                         >
                             <div className="flex justify-between items-center mb-2">
                                 <span className="text-xl">{company.name}</span>
+                                <img src={company.logo} alt={`${company.name} logo`} className="h-10 w-10 rounded-full" />
                                 <button
                                     onClick={() =>
                                         handleDeleteCompany(company._id)

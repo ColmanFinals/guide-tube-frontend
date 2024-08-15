@@ -40,7 +40,13 @@ const CompaniesPage: React.FC = () => {
                         className='m-5 group relative overflow-hidden text-center cursor-pointer'
                         onClick={() => handleNavigate(company.name)}
                     >
-                        <div className='w-[250px] h-[250px] bg-cyan-700 rounded-2xl p-5 shadow-lg'>
+                        <div
+                            className='w-[250px] h-[250px] bg-cyan-700 rounded-2xl p-5 shadow-lg flex flex-col items-center'>
+                            <img
+                                src={company.logo}
+                                alt={`${company.name} logo`}
+                                className='w-20 h-20 mb-3 rounded-full border-2 border-white'
+                            />
                             <h2 className='text-xl font-bold mb-2'>{company.name}</h2>
                             <h3 className='text-lg font-medium'>Creator: {company.creator.fullName}</h3>
                         </div>
