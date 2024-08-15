@@ -1,7 +1,14 @@
-import {useEffect, useState} from "react";
-import {toast, ToastContainer} from "react-toastify";
+import { useEffect, useState } from "react";
+import { Box, Grid, Typography, TextField, Button, IconButton } from "@mui/material";
+import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import api from "../../../services/serverApi";
+import { fetchCompanies } from "../../../services/companiesService";
+import PageTopTitle from "../../PageTopTitle";
+import { useTheme } from '@mui/material';
+import DeleteIcon from '@mui/icons-material/Delete';
+import AddIcon from '@mui/icons-material/Add';
+import CancelIcon from '@mui/icons-material/Cancel';
 
 interface ICompanyCreator {
     _id: string;
@@ -13,6 +20,7 @@ interface ICompanyCreator {
 }
 
 const CompanyManager = () => {
+    const theme = useTheme();
     const [newCompany, setNewCompany] = useState<Partial<ICompanyCreator>>({
         name: "",
         logo: "",
@@ -27,23 +35,23 @@ const CompanyManager = () => {
 
     useEffect(() => {
         // Fetch companies on component mount
-        const fetchCompanies = async () => {
+        const loadCompanies = async () => {
             try {
-                const response = await api.get("/company/getAll"); // Endpoint to fetch all companies
-                setCompanies(response.data.companies);
-                console.log(response.data.companies);
+                const response = await fetchCompanies() // Endpoint to fetch all companies
+                setCompanies(response.companies);
+                console.log(response.companies);
             } catch (error) {
                 console.error("Error fetching companies:", error);
             }
         };
 
-        fetchCompanies();
+        loadCompanies();
     }, []);
 
     const handleCreateCompany = async () => {
         try {
             await api.post("/company/create", newCompany);
-            toast.success("ICompanyCreator created successfully!");
+            toast.success("Company created successfully!");
             // Fetch updated list of companies
             const response = await api.get("/company/getAll");
             setCompanies(response.data.companies);
@@ -56,7 +64,7 @@ const CompanyManager = () => {
     const handleDeleteCompany = async (id: string) => {
         try {
             await api.delete(`/company/delete/${id}`); // Pass companyId as part of the URL
-            toast.success("ICompanyCreator deleted successfully!");
+            toast.success("Company deleted successfully!");
             // Fetch updated list of companies
             const response = await api.get("/company/getAll");
             setCompanies(response.data.companies);
@@ -88,7 +96,7 @@ const CompanyManager = () => {
 
     const handleRemoveAdmin = async (companyId: string, adminId: string) => {
         try {
-            await api.put("/company/removeAdmin", {companyId, adminId});
+            await api.put("/company/removeAdmin", { companyId, adminId });
             toast.success("Admin removed successfully!");
             // Fetch updated list of companies
             const response = await api.get("/company/getAll");
@@ -100,140 +108,190 @@ const CompanyManager = () => {
     };
 
     return (
-        <div
-            className="p-[30px] bg-[rgba(0,0,0,.6)] box-border mx-auto rounded-[10px] text-white"
-            style={{width: "90%"}}
+        <Box
+            sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                height: '100vh',
+                width: '100%',
+                paddingTop: '35px',
+            }}
         >
-            <h1 className="text-3xl font-bold text-center mb-5">
-                Company Manager
-            </h1>
+            <PageTopTitle pageTitle="Companies manager" />
+            <Box
+                sx={{
+                    flex: 1,
+                    padding: 2,
+                }}
+            >
+                <Box sx={{ marginTop: '5rem', marginBottom: '2rem' }}>
+                    <Grid container spacing={2} alignItems="center">
+                        <Grid item xs={12} md={6}>
+                            <TextField
+                                label="Company Name"
+                                fullWidth
+                                value={newCompany.name || ""}
+                                onChange={(e) =>
+                                    setNewCompany({ ...newCompany, name: e.target.value })
+                                }
+                                variant="outlined"
+                            />
+                            <TextField
+                                label="Company Logo URL"
+                                fullWidth
+                                value={newCompany.logo || ""}
+                                onChange={(e) =>
+                                    setNewCompany({ ...newCompany, logo: e.target.value })
+                                }
+                                variant="outlined"
+                            />
+                        </Grid>
+                        <Grid item xs={12} md={6}>
+                            <Button
+                                variant="contained"
+                                color="primary"
+                                onClick={handleCreateCompany}
+                                startIcon={<AddIcon />}
+                                fullWidth
+                            >
+                                Create Company
+                            </Button>
+                        </Grid>
+                    </Grid>
+                </Box>
 
-            <div className="mb-5">
-                <h2 className="text-2xl font-semibold mb-2">Create Company</h2>
-                <input
-                    type="text"
-                    placeholder="Company Name"
-                    value={newCompany.name || ""}
-                    onChange={(e) =>
-                        setNewCompany({...newCompany, name: e.target.value})
-                    }
-                    className="p-2 rounded-md bg-white text-black w-full mb-3"
-                />
-                <input
-                    type="text"
-                    placeholder="Company Logo URL"
-                    value={newCompany.logo || ""}
-                    onChange={(e) => setNewCompany({ ...newCompany, logo: e.target.value })}
-                    className="p-2 rounded-md bg-white text-black w-full mb-3"
-                />
-                <button
-                    onClick={handleCreateCompany}
-                    className="bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600"
-                >
-                    Create Company
-                </button>
-            </div>
+                <Box>
+                    <Typography variant="h5" gutterBottom>
+                        Companies
+                    </Typography>
+                    <Grid container spacing={2}>
+                        {companies.map((company) => (
+                            <Grid item xs={12} md={6} key={company._id}>
+                                <Box
+                                    sx={{
+                                        border: '1px solid',
+                                        borderColor: theme.palette.divider,
+                                        borderRadius: 2,
+                                        padding: 2,
+                                        display: 'flex',
+                                        flexDirection: 'column',
+                                        gap: 2,
+                                    }}
+                                >
+                                    <Box
+                                        sx={{
+                                            display: 'flex',
+                                            justifyContent: 'space-between',
+                                            alignItems: 'center',
+                                        }}
+                                    >
+                                        <Typography variant="h6">{company.name}</Typography>
+                                        <img src={company.logo} alt={`${company.name} logo`} className="h-10 w-10 rounded-full" />
+                                        <IconButton
+                                            onClick={() => handleDeleteCompany(company._id)}
+                                            color="error"
+                                        >
+                                            <DeleteIcon />
+                                        </IconButton>
+                                    </Box>
 
-            <div className="mb-5">
-                <h2 className="text-2xl font-semibold mb-2">Companies</h2>
-                <ul>
-                    {companies.map((company) => (
-                        <li
-                            key={company._id}
-                            className="mb-3 flex flex-col border border-gray-700 p-4 rounded-md"
-                        >
-                            <div className="flex justify-between items-center mb-2">
-                                <span className="text-xl">{company.name}</span>
-                                <img src={company.logo} alt={`${company.name} logo`} className="h-10 w-10 rounded-full" />
-                                <button
-                                    onClick={() =>
-                                        handleDeleteCompany(company._id)
-                                    }
-                                    className="bg-red-500 text-white p-1 rounded-md hover:bg-red-600"
-                                >
-                                    Delete
-                                </button>
-                            </div>
-                            {showAddAdminInput === company._id ? (
-                                <div className="mb-3">
-                                    <input
-                                        type="text"
-                                        placeholder="Admin ID"
-                                        value={adminId}
-                                        onChange={(e) =>
-                                            setAdminId(e.target.value)
-                                        }
-                                        className="p-2 rounded-md bg-white text-black w-full mb-2"
-                                    />
-                                    <button
-                                        onClick={() =>
-                                            handleAddAdmin(company._id)
-                                        }
-                                        className="bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600"
-                                    >
-                                        Add Admin
-                                    </button>
-                                    <button
-                                        onClick={() =>
-                                            setShowAddAdminInput(null)
-                                        }
-                                        className="bg-gray-500 text-white p-2 rounded-md hover:bg-gray-600 ml-2"
-                                    >
-                                        Cancel
-                                    </button>
-                                </div>
-                            ) : (
-                                <button
-                                    onClick={() =>
-                                        setShowAddAdminInput(company._id)
-                                    }
-                                    className="bg-blue-500 text-white p-1 rounded-md hover:bg-blue-600"
-                                >
-                                    Add Admin
-                                </button>
-                            )}
-                            <div>
-                                {company.admins.map((admin) => (
-                                    <div
-                                        key={admin._id}
-                                        className="flex items-center mb-2"
-                                    >
-                                        <div className="mt-4">
-                                            <span className="mr-2">
-                                                Admin: {admin.username}
-                                            </span>
-                                            <button
-                                                onClick={() =>
-                                                    handleRemoveAdmin(
-                                                        company._id,
-                                                        admin._id
-                                                    )
+                                    {showAddAdminInput === company._id ? (
+                                        <Box>
+                                            <TextField
+                                                label="Admin ID"
+                                                fullWidth
+                                                value={adminId}
+                                                onChange={(e) =>
+                                                    setAdminId(e.target.value)
                                                 }
-                                                className="bg-red-500 text-white p-1 ml-auto rounded-md hover:bg-red-600"
-                                            >
-                                                Remove Admin
-                                            </button>
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-                        </li>
-                    ))}
-                </ul>
-            </div>
+                                                variant="outlined"
+                                                sx={{ marginBottom: 2 }}
+                                            />
+                                            <Box sx={{ display: 'flex', gap: 2 }}>
+                                                <Button
+                                                    variant="contained"
+                                                    color="primary"
+                                                    onClick={() =>
+                                                        handleAddAdmin(company._id)
+                                                    }
+                                                    startIcon={<AddIcon />}
+                                                    fullWidth
+                                                >
+                                                    Add Admin
+                                                </Button>
+                                                <Button
+                                                    variant="contained"
+                                                    color="secondary"
+                                                    onClick={() =>
+                                                        setShowAddAdminInput(null)
+                                                    }
+                                                    startIcon={<CancelIcon />}
+                                                    fullWidth
+                                                >
+                                                    Cancel
+                                                </Button>
+                                            </Box>
+                                        </Box>
+                                    ) : (
+                                        <Button
+                                            variant="outlined"
+                                            color="primary"
+                                            onClick={() =>
+                                                setShowAddAdminInput(company._id)
+                                            }
+                                            fullWidth
+                                        >
+                                            Add Admin
+                                        </Button>
+                                    )}
 
-            <ToastContainer
-                theme="dark"
-                position="top-center"
-                autoClose={5000}
-                hideProgressBar={false}
-                newestOnTop={false}
-                closeOnClick
-                rtl={false}
-                pauseOnFocusLoss
-                pauseOnHover
-            />
-        </div>
+                                    <Box>
+                                        {company.admins.map((admin) => (
+                                            <Box
+                                                key={admin._id}
+                                                sx={{
+                                                    display: 'flex',
+                                                    justifyContent: 'space-between',
+                                                    alignItems: 'center',
+                                                    marginTop: 2,
+                                                }}
+                                            >
+                                                <Typography>
+                                                    Admin: {admin.username}
+                                                </Typography>
+                                                <IconButton
+                                                    onClick={() =>
+                                                        handleRemoveAdmin(
+                                                            company._id,
+                                                            admin._id
+                                                        )
+                                                    }
+                                                    color="error"
+                                                >
+                                                    <DeleteIcon />
+                                                </IconButton>
+                                            </Box>
+                                        ))}
+                                    </Box>
+                                </Box>
+                            </Grid>
+                        ))}
+                    </Grid>
+                </Box>
+
+                <ToastContainer
+                    theme="dark"
+                    position="top-center"
+                    autoClose={5000}
+                    hideProgressBar={false}
+                    newestOnTop={false}
+                    closeOnClick
+                    rtl={false}
+                    pauseOnFocusLoss
+                    pauseOnHover
+                />
+            </Box>
+        </Box>
     );
 };
 

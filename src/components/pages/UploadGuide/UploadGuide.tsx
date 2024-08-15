@@ -23,7 +23,7 @@ export interface Video {
 
 const UploadGuidePage = () => {
     const defaultPlaylistName = "New Guide"
-    const [videos, setVideos] = useState<Video[]>([{"file": undefined, "fragment": 1, "source": "", "title": ""}]);
+    const [videos, setVideos] = useState<Video[]>([{ "file": undefined, "fragment": 1, "source": "", "title": "" }]);
     const [playlistName, setPlaylistName] = useState(defaultPlaylistName);
     const theme = useTheme();
     const [isPrivate, setIsPrivate] = useState(false);
@@ -49,19 +49,14 @@ const UploadGuidePage = () => {
     const addVideoInput = () => {
         setVideos(prevVideosList => {
             if (prevVideosList.length < 10) {
-                return [...prevVideosList, {
-                    "file": undefined,
-                    "fragment": prevVideosList.length + 1,
-                    "source": "",
-                    "title": ""
-                }];
+                return [...prevVideosList, { "file": undefined, "fragment": prevVideosList.length + 1, "source": "", "title": "" }];
             } else {
                 toast.error("You can only add up to 10 videos");
                 return prevVideosList;
             }
         });
     };
-
+    
     const handleSave = async () => {
         try {
             const privacy = isPrivate ? "unlisted" : "public";
@@ -123,114 +118,100 @@ const UploadGuidePage = () => {
             sx={{
                 display: 'flex',
                 flexDirection: 'column',
-                flexWrap: 'wrap',
                 height: '100vh',
                 width: '100%',
-                overflowX: 'hidden'
+                paddingTop: '35px',
             }}
         >
+            <PageTopTitle pageTitle="Companies manager" />
             <Box
                 sx={{
-                    position: 'fixed',
-                    top: 0,
-                    left: 0,
-                    right: 0,
-                    backgroundColor: theme.palette.background.paper,
-                    zIndex: 1200,
-                }}
-            >
-                <PageTopTitle pageTitle="Create a new guide"/>
-            </Box>
-
-            <Box
-                sx={{
-                    display: 'flex',
-                    flexDirection: 'column',
                     flex: 1,
-                    paddingTop: '4rem',
-                    paddingBottom: '6rem',
+                    padding: 2,
                 }}
             >
-                <Grid container spacing={3} alignItems="center" justifyContent="center"
-                      sx={{width: '100%', marginBottom: 2, marginTop: 5}}>
-                    <Grid item xs={11} lg={4} container alignItems="center" justifyContent="center">
-                        <Input
-                            fullWidth
-                            sx={{
-                                fontSize: '1.2em',
-                                padding: '0.5em',
-                                mb: 2,
-                                border: 'none',
-                                maxWidth: isMobile ? '90%' : '300px'
-                            }}
-                            defaultValue={defaultPlaylistName}
-                            placeholder="Enter video title"
-                            onChange={(event) => setPlaylistName(event.target.value)}
-                        />
-                    </Grid>
-                    <Grid item xs={12} lg={3} container justifyContent="center">
-                        <Button
-                            variant="outlined"
-                            color="secondary"
-                            startIcon={<RestartAltIcon/>}
-                            onClick={handleStartAgain}
-                            sx={{mt: 2}}
-                        >
-                            Start Again
-                        </Button>
-                    </Grid>
-                </Grid>
 
-                <Grid container spacing={3} justifyContent="center">
-                    {videos.map(video => (
-                        <Grid item key={video.fragment} xs={12} sm={6} md={4} lg={3}>
-                            <VideoInput
-                                video={video}
-                                setVideos={setVideos}
-                                onDelete={() => handleDeleteVideo(video)}
+                <Box
+                    sx={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        flex: 1,
+                        paddingBottom: '6rem',
+                    }}
+                >
+                    <Grid container spacing={3} alignItems="center" justifyContent="center" sx={{ width: '100%', marginBottom: 2, marginTop: 5 }}>
+                        <Grid item xs={11} lg={4} container alignItems="center" justifyContent="center">
+                            <Input
+                                fullWidth
+                                sx={{ fontSize: '1.2em', padding: '0.5em', mb: 2, border: 'none', maxWidth: isMobile ? '90%' : '300px' }}
+                                defaultValue={defaultPlaylistName}
+                                placeholder="Enter video title"
+                                onChange={(event) => setPlaylistName(event.target.value)}
                             />
                         </Grid>
-                    ))}
-                </Grid>
-            </Box>
+                        <Grid item xs={12} lg={3} container justifyContent="center">
+                            <Button
+                                variant="outlined"
+                                color="secondary"
+                                startIcon={<RestartAltIcon />}
+                                onClick={handleStartAgain}
+                                sx={{ mt: 2 }}
+                            >
+                                Start Again
+                            </Button>
+                        </Grid>
+                    </Grid>
 
-            <Box
-                sx={{
-                    position: 'fixed',
-                    bottom: 85,
-                    left: 0,
-                    right: 0,
-                    zIndex: 1200,
-                    display: 'flex',
-                    justifyContent: 'center',
-                    padding: '0 1rem',
-                    gap: '1rem',
-                }}
-            >
-                <Button
-                    variant="contained"
-                    color="primary"
-                    startIcon={<SaveIcon/>}
-                    onClick={() => setOpenModal(true)}
-                    sx={{width: '50%', maxWidth: '300px'}}
+                    <Grid container spacing={3} justifyContent="center">
+                        {videos.map(video => (
+                            <Grid item key={video.fragment} xs={12} sm={6} md={4} lg={3}>
+                                <VideoInput
+                                    video={video}
+                                    setVideos={setVideos}
+                                    onDelete={() => handleDeleteVideo(video)}
+                                />
+                            </Grid>
+                        ))}
+                    </Grid>
+                </Box>
+
+                <Box
+                    sx={{
+                        position: 'fixed',
+                        bottom: 85,
+                        left: 0,
+                        right: 0,
+                        zIndex: 1200,
+                        display: 'flex',
+                        justifyContent: 'center',
+                        padding: '0 1rem',
+                        gap: '1rem',
+                    }}
                 >
-                    Finish
-                </Button>
-            </Box>
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        startIcon={<SaveIcon />}
+                        onClick={() => setOpenModal(true)}
+                        sx={{ width: '50%', maxWidth: '300px' }}
+                    >
+                        Finish
+                    </Button>
+                </Box>
 
-            <Fab
-                size="large"
-                color="secondary"
-                onClick={addVideoInput}
-                sx={{position: 'fixed', right: '2em', bottom: '80px', zIndex: 1300}}
-            >
-                <AddCardRoundedIcon fontSize="large"/>
-            </Fab>
-            <PlaylistConfiguration handleSave={handleSave} isPrivate={isPrivate} open={openModal}
-                                   setCompany={setCompany}
-                                   setIsOpen={setOpenModal} setIsPrivate={setIsPrivate} userCompanies={userCompanies}/>
-            <ToastContainer theme="dark" position="top-center" autoClose={5000} hideProgressBar={false}
-                            newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss pauseOnHover/>
+                <Fab
+                    size="large"
+                    color="secondary"
+                    onClick={addVideoInput}
+                    sx={{ position: 'fixed', right: '2em', bottom: '80px', zIndex: 1300 }}
+                >
+                    <AddCardRoundedIcon fontSize="large" />
+                </Fab>
+                <PlaylistConfiguration handleSave={handleSave} isPrivate={isPrivate} open={openModal} setCompany={setCompany}
+                    setIsOpen={setOpenModal} setIsPrivate={setIsPrivate} userCompanies={userCompanies} />
+                <ToastContainer theme="dark" position="top-center" autoClose={5000} hideProgressBar={false}
+                    newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss pauseOnHover />
+            </Box>
         </Box>
     );
 };

@@ -130,15 +130,20 @@ const VideoPage: React.FC = () => {
     if (!guide) return <div>Loading...</div>;
 
     return (
-        <Box sx={{flexGrow: 1, padding: 2}}>
+        <Box
+            sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                height: '100vh',
+                width: '100%',
+                paddingTop: '35px',
+            }}
+        >
+            <PageTopTitle pageTitle="Companies manager" />
             <Box
                 sx={{
-                    position: 'fixed',
-                    top: 0,
-                    left: 0,
-                    right: 0,
-                    backgroundColor: 'background.paper',
-                    zIndex: 1200,
+                    flex: 1,
+                    padding: 2,
                 }}
             >
                 <PageTopTitle pageTitle={guide.name}/>
