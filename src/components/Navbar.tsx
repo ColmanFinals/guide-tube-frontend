@@ -40,7 +40,7 @@ const Navbar = () => {
         <IconButton edge="start" color="inherit" aria-label="add-guide" component={Link} to="/add-guide">
           <AddCircleRoundedIcon />
         </IconButton>
-        <IconButton edge="start" color="inherit" aria-label="data-saver" component={Link} to="/data-saver">
+        <IconButton edge="start" color="inherit" aria-label="data-saver" component={Link} to="/analytics">
           <DataSaverOffRoundedIcon />
         </IconButton>
         <IconButton edge="start" color="inherit" aria-label="settings" onClick={handleSettingsClick}>
@@ -64,8 +64,6 @@ const Navbar = () => {
         <MenuItem onClick={() => { handleClose(); navigate('/profile'); }}><PersonRoundedIcon/> Profile</MenuItem>
         <MenuItem onClick={() => { handleClose(); navigate('/admin'); }}><ManageAccountsRoundedIcon/> Roles</MenuItem>
         <MenuItem onClick={() => { handleClose(); navigate('/system'); }}><StoreRoundedIcon/> Companies</MenuItem>
-         <MenuItem onClick={() => { handleClose(); navigate('/analytics'); }}><StoreRoundedIcon/> Analytics</MenuItem>
-
       </Menu>
     </AppBar>
   );

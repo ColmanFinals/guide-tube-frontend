@@ -41,7 +41,7 @@ const CompaniesPage: React.FC = () => {
                         onClick={() => handleNavigate(company.name)}
                     >
                         <div
-                            className='w-[250px] h-[250px] bg-cyan-700 rounded-2xl p-5 shadow-lg flex flex-col items-center'>
+                            className='w-[250px] h-[250px] rounded-2xl p-5 shadow-lg flex flex-col items-center' style={{backgroundColor:"#ffffff17"}}>
                             <img
                                 src={company.logo}
                                 alt={`${company.name} logo`}

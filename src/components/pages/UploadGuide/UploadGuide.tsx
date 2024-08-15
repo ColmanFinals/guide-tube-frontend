@@ -1,4 +1,4 @@
-import {useEffect, useState} from 'react';
+import { useEffect, useState } from 'react';
 import VideoInput from './VideoInput';
 import PageTopTitle from '../../PageTopTitle';
 import Input from '@mui/material/Input';
@@ -7,12 +7,14 @@ import SaveIcon from '@mui/icons-material/Save';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import Fab from '@mui/material/Fab';
 import Button from '@mui/material/Button';
-import {Box, Grid, useMediaQuery, useTheme} from '@mui/material';
-import {addGuideToCompany, addVideoToPlaylist, createPlaylist, uploadVideo} from '../../../services/guideService';
-import {toast, ToastContainer} from 'react-toastify';
+import { Box, Grid, useMediaQuery, useTheme } from '@mui/material';
+import { addGuideToCompany, addVideoToPlaylist, createPlaylist, uploadVideo } from '../../../services/guideService';
+import { toast, ToastContainer } from 'react-toastify';
 import PlaylistConfiguration from './PlaylistConfiguration';
-import {ICompany, IGuide, INewGuideRequest, IVideo} from '../../../utillity/types';
-import {fetchMyCompanies} from '../../../services/companiesService';
+import { ICompany, IGuide, INewGuideRequest, IVideo } from '../../../utillity/types';
+import { fetchMyCompanies } from '../../../services/companiesService';
+import CircularProgress from '@mui/material/CircularProgress';
+
 
 export interface Video {
     "file"?: File,
@@ -23,6 +25,7 @@ export interface Video {
 
 const UploadGuidePage = () => {
     const defaultPlaylistName = "New Guide"
+    const [isVideoAdded, setIsVideoAdded] = useState(false)
     const [videos, setVideos] = useState<Video[]>([{ "file": undefined, "fragment": 1, "source": "", "title": "" }]);
     const [playlistName, setPlaylistName] = useState(defaultPlaylistName);
     const theme = useTheme();
@@ -30,6 +33,7 @@ const UploadGuidePage = () => {
     const [userCompanies, setUserCompanies] = useState<string[]>([]);
     const [company, setCompany] = useState<string>("");
     const [openModal, setOpenModal] = useState(false);
+    const [isSaving, setIsSaving] = useState(false)
     const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
     useEffect(() => {
@@ -38,7 +42,7 @@ const UploadGuidePage = () => {
                 const companyData: ICompany[] = await fetchMyCompanies();
                 const companyNames = companyData.map(company => company.name);
                 setUserCompanies(companyNames);
-                setCompany(userCompanies[0])
+                setCompany(companyNames[0]);
             } catch (error) {
                 console.error("Error fetching companies:", error);
             }
@@ -56,8 +60,13 @@ const UploadGuidePage = () => {
             }
         });
     };
-    
+
     const handleSave = async () => {
+        if (!isVideoAdded || videos.length == 0) {
+            toast.error("You must upload at least one video")
+            return
+        }
+        setIsSaving(true); // Start loading
         try {
             const privacy = isPrivate ? "unlisted" : "public";
             const guideData: IGuide = {
@@ -81,24 +90,29 @@ const UploadGuidePage = () => {
 
                     // Add video to playlist
                     const videoData = await addVideoToPlaylist(playlist.id, videoID, video.fragment - 1);
-                    videosData.push({...videoData});
+                    videosData.push({ ...videoData });
                 }
             }
-            const newGuideRequest: INewGuideRequest = {
-                guideData: guideData, companyName: company, playlistData: playlist,
-                videoData: videosData
+            if (videosData.length != 0) {
+                const newGuideRequest: INewGuideRequest = {
+                    guideData: guideData, companyName: company, playlistData: playlist,
+                    videoData: videosData
+                }
+                await addGuideToCompany(newGuideRequest);
+                toast.success("Guide created successfully!");
             }
-            await addGuideToCompany(newGuideRequest);
-            toast.success("Guide created successfully!");
         } catch (e) {
             // Handle any errors that occur during the guide creation process
             toast.error("An error occurred during guide creation.");
+        } finally {
+            setIsSaving(false); // Stop loading
         }
     };
 
     const handleStartAgain = () => {
+        setIsVideoAdded(false)
         setIsPrivate(false);
-        setVideos([{"file": undefined, "fragment": 1, "source": "", "title": ""}])
+        setVideos([{ "file": undefined, "fragment": 1, "source": "", "title": "" }])
     };
 
 
@@ -122,7 +136,7 @@ const UploadGuidePage = () => {
                 width: '100%',
             }}
         >
-            <PageTopTitle pageTitle="Companies manager" />
+            <PageTopTitle pageTitle="Upload Guide" />
             <Box
                 sx={{
                     flex: 1,
@@ -138,6 +152,24 @@ const UploadGuidePage = () => {
                         paddingBottom: '6rem',
                     }}
                 >
+                    {isSaving && (
+                        <Box
+                            sx={{
+                                display: 'flex',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                position: 'fixed',
+                                top: 0,
+                                left: 0,
+                                right: 0,
+                                bottom: 0,
+                                backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                                zIndex: 1500,
+                            }}
+                        >
+                            <CircularProgress color="secondary" />
+                        </Box>
+                    )}
                     <Grid container spacing={3} alignItems="center" justifyContent="center" sx={{ width: '100%', marginBottom: 2, marginTop: 5 }}>
                         <Grid item xs={11} lg={4} container alignItems="center" justifyContent="center">
                             <Input
@@ -166,6 +198,7 @@ const UploadGuidePage = () => {
                             <Grid item key={video.fragment} xs={12} sm={6} md={4} lg={3}>
                                 <VideoInput
                                     video={video}
+                                    setIsVideoAdded={setIsVideoAdded}
                                     setVideos={setVideos}
                                     onDelete={() => handleDeleteVideo(video)}
                                 />
