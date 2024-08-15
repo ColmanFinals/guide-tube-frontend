@@ -1,23 +1,13 @@
 import React, {useCallback, useEffect, useRef, useState} from 'react';
 import YouTube, {YouTubePlayer, YouTubeProps} from 'react-youtube';
 import 'regenerator-runtime/runtime';
-import {Box, Button, Card, CardContent, Grid, useMediaQuery, useTheme} from '@mui/material';
+import {Box, Button, Card, CardContent, Grid, Typography, useMediaQuery, useTheme} from '@mui/material';
 import {useParams} from 'react-router-dom';
 import api from "../../services/serverApi.tsx";
 import SpeechRecognition from '../Video/SpeechRecognition';
 import PageTopTitle from '../PageTopTitle';
 import './VideoPage.css';
-
-interface IVideo {
-    id: string;
-    title: string;
-}
-
-interface IGuide {
-    name: string;
-    views: number;
-    videos: IVideo[];
-}
+import {IGuide} from "../../interfaces/IGuide.tsx";
 
 const VideoPage: React.FC = () => {
     const {guideId} = useParams<{ guideId: string }>();
@@ -37,7 +27,7 @@ const VideoPage: React.FC = () => {
                 const response = await api.post<IGuide>('/guide/byId', {guideId});
                 setGuide(response.data);
             } catch (err) {
-                setError('Failed to fetch companies.');
+                setError('Failed to fetch guide.');
             }
         };
 
@@ -174,6 +164,9 @@ const VideoPage: React.FC = () => {
                                     onReady={onPlayerReady}
                                     onStateChange={syncStateChange}
                                 />
+                                <Typography variant="h6" sx={{mt: 2}}>
+                                    Views: {guide.views}
+                                </Typography>
                             </CardContent>
                         </Card>
                     </Grid>
