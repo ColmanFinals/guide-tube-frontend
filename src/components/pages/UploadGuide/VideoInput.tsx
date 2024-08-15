@@ -12,11 +12,12 @@ import {Video} from "./UploadGuide";
 
 type VideoInputProps = {
     video: Video;
+    setIsVideoAdded : React.Dispatch<React.SetStateAction<boolean>>;
     setVideos: React.Dispatch<React.SetStateAction<Video[]>>;
     onDelete: () => void;
 };
 
-export default function VideoInput({video, setVideos, onDelete}: VideoInputProps) {
+export default function VideoInput({video, setIsVideoAdded ,setVideos, onDelete}: VideoInputProps) {
     const inputRef = useRef<HTMLInputElement>(null);
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
@@ -33,6 +34,7 @@ export default function VideoInput({video, setVideos, onDelete}: VideoInputProps
             const newVideo = {"fragment": video.fragment, "file": file, "source": url, "title": video.title}
             setVideos(prevVideosList => prevVideosList.map(video =>
                 video.fragment === newVideo.fragment ? newVideo : video));
+            setIsVideoAdded(true)
         }
     };
 
