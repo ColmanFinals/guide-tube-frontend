@@ -7,13 +7,14 @@ import Root from "./Root.tsx";
 import ErrorPage from "./components/pages/ErrorPage.tsx";
 import SignupPage from "./components/pages/SignupPage.tsx"
 import LoginPage from './components/pages/LoginPage/LoginPage.tsx';
-import HomePage from './components/pages/HomePage.tsx';
+import VideoPage from './components/pages/VideoPage.tsx';
 import UploadGuidePage from './components/pages/UploadGuide/UploadGuide.tsx';
 import LandingPage from './components/pages/LandingPage/LandingPage.tsx';
 import ProtectedRoute from './ProtectedRoute.tsx';
 import CompanyManager from './components/pages/systemPage/Company.tsx';
 import AdminPage from './components/pages/AdminPage.tsx';
 import UserProfile from './components/pages/UserProfilePage.tsx';
+import CompaniesPage from "./components/pages/CompaniesPage.tsx";
 import FeedPage from "./components/pages/FeedPage.tsx";
 
 const router = createBrowserRouter([
@@ -35,12 +36,16 @@ const router = createBrowserRouter([
                 element: <SignupPage/>,
             },
             {
-                path: 'home',
-                element: <ProtectedRoute> <HomePage/> </ProtectedRoute>,
+                path: 'company',
+                element: <ProtectedRoute> <CompaniesPage/> </ProtectedRoute>,
             },
             {
-                path: 'feed',
+                path: '/feed/:companyName',
                 element: <ProtectedRoute> <FeedPage/> </ProtectedRoute>,
+            },
+            {
+                path: '/video/:guideId',
+                element: <ProtectedRoute> <VideoPage/> </ProtectedRoute>,
             },
             {
                 path: 'system',

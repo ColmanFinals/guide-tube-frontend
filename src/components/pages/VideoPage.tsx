@@ -1,32 +1,60 @@
-import React, {useCallback, useRef, useState} from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import YouTube, {YouTubePlayer, YouTubeProps} from 'react-youtube';
 import 'regenerator-runtime/runtime';
 import {Box, Button, Card, CardContent, Grid, useMediaQuery, useTheme} from '@mui/material';
+import {useParams} from 'react-router-dom';
+import api from "../../services/serverApi.tsx";
 import SpeechRecognition from '../Video/SpeechRecognition';
-import PageTopTitle from '../PageTopTitle'; // Adjust the path if necessary
-import './Homepage.css';
+import PageTopTitle from '../PageTopTitle';
+import './VideoPage.css';
 
-const VideoRoute: React.FC = () => {
-    const videoIds = ['SSn1g1micfs', 'fnEPYg2cb1g', 'eyDk9MZ-odk'];
+interface IVideo {
+    id: string;
+    title: string;
+}
+
+interface IGuide {
+    name: string;
+    views: number;
+    videos: IVideo[];
+}
+
+const VideoPage: React.FC = () => {
+    const {guideId} = useParams<{ guideId: string }>();
+    const [guide, setGuide] = useState<IGuide | null>(null);
     const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
     const [isPlaying, setIsPlaying] = useState(false);
     const [isMuted, setIsMuted] = useState(false);
     const playerRef = useRef<YouTubePlayer | null>(null);
+    const [error, setError] = useState<string | null>(null);
 
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+
+    useEffect(() => {
+        const fetchGuide = async () => {
+            try {
+                const response = await api.post<IGuide>('/guide/byId', {guideId});
+                setGuide(response.data);
+            } catch (err) {
+                setError('Failed to fetch companies.');
+            }
+        };
+
+        fetchGuide();
+    }, [guideId]);
 
     const onPlayerReady: YouTubeProps['onReady'] = (event) => {
         playerRef.current = event.target;
     };
 
     const startVideo = () => {
-        playerRef.current.playVideo();
+        playerRef.current?.playVideo();
         setIsPlaying(true);
     };
 
     const stopVideo = () => {
-        playerRef.current.pauseVideo();
+        playerRef.current?.pauseVideo();
         setIsPlaying(false);
     };
 
@@ -59,13 +87,11 @@ const VideoRoute: React.FC = () => {
     };
 
     const playNextVideo = () => {
-        const nextIndex = (currentVideoIndex + 1) % videoIds.length;
-        setCurrentVideoIndex(nextIndex);
+        setCurrentVideoIndex((prevIndex) => (prevIndex + 1) % (guide?.videos.length || 1));
     };
 
     const playPreviousVideo = () => {
-        const previousIndex = (currentVideoIndex - 1 + videoIds.length) % videoIds.length;
-        setCurrentVideoIndex(previousIndex);
+        setCurrentVideoIndex((prevIndex) => (prevIndex - 1 + (guide?.videos.length || 1)) % (guide?.videos.length || 1));
     };
 
     const syncStateChange = (event: { data: number }) => {
@@ -85,27 +111,33 @@ const VideoRoute: React.FC = () => {
         }
     };
 
-    const handleCommand = useCallback((command: string) => {
-        const lower_command = command.toLowerCase();
+    const handleCommand = useCallback(
+        (command: string) => {
+            const lower_command = command.toLowerCase();
 
-        if (lower_command.includes('pause') || lower_command.includes('stop')) {
-            stopVideo();
-        } else if (lower_command.includes('mute')) {
-            toggleMute();
-        } else if (lower_command.includes('next')) {
-            playNextVideo();
-        } else if (lower_command.includes('previous')) {
-            playPreviousVideo();
-        } else if (lower_command.includes('play')) {
-            startVideo();
-        }
-    }, [isPlaying, isMuted]);
+            if (lower_command.includes('pause') || lower_command.includes('stop')) {
+                stopVideo();
+            } else if (lower_command.includes('mute')) {
+                toggleMute();
+            } else if (lower_command.includes('next')) {
+                playNextVideo();
+            } else if (lower_command.includes('previous')) {
+                playPreviousVideo();
+            } else if (lower_command.includes('play')) {
+                startVideo();
+            }
+        },
+        [isPlaying, isMuted]
+    );
 
     const opts: YouTubeProps['opts'] = {
         height: isMobile ? '300' : '400',
         width: '100%',
-        playerVars: {'autoplay': 1, 'controls': 0},
+        playerVars: {autoplay: 1, controls: 0},
     };
+
+    if (error) return <div>{error}</div>;
+    if (!guide) return <div>Loading...</div>;
 
     return (
         <Box sx={{flexGrow: 1, padding: 2}}>
@@ -119,7 +151,7 @@ const VideoRoute: React.FC = () => {
                     zIndex: 1200,
                 }}
             >
-                <PageTopTitle pageTitle="Video Guide"/>
+                <PageTopTitle pageTitle={guide.name}/>
             </Box>
 
             <Box
@@ -137,7 +169,7 @@ const VideoRoute: React.FC = () => {
                         <Card>
                             <CardContent>
                                 <YouTube
-                                    videoId={videoIds[currentVideoIndex]}
+                                    videoId={guide.videos[currentVideoIndex]?.id}
                                     opts={opts}
                                     onReady={onPlayerReady}
                                     onStateChange={syncStateChange}
@@ -174,9 +206,8 @@ const VideoRoute: React.FC = () => {
                     <SpeechRecognition onCommand={handleCommand}/>
                 </Box>
             </Box>
-
         </Box>
     );
 };
 
-export default VideoRoute;
+export default VideoPage;

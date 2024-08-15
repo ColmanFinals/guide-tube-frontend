@@ -20,7 +20,7 @@ const LoginPage = () => {
                     credentialResponse.credential
                 );
                 await signInViaGoogle(decodedRes);
-                navigate("/feed")
+                navigate("/company")
             } else {
                 toast.error("An error occured. Please try to login again")
             }
@@ -37,7 +37,7 @@ const LoginPage = () => {
         const user: IUser = {username: username, password: password}
         try {
             await login(user)
-            navigate("/feed")
+            navigate("/company")
         } catch (e) {
             if (isAxiosError(e)) {
                 toast.error(e.message)
