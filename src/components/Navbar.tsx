@@ -9,12 +9,13 @@ import {useUser} from '../context/user-context';
 import PersonRoundedIcon from '@mui/icons-material/PersonRounded';
 import StoreRoundedIcon from '@mui/icons-material/StoreRounded';
 import ManageAccountsRoundedIcon from '@mui/icons-material/ManageAccountsRounded';
+import {useState} from "react";
 
 const Navbar = () => {
   const { logout } = useUser();
   const navigate = useNavigate();
 
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+    const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
 
   const handleSettingsClick = (event: React.MouseEvent<HTMLElement>) => {

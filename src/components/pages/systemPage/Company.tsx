@@ -1,11 +1,10 @@
-import { useEffect, useState } from "react";
-import { Box, Grid, Typography, TextField, Button, IconButton } from "@mui/material";
-import { ToastContainer, toast } from "react-toastify";
+import {useEffect, useState} from "react";
+import {Box, Button, Grid, IconButton, TextField, Typography, useTheme} from "@mui/material";
+import {toast, ToastContainer} from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import api from "../../../services/serverApi";
-import { fetchCompanies } from "../../../services/companiesService";
+import {fetchCompanies} from "../../../services/companiesService";
 import PageTopTitle from "../../PageTopTitle";
-import { useTheme } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
 import CancelIcon from '@mui/icons-material/Cancel';
@@ -112,36 +111,35 @@ const CompanyManager = () => {
             sx={{
                 display: 'flex',
                 flexDirection: 'column',
-                height: '100vh',
+                height: '100%',
                 width: '100%',
-                paddingTop: '35px',
             }}
         >
-            <PageTopTitle pageTitle="Companies manager" />
+            <PageTopTitle pageTitle="Companies manager"/>
             <Box
                 sx={{
                     flex: 1,
                     padding: 2,
                 }}
             >
-                <Box sx={{ marginTop: '5rem', marginBottom: '2rem' }}>
-                    <Grid container spacing={2} alignItems="center">
-                        <Grid item xs={12} md={6}>
+                <Box sx={{marginTop: '5rem', marginBottom: '2rem'}}>
+                    <Grid container spacing={2} alignItems="center"><Grid item xs={12} md={6}>
                             <TextField
                                 label="Company Name"
                                 fullWidth
                                 value={newCompany.name || ""}
                                 onChange={(e) =>
-                                    setNewCompany({ ...newCompany, name: e.target.value })
+                                    setNewCompany({...newCompany, name: e.target.value})
                                 }
                                 variant="outlined"
+                                sx={{mb: 1}}
                             />
                             <TextField
                                 label="Company Logo URL"
                                 fullWidth
                                 value={newCompany.logo || ""}
                                 onChange={(e) =>
-                                    setNewCompany({ ...newCompany, logo: e.target.value })
+                                    setNewCompany({...newCompany, logo: e.target.value})
                                 }
                                 variant="outlined"
                             />
@@ -151,7 +149,7 @@ const CompanyManager = () => {
                                 variant="contained"
                                 color="primary"
                                 onClick={handleCreateCompany}
-                                startIcon={<AddIcon />}
+                                startIcon={<AddIcon/>}
                                 fullWidth
                             >
                                 Create Company
@@ -186,12 +184,13 @@ const CompanyManager = () => {
                                         }}
                                     >
                                         <Typography variant="h6">{company.name}</Typography>
-                                        <img src={company.logo} alt={`${company.name} logo`} className="h-10 w-10 rounded-full" />
+                                        <img src={company.logo} alt={`${company.name} logo`}
+                                             className="h-10 w-10 rounded-full"/>
                                         <IconButton
                                             onClick={() => handleDeleteCompany(company._id)}
                                             color="error"
                                         >
-                                            <DeleteIcon />
+                                            <DeleteIcon/>
                                         </IconButton>
                                     </Box>
 
@@ -205,16 +204,16 @@ const CompanyManager = () => {
                                                     setAdminId(e.target.value)
                                                 }
                                                 variant="outlined"
-                                                sx={{ marginBottom: 2 }}
+                                                sx={{marginBottom: 2}}
                                             />
-                                            <Box sx={{ display: 'flex', gap: 2 }}>
+                                            <Box sx={{display: 'flex', gap: 2}}>
                                                 <Button
                                                     variant="contained"
                                                     color="primary"
                                                     onClick={() =>
                                                         handleAddAdmin(company._id)
                                                     }
-                                                    startIcon={<AddIcon />}
+                                                    startIcon={<AddIcon/>}
                                                     fullWidth
                                                 >
                                                     Add Admin
@@ -225,7 +224,7 @@ const CompanyManager = () => {
                                                     onClick={() =>
                                                         setShowAddAdminInput(null)
                                                     }
-                                                    startIcon={<CancelIcon />}
+                                                    startIcon={<CancelIcon/>}
                                                     fullWidth
                                                 >
                                                     Cancel
@@ -268,7 +267,7 @@ const CompanyManager = () => {
                                                     }
                                                     color="error"
                                                 >
-                                                    <DeleteIcon />
+                                                    <DeleteIcon/>
                                                 </IconButton>
                                             </Box>
                                         ))}
