@@ -47,7 +47,7 @@ const FeedPage: React.FC = () => {
     return (
         <div className='h-full w-full'>
             <PageTopTitle pageTitle="Choose a Guide"/>
-            <div className='fixed top-[52px] left-0 w-full z-10 bg-[#212121] shadow py-2 px-4'>
+            <div className='sticky top-0 z-10 bg-[#212121] shadow py-2 px-4'>
                 <TextField
                     label={`Search Playlists in ${companyName}`}
                     variant="outlined"
@@ -57,7 +57,7 @@ const FeedPage: React.FC = () => {
                     className='mb-4'
                 />
             </div>
-            <div className='mt-[100px] bg-[linear-gradient(#141e30, #243b55)] p-6'>
+            <div className='mt-4 bg-[linear-gradient(#141e30, #243b55)] p-6'>
                 <h1 className='text-3xl text-center text-white mb-8'>Playlists for {companyName}</h1>
                 <div className='flex flex-wrap justify-center items-center'>
                     {filteredGuides.map((guide) => (

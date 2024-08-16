@@ -46,7 +46,7 @@ const CompaniesPage: React.FC = () => {
     return (
         <div className='h-full w-full'>
             <PageTopTitle pageTitle="Choose a Company"/>
-            <div className='fixed top-[52px] left-0 w-full z-10 bg-[#212121] shadow py-2 px-4'>
+            <div className='sticky top-0 z-10 bg-[#212121] shadow py-2 px-4'>
                 <TextField
                     label="Search Companies"
                     variant="outlined"
@@ -56,8 +56,7 @@ const CompaniesPage: React.FC = () => {
                     className='mb-4'
                 />
             </div>
-            <div
-                className='mt-[100px] bg-[linear-gradient(#141e30, #243b55)] flex flex-wrap justify-center items-center'>
+            <div className='mt-4 bg-[linear-gradient(#141e30, #243b55)] flex flex-wrap justify-center items-center'>
                 {filteredCompanies.map((company) => (
                     <div
                         key={company._id}
@@ -78,8 +77,7 @@ const CompaniesPage: React.FC = () => {
                 ))}
             </div>
         </div>
-    )
-        ;
+    );
 };
 
 export default CompaniesPage;

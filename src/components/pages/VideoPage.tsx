@@ -8,6 +8,12 @@ import SpeechRecognition from '../Video/SpeechRecognition';
 import PageTopTitle from '../PageTopTitle';
 import './VideoPage.css';
 import {IGuide} from "../../interfaces/IGuide.tsx";
+import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+import PauseIcon from '@mui/icons-material/Pause';
+import SkipPreviousIcon from '@mui/icons-material/SkipPrevious';
+import SkipNextIcon from '@mui/icons-material/SkipNext';
+import VolumeOffIcon from '@mui/icons-material/VolumeOff';
+import VolumeUpIcon from '@mui/icons-material/VolumeUp';
 
 const VideoPage: React.FC = () => {
     const {guideId} = useParams<{ guideId: string }>();
@@ -164,32 +170,78 @@ const VideoPage: React.FC = () => {
                                     onReady={onPlayerReady}
                                     onStateChange={syncStateChange}
                                 />
-                                <Typography variant="h6" sx={{mt: 2}}>
-                                    Views: {guide.views}
-                                </Typography>
+                                <Box
+                                    display="flex"
+                                    flexWrap="wrap"
+                                    justifyContent="space-between"
+                                    alignItems="center"
+                                    mt={1}
+                                    sx={{px: '3%', overflow: 'hidden', textOverflow: 'ellipsis'}}
+                                >
+                                    <Typography
+                                        variant="body1"
+                                        sx={{flexShrink: 0, fontSize: isMobile ? '1rem' : '1.25rem'}}
+                                    >
+                                        {guide.name}
+                                    </Typography>
+                                    <Typography
+                                        variant="body1"
+                                        sx={{flexShrink: 0, fontSize: isMobile ? '1rem' : '1.25rem'}}
+                                    >
+                                        Views: {guide.views}
+                                    </Typography>
+                                    <Typography
+                                        variant="body1"
+                                        sx={{flexShrink: 0, fontSize: isMobile ? '1rem' : '1.25rem'}}
+                                    >
+                                        Currently watching: {guide.videos[currentVideoIndex]?.title}
+                                    </Typography>
+                                    <Typography
+                                        variant="body1"
+                                        sx={{flexShrink: 0, fontSize: isMobile ? '1rem' : '1.25rem'}}
+                                    >
+                                        {currentVideoIndex + 1} out of {guide.videos.length}
+                                    </Typography>
+                                </Box>
                             </CardContent>
                         </Card>
                     </Grid>
                     <Grid item xs={12} sm={10} md={8}>
                         <Grid container spacing={2} justifyContent="center">
                             <Grid item>
-                                <Button variant="contained" color="primary" onClick={ApplyPlayPause}>
-                                    {isPlaying ? 'Pause' : 'Play'}
+                                <Button
+                                    variant="contained"
+                                    color="primary"
+                                    onClick={ApplyPlayPause}
+                                >
+                                    {isPlaying ? <PauseIcon/> : <PlayArrowIcon/>}
                                 </Button>
                             </Grid>
                             <Grid item>
-                                <Button variant="contained" color="primary" onClick={playPreviousVideo}>
-                                    Previous
+                                <Button
+                                    variant="contained"
+                                    color="primary"
+                                    onClick={playPreviousVideo}
+                                >
+                                    <SkipPreviousIcon/>
                                 </Button>
                             </Grid>
                             <Grid item>
-                                <Button variant="contained" color="primary" onClick={playNextVideo}>
-                                    Next
+                                <Button
+                                    variant="contained"
+                                    color="primary"
+                                    onClick={playNextVideo}
+                                >
+                                    <SkipNextIcon/>
                                 </Button>
                             </Grid>
                             <Grid item>
-                                <Button variant="contained" color="primary" onClick={toggleMute}>
-                                    {isMuted ? 'Unmute' : 'Mute'}
+                                <Button
+                                    variant="contained"
+                                    color="primary"
+                                    onClick={toggleMute}
+                                >
+                                    {isMuted ? <VolumeUpIcon/> : <VolumeOffIcon/>}
                                 </Button>
                             </Grid>
                         </Grid>
