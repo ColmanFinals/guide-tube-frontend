@@ -31,6 +31,10 @@ const Navbar = () => {
     logout();
   };
 
+  const getUserRole = () => {
+    return JSON.parse(localStorage.getItem('user') || '{}').userData.role
+  };
+
   return (
     <AppBar position="fixed" sx={{ top: 'auto', bottom: 0, width: '100vw', maxWidth: '100vw' }}>
       <Toolbar className="flex justify-around">
@@ -63,7 +67,7 @@ const Navbar = () => {
       >
         <MenuItem onClick={() => { handleClose(); navigate('/profile'); }}><PersonRoundedIcon/> Profile</MenuItem>
         <MenuItem onClick={() => { handleClose(); navigate('/admin'); }}><ManageAccountsRoundedIcon/> Roles</MenuItem>
-        <MenuItem onClick={() => { handleClose(); navigate('/system'); }}><StoreRoundedIcon/> Companies</MenuItem>
+        {getUserRole() === 'system' &&<MenuItem onClick={() => { handleClose(); navigate('/system'); }}><StoreRoundedIcon/> Companies</MenuItem>}
       </Menu>
     </AppBar>
   );
