@@ -4,9 +4,10 @@ import {JwtPayload} from "jwt-decode";
 export interface IUser {
     email?: string,
     username?: string,
+    fullName?: string,
+    role?: string,
     password?: string,
     userData?: { _id?: string },
-    imgUrl?: string,
     _id?: string,
     accessToken?: string,
     refreshToken?: string,

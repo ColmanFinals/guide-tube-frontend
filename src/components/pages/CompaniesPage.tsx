@@ -1,12 +1,16 @@
 import React, {useEffect, useState} from 'react';
-import {ICompany} from '../../interfaces/ICompany.tsx';
+import {ICompany} from '../../interfaces/ICompany';
 import {useNavigate} from 'react-router-dom';
-import api from "../../services/serverApi.tsx";
+import api from "../../services/serverApi";
+import {TextField} from '@mui/material';
+import PageTopTitle from "../PageTopTitle.tsx";
 
 const CompaniesPage: React.FC = () => {
     const [companies, setCompanies] = useState<ICompany[]>([]);
+    const [filteredCompanies, setFilteredCompanies] = useState<ICompany[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
+    const [searchQuery, setSearchQuery] = useState<string>('');
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -14,6 +18,7 @@ const CompaniesPage: React.FC = () => {
             try {
                 const response = await api.get<{ companies: ICompany[] }>('/company/getAll');
                 setCompanies(response.data.companies);
+                setFilteredCompanies(response.data.companies);
             } catch (err) {
                 setError('Failed to fetch companies.');
             } finally {
@@ -24,6 +29,13 @@ const CompaniesPage: React.FC = () => {
         fetchCompanies();
     }, []);
 
+    useEffect(() => {
+        const filtered = companies.filter(company =>
+            company.name.toLowerCase().includes(searchQuery.toLowerCase())
+        );
+        setFilteredCompanies(filtered);
+    }, [searchQuery, companies]);
+
     if (loading) return <div>Loading...</div>;
     if (error) return <div>{error}</div>;
 
@@ -32,9 +44,21 @@ const CompaniesPage: React.FC = () => {
     };
 
     return (
-        <div className='h-full'>
-            <div className='bg-[linear-gradient(#141e30, #243b55)] flex flex-wrap justify-center items-center'>
-                {companies.map((company) => (
+        <div className='h-full w-full'>
+            <PageTopTitle pageTitle="Choose a Company"/>
+            <div className='fixed top-[52px] left-0 w-full z-10 bg-[#212121] shadow py-2 px-4'>
+                <TextField
+                    label="Search Companies"
+                    variant="outlined"
+                    fullWidth
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className='mb-4'
+                />
+            </div>
+            <div
+                className='mt-[100px] bg-[linear-gradient(#141e30, #243b55)] flex flex-wrap justify-center items-center'>
+                {filteredCompanies.map((company) => (
                     <div
                         key={company._id}
                         className='m-5 group relative overflow-hidden text-center cursor-pointer'
@@ -54,7 +78,8 @@ const CompaniesPage: React.FC = () => {
                 ))}
             </div>
         </div>
-    );
+    )
+        ;
 };
 
 export default CompaniesPage;

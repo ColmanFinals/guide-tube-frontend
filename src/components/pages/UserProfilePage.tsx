@@ -16,7 +16,7 @@ const UserProfile: React.FC = () => {
     useEffect(() => {
         const loadUserData = async () => {
             try {
-                if (contextUser?.userData._id == null) return;
+                if (!contextUser?.userData?._id) return;
                 const userData = await getUserData(contextUser.userData._id);
                 setUser(userData);
                 const pictureUrl: string = userData?.picture === null ? userData?.picture : '';
@@ -48,7 +48,8 @@ const UserProfile: React.FC = () => {
         const file = event.target.files?.[0];
         if (file) {
             try {
-                await updateProfilePicture(contextUser?.userData._id!, file);
+                if (!contextUser?.userData?._id) return;
+                await updateProfilePicture(contextUser.userData._id, file);
                 alert('Profile picture updated successfully');
                 setImgUrl(URL.createObjectURL(file));
             } catch (error) {
@@ -63,11 +64,8 @@ const UserProfile: React.FC = () => {
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
-                height: '100vh',
+                height: '100%',
                 width: '100%',
-                paddingTop: 8,
-                marginTop: 3,
-                padding: 2,
             }}
         >
             <PageTopTitle pageTitle="My Profile"/>

@@ -1,24 +1,17 @@
 import React, {useEffect, useState} from 'react';
 import {useNavigate, useParams} from 'react-router-dom';
-import api from "../../services/serverApi.tsx";
-
-interface IVideo {
-    id: string;
-}
-
-interface IGuide {
-    _id: string;
-    name: string;
-    views: number;
-    createdAt: string;
-    videos: IVideo[];
-}
+import api from "../../services/serverApi";
+import {IGuide} from "../../interfaces/IGuide";
+import {TextField} from '@mui/material';
+import PageTopTitle from "../PageTopTitle.tsx";
 
 const FeedPage: React.FC = () => {
     const {companyName} = useParams<{ companyName: string }>();
     const [guides, setGuides] = useState<IGuide[]>([]);
+    const [filteredGuides, setFilteredGuides] = useState<IGuide[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
+    const [searchQuery, setSearchQuery] = useState<string>('');
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -26,6 +19,7 @@ const FeedPage: React.FC = () => {
             try {
                 const response = await api.post<{ guides: IGuide[] }>('/guide/byCompany', {companyName});
                 setGuides(response.data.guides);
+                setFilteredGuides(response.data.guides);
             } catch (err) {
                 setError('Failed to fetch guides.');
             } finally {
@@ -36,6 +30,13 @@ const FeedPage: React.FC = () => {
         fetchGuides();
     }, [companyName]);
 
+    useEffect(() => {
+        const filtered = guides.filter(guide =>
+            guide.name.toLowerCase().includes(searchQuery.toLowerCase())
+        );
+        setFilteredGuides(filtered);
+    }, [searchQuery, guides]);
+
     if (loading) return <div>Loading...</div>;
     if (error) return <div>{error}</div>;
 
@@ -44,11 +45,22 @@ const FeedPage: React.FC = () => {
     };
 
     return (
-        <div className='h-full'>
-            <div className='bg-[linear-gradient(#141e30, #243b55)] p-6'>
+        <div className='h-full w-full'>
+            <PageTopTitle pageTitle="Choose a Guide"/>
+            <div className='fixed top-[52px] left-0 w-full z-10 bg-[#212121] shadow py-2 px-4'>
+                <TextField
+                    label={`Search Playlists in ${companyName}`}
+                    variant="outlined"
+                    fullWidth
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className='mb-4'
+                />
+            </div>
+            <div className='mt-[100px] bg-[linear-gradient(#141e30, #243b55)] p-6'>
                 <h1 className='text-3xl text-center text-white mb-8'>Playlists for {companyName}</h1>
                 <div className='flex flex-wrap justify-center items-center'>
-                    {guides.map((guide) => (
+                    {filteredGuides.map((guide) => (
                         <div
                             key={guide._id}
                             className="m-5 group relative overflow-hidden text-center cursor-pointer"
