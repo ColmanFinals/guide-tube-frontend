@@ -178,9 +178,10 @@ const AdminPage: React.FC = () => {
                 <Grid container spacing={2} alignItems="center" marginTop={2} justifyContent="center">
                     <Grid item xs={12} md={4} container justifyContent="center">
                         <Autocomplete
-                            sx={{width: '100%'}}
+                        disabled={!selectedCompany}
+                            sx={{ width: '100%' }}
                             freeSolo
-                            options={filteredUsers}
+                            options={availableUsers}
                             getOptionLabel={(option) => typeof option === 'string' ? option : `${option.username} (${option.fullName})`}
                             renderInput={(params) => (
                                 <TextField
@@ -196,7 +197,7 @@ const AdminPage: React.FC = () => {
                                             </InputAdornment>
                                         ),
                                     }}
-                                    disabled={!selectedCompany} // Disable until company is selected
+                                    disabled={!selectedCompany}
                                 />
                             )}
                             onChange={(_event, value) => {

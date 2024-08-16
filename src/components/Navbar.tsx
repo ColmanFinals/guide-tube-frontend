@@ -31,6 +31,10 @@ const Navbar = () => {
     logout();
   };
 
+  const getUserRole = () => {
+    return JSON.parse(localStorage.getItem('user') || '{}').userData.role
+  };
+
   return (
     <AppBar position="fixed" sx={{ top: 'auto', bottom: 0, width: '100vw', maxWidth: '100vw' }}>
       <Toolbar className="flex justify-around">
@@ -40,7 +44,7 @@ const Navbar = () => {
         <IconButton edge="start" color="inherit" aria-label="add-guide" component={Link} to="/add-guide">
           <AddCircleRoundedIcon />
         </IconButton>
-        <IconButton edge="start" color="inherit" aria-label="data-saver" component={Link} to="/data-saver">
+        <IconButton edge="start" color="inherit" aria-label="data-saver" component={Link} to="/analytics">
           <DataSaverOffRoundedIcon />
         </IconButton>
         <IconButton edge="start" color="inherit" aria-label="settings" onClick={handleSettingsClick}>
@@ -62,8 +66,8 @@ const Navbar = () => {
         TransitionComponent={Fade}
       >
         <MenuItem onClick={() => { handleClose(); navigate('/profile'); }}><PersonRoundedIcon/> Profile</MenuItem>
-        <MenuItem onClick={() => { handleClose(); navigate('/admin'); }}><ManageAccountsRoundedIcon/> Roles</MenuItem>
-        <MenuItem onClick={() => { handleClose(); navigate('/system'); }}><StoreRoundedIcon/> Companies</MenuItem>
+        <MenuItem onClick={() => { handleClose(); navigate('/admin'); }}><ManageAccountsRoundedIcon/> Admin</MenuItem>
+        {getUserRole() === 'system' &&<MenuItem onClick={() => { handleClose(); navigate('/system'); }}><StoreRoundedIcon/> System</MenuItem>}
       </Menu>
     </AppBar>
   );

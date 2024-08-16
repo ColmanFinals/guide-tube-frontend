@@ -1,5 +1,5 @@
 import {useEffect, useState} from "react";
-import {Box, Button, Grid, IconButton, TextField, Typography, useTheme} from "@mui/material";
+import {Box, Button, Grid, IconButton, TextField, Typography, useTheme,Autocomplete,InputAdornment} from "@mui/material";
 import {toast, ToastContainer} from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import api from "../../../services/serverApi";
@@ -7,7 +7,9 @@ import {fetchCompanies} from "../../../services/companiesService";
 import PageTopTitle from "../../PageTopTitle";
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
-import CancelIcon from '@mui/icons-material/Cancel';
+import { IUser } from "../../../utillity/types";
+import { fetchAllUsers } from "../../../services/userService";
+
 
 interface ICompanyCreator {
     _id: string;
@@ -18,7 +20,12 @@ interface ICompanyCreator {
     videos: string[];
 }
 
+
+
+
 const CompanyManager = () => {
+
+
     const theme = useTheme();
     const [newCompany, setNewCompany] = useState<Partial<ICompanyCreator>>({
         name: "",
@@ -28,6 +35,9 @@ const CompanyManager = () => {
     });
     const [companies, setCompanies] = useState<ICompanyCreator[]>([]);
     const [adminId, setAdminId] = useState<string>("");
+    const [availableUsers, setAvailableUsers] = useState<IUser[]>([]);
+    const [filteredUsers, setFilteredUsers] = useState<IUser[]>([]);
+    const [searchTerm, setSearchTerm] = useState<string>('');
     const [showAddAdminInput, setShowAddAdminInput] = useState<string | null>(
         null
     ); // Store companyId when showing input
@@ -60,8 +70,30 @@ const CompanyManager = () => {
         }
     };
 
+    useEffect(() => {
+        const loadAvailableUsers = async () => {
+            try {
+                const allUsers: IUser[] = await fetchAllUsers();
+                setAvailableUsers(allUsers || []);
+            } catch (error) {
+                console.error("Error fetching available users:", error);
+            }
+        };
+        loadAvailableUsers();
+    }, []);
+
+    useEffect(() => {
+        setFilteredUsers(
+            (availableUsers || []).filter(user =>
+                user.username.toLowerCase().includes(searchTerm.toLowerCase())
+            )
+        );
+    }, [searchTerm, availableUsers]);
+
     const handleDeleteCompany = async (id: string) => {
         try {
+            console.log(id);
+            
             await api.delete(`/company/delete/${id}`); // Pass companyId as part of the URL
             toast.success("Company deleted successfully!");
             // Fetch updated list of companies
@@ -73,11 +105,13 @@ const CompanyManager = () => {
         }
     };
 
-    const handleAddAdmin = async (companyId: string) => {
+    const handleAddAdmin = async (companyId: string, username:string) => {
         try {
             // Ensure adminId is a string
-            if (adminId.trim() !== "") {
-                await api.put("/company/addAdmin", {companyId, adminId});
+            if (username.trim() !== "") {    
+                console.log("asdasdasdasd");
+                            
+                await api.put("/company/addAdmin", {companyId, username});
                 toast.success("Admin added successfully!");
                 setAdminId(""); // Clear the input field
                 setShowAddAdminInput(null); // Hide the input field
@@ -195,47 +229,37 @@ const CompanyManager = () => {
                                     </Box>
 
                                     {showAddAdminInput === company._id ? (
-                                        <Box>
-                                            <TextField
-                                                label="Admin ID"
-                                                fullWidth
-                                                value={adminId}
-                                                onChange={(e) =>
-                                                    setAdminId(e.target.value)
-                                                }
-                                                variant="outlined"
-                                                sx={{marginBottom: 2}}
-                                            />
-                                            <Box sx={{display: 'flex', gap: 2}}>
-                                                <Button
-                                                    variant="contained"
-                                                    color="primary"
-                                                    onClick={() =>
-                                                        handleAddAdmin(company._id)
-                                                    }
-                                                    startIcon={<AddIcon/>}
-                                                    fullWidth
-                                                >
-                                                    Add Admin
-                                                </Button>
-                                                <Button
-                                                    variant="contained"
-                                                    color="secondary"
-                                                    onClick={() =>
-                                                        setShowAddAdminInput(null)
-                                                    }
-                                                    startIcon={<CancelIcon/>}
-                                                    fullWidth
-                                                >
-                                                    Cancel
-                                                </Button>
-                                            </Box>
-                                        </Box>
+                                        <Autocomplete
+                                            sx={{ width: '100%' }}
+                                            freeSolo
+                                            options={availableUsers}
+                                            getOptionLabel={(option) => typeof option === 'string' ? option : `${option.username} (${option.fullName})`}
+                                            renderInput={(params) => (
+                                                <TextField
+                                                    {...params}
+                                                    label="Search Users"
+                                                    variant="outlined"
+                                                    onChange={(e) => setSearchTerm(e.target.value)}
+                                                    InputProps={{
+                                                        ...params.InputProps,
+                                                        startAdornment: (
+                                                            <InputAdornment position="start">
+                                                                <AddIcon/>
+                                                            </InputAdornment>
+                                                        ),
+                                                    }}
+                                                />
+                                            )}
+                                            onChange={(_event, value:any) => {
+                                                handleAddAdmin(company._id,value.username);
+                                            }}
+                                        />
                                     ) : (
                                         <Button
                                             variant="outlined"
                                             color="primary"
                                             onClick={() =>
+                                                
                                                 setShowAddAdminInput(company._id)
                                             }
                                             fullWidth

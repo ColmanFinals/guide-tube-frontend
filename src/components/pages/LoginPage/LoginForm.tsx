@@ -35,7 +35,7 @@ const LoginForm: React.FC<LoginFormProps> = ({handleLogin}) => {
                 style={{textTransform: 'none'}}
 
             >
-                Log in with an email
+                Log in
             </Button>
         </form>
     )
