@@ -62,8 +62,8 @@ const Navbar = () => {
         TransitionComponent={Fade}
       >
         <MenuItem onClick={() => { handleClose(); navigate('/profile'); }}><PersonRoundedIcon/> Profile</MenuItem>
-        <MenuItem onClick={() => { handleClose(); navigate('/admin'); }}><ManageAccountsRoundedIcon/> Roles</MenuItem>
-        <MenuItem onClick={() => { handleClose(); navigate('/system'); }}><StoreRoundedIcon/> Companies</MenuItem>
+        <MenuItem onClick={() => { handleClose(); navigate('/admin'); }}><ManageAccountsRoundedIcon/> Admin</MenuItem>
+        <MenuItem onClick={() => { handleClose(); navigate('/system'); }}><StoreRoundedIcon/> System</MenuItem>
       </Menu>
     </AppBar>
   );
