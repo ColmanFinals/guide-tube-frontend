@@ -3,6 +3,7 @@ import {Link} from 'react-router-dom';
 import Button from '@mui/material/Button';
 import {Shake} from 'reshake';
 
+const PROJECT_DESIGN_PAGE = "https://docs.google.com/document/d/13gLUwFbts7w45DCb82qKf9Gnyzm0NZOzd5s_c8K0Kow/edit?usp=sharing"
 const LearnMore = () => {
     return (
         <div className="flex flex-col items-center w-full" style={{margin: "2vh", maxHeight: "50%"}}>
@@ -18,10 +19,10 @@ const LearnMore = () => {
                         </Button>
                     </Shake>
                 </Link>
-                <button className="bg-white text-black px-6 py-3 rounded-lg mt-4 flex justify-between w-full">
-                    <span className="flex items-center" style={{fontSize: "0.8em"}}>Learn More</span>
-                    <span className="flex items-center ml-auto"><ArrowRightAltIcon/></span>
-                </button>
+                <Link to={PROJECT_DESIGN_PAGE} className="bg-white text-black px-6 py-3 rounded-lg mt-4 flex justify-between w-full">
+                        <span className="flex items-center" style={{fontSize: "0.8em"}} >Learn More</span>
+                        <span className="flex items-center ml-auto"><ArrowRightAltIcon/></span>
+                </Link>
             </div>
         </div>
     )

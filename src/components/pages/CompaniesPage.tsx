@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {ICompany} from '../../interfaces/ICompany';
 import {useNavigate} from 'react-router-dom';
 import api from "../../services/serverApi";
+import {fetchCompanies} from "../../services/companiesService.tsx"
 import {TextField} from '@mui/material';
 import PageTopTitle from "../PageTopTitle.tsx";
 
@@ -14,11 +15,11 @@ const CompaniesPage: React.FC = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        const fetchCompanies = async () => {
+        const loadCompanies = async () => {
             try {
-                const response = await api.get<{ companies: ICompany[] }>('/company/getAll');
-                setCompanies(response.data.companies);
-                setFilteredCompanies(response.data.companies);
+                const response = await fetchCompanies()
+                setCompanies(response.companies);
+                setFilteredCompanies(response.companies);
             } catch (err) {
                 setError('Failed to fetch companies.');
             } finally {
@@ -26,7 +27,7 @@ const CompaniesPage: React.FC = () => {
             }
         };
 
-        fetchCompanies();
+        loadCompanies();
     }, []);
 
     useEffect(() => {
