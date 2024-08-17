@@ -45,6 +45,7 @@ const VideoPage: React.FC = () => {
 
     const startVideo = () => {
         playerRef.current?.playVideo();
+        applyMute(false)
         setIsPlaying(true);
     };
 
