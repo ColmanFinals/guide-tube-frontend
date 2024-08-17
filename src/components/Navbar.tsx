@@ -1,21 +1,22 @@
-import {AppBar, Fade, IconButton, Menu, MenuItem, Toolbar} from '@mui/material';
+import { AppBar, Fade, IconButton, Menu, MenuItem, Toolbar } from '@mui/material';
 import HomeRoundedIcon from '@mui/icons-material/HomeRounded';
 import DataSaverOffRoundedIcon from '@mui/icons-material/DataSaverOffRounded';
 import SettingsRoundedIcon from '@mui/icons-material/SettingsRounded';
 import AddCircleRoundedIcon from '@mui/icons-material/AddCircleRounded';
 import LogoutRounded from '@mui/icons-material/LogoutRounded';
-import {Link, useNavigate} from 'react-router-dom';
-import {useUser} from '../context/user-context';
+import { Link, useNavigate } from 'react-router-dom';
+import { useUser } from '../context/user-context';
 import PersonRoundedIcon from '@mui/icons-material/PersonRounded';
 import StoreRoundedIcon from '@mui/icons-material/StoreRounded';
 import ManageAccountsRoundedIcon from '@mui/icons-material/ManageAccountsRounded';
-import {useState} from "react";
+import { useEffect, useState } from "react";
+import { getIsAdmin } from '../services/userService';
 
 const Navbar = () => {
   const { logout } = useUser();
   const navigate = useNavigate();
-
-    const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
 
   const handleSettingsClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -32,8 +33,21 @@ const Navbar = () => {
   };
 
   const getUserRole = () => {
-    return JSON.parse(localStorage.getItem('user') || '{}').userData.role
+    return JSON.parse(localStorage.getItem('user') || '{}').userData.role;
   };
+
+  useEffect(() => {
+    const fetchAdminStatus = async () => {
+      try {
+        const admin = await getIsAdmin();
+        setIsAdmin(admin);
+      } catch (error) {
+        console.error('Error fetching admin status:', error);
+      }
+    };
+
+    fetchAdminStatus();
+  }, []);
 
   return (
     <AppBar position="fixed" sx={{ top: 'auto', bottom: 0, width: '100vw', maxWidth: '100vw' }}>
@@ -65,9 +79,19 @@ const Navbar = () => {
         onClose={handleClose}
         TransitionComponent={Fade}
       >
-        <MenuItem onClick={() => { handleClose(); navigate('/profile'); }}><PersonRoundedIcon/> Profile</MenuItem>
-        <MenuItem onClick={() => { handleClose(); navigate('/admin'); }}><ManageAccountsRoundedIcon/> Admin</MenuItem>
-        {getUserRole() === 'system' &&<MenuItem onClick={() => { handleClose(); navigate('/system'); }}><StoreRoundedIcon/> System</MenuItem>}
+        <MenuItem onClick={() => { handleClose(); navigate('/profile'); }}>
+          <PersonRoundedIcon /> Profile
+        </MenuItem>
+        {isAdmin && (
+          <MenuItem onClick={() => { handleClose(); navigate('/admin'); }}>
+            <ManageAccountsRoundedIcon /> Admin
+          </MenuItem>
+        )}
+        {getUserRole() === 'system' && (
+          <MenuItem onClick={() => { handleClose(); navigate('/system'); }}>
+            <StoreRoundedIcon /> System
+          </MenuItem>
+        )}
       </Menu>
     </AppBar>
   );

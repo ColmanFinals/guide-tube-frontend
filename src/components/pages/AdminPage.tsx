@@ -47,8 +47,8 @@ const AdminPage: React.FC = () => {
                 setLoading(true);
                 try {
                     const companyData = await getCompanyById(selectedCompany);
-                    setUsers(companyData.users || []);
-                    setFilteredUsers(companyData.users || []);
+                    setUsers(companyData.users.concat(companyData.admins) || []);
+                    setFilteredUsers(companyData.users.concat(companyData.admins) || []);
                 } catch (error) {
                     console.error("Error fetching users:", error);
                 } finally {

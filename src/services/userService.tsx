@@ -123,7 +123,6 @@ export const updateProfilePicture = (userId: string, file: File) => {
                 'Content-Type': 'multipart/form-data'
             }
         }).then((response) => {
-            console.log(response)
             resolve(response.data)
         }).catch((error) => {
             console.log(error)
@@ -136,3 +135,10 @@ export const fetchAllUsers = async () => {
     const response = await api.get('/user/fetch');
     return response.data;
 };
+
+export const getIsAdmin = async () => {
+    const accessToken = localStorage.getItem('accessToken');
+    const response = await api.get(`/user/isAdmin`, {
+            headers: {'authorization': `Bearer ${accessToken}`}});
+    return response.data.isAdmin;
+}

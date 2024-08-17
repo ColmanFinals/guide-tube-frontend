@@ -19,7 +19,8 @@ const UserProfile: React.FC = () => {
                 if (!contextUser?.userData?._id) return;
                 const userData = await getUserData(contextUser.userData._id);
                 setUser(userData);
-                const pictureUrl: string = userData?.picture === null ? userData?.picture : '';
+                const pictureUrl: string = userData?.picture != null ? userData?.picture : '';
+                console.log(userData?.picture);
                 setImgUrl(`${import.meta.env.VITE_SERVER}/${pictureUrl}`);
 
             } catch (error) {

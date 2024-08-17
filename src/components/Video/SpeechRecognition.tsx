@@ -78,14 +78,14 @@ const SpeechRecognition: React.FC<SpeechRecognitionProps> = ({onCommand}) => {
         formData.append('file', audioBlob, 'audio.webm');
 
         try {
-            console.log('Sending audio to backend...');
+
             const endpoint = checkGuyTube ? 'https://guidetube-ai.cs.colman.ac.il/en/hi_guide_tube' : 'https://guidetube-ai.cs.colman.ac.il/en/transcribe';
             const response = await fetch(endpoint, {
                 method: 'PUT',
                 body: formData,
             });
 
-            console.log('Received response from backend');
+            
             const responseData = await response.json();
 
             if (checkGuyTube) {

@@ -1,13 +1,10 @@
-import React, {useCallback, useEffect, useRef, useState} from 'react';
-import YouTube, {YouTubePlayer, YouTubeProps} from 'react-youtube';
-import 'regenerator-runtime/runtime';
-import {Box, Button, Card, CardContent, Grid, Typography, useMediaQuery, useTheme} from '@mui/material';
-import {useParams} from 'react-router-dom';
-import api from "../../services/serverApi.tsx";
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import YouTube, { YouTubePlayer, YouTubeProps } from 'react-youtube';
+import { Box, Button, Card, CardContent, Grid, Typography, useMediaQuery, useTheme } from '@mui/material';
+import { useParams } from 'react-router-dom';
+import api from "../../services/serverApi";
 import SpeechRecognition from '../Video/SpeechRecognition';
 import PageTopTitle from '../PageTopTitle';
-import './VideoPage.css';
-import {IGuide} from "../../interfaces/IGuide.tsx";
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import PauseIcon from '@mui/icons-material/Pause';
 import SkipPreviousIcon from '@mui/icons-material/SkipPrevious';
@@ -16,13 +13,14 @@ import VolumeOffIcon from '@mui/icons-material/VolumeOff';
 import VolumeUpIcon from '@mui/icons-material/VolumeUp';
 
 const VideoPage: React.FC = () => {
-    const {guideId} = useParams<{ guideId: string }>();
+    const { guideId } = useParams<{ guideId: string }>();
     const [guide, setGuide] = useState<IGuide | null>(null);
     const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
     const [isPlaying, setIsPlaying] = useState(false);
     const [isMuted, setIsMuted] = useState(false);
     const playerRef = useRef<YouTubePlayer | null>(null);
     const [error, setError] = useState<string | null>(null);
+    const [isListening, setIsListening] = useState(false); // Flag for listening state
 
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
@@ -30,7 +28,7 @@ const VideoPage: React.FC = () => {
     useEffect(() => {
         const fetchGuide = async () => {
             try {
-                const response = await api.post<IGuide>('/guide/byId', {guideId});
+                const response = await api.post<IGuide>('/guide/byId', { guideId });
                 setGuide(response.data);
             } catch (err) {
                 setError('Failed to fetch guide.');
@@ -54,7 +52,7 @@ const VideoPage: React.FC = () => {
         setIsPlaying(false);
     };
 
-    const ApplyPlayPause = () => {
+    const applyPlayPause = () => {
         if (playerRef.current) {
             if (isPlaying) {
                 stopVideo();
@@ -67,12 +65,12 @@ const VideoPage: React.FC = () => {
     const toggleMute = () => {
         setIsMuted((prev) => {
             const newMutedState = !prev;
-            ApplyMute(newMutedState);
+            applyMute(newMutedState);
             return newMutedState;
         });
     };
 
-    const ApplyMute = (toMute: boolean) => {
+    const applyMute = (toMute: boolean) => {
         if (playerRef.current) {
             if (toMute) {
                 playerRef.current.mute();
@@ -91,17 +89,17 @@ const VideoPage: React.FC = () => {
     };
 
     const syncStateChange = (event: { data: number }) => {
-        const PlayerStateNumber = event.data;
+        const playerStateNumber = event.data;
         if (playerRef.current) {
-            if (PlayerStateNumber === -1) {
+            if (playerStateNumber === -1) {
                 playerRef.current.playVideo();
-            } else if (PlayerStateNumber === 0) {
+            } else if (playerStateNumber === 0) {
                 playNextVideo();
                 setIsPlaying(false);
-            } else if (PlayerStateNumber === 1) {
+            } else if (playerStateNumber === 1) {
                 setIsPlaying(true);
-                ApplyMute(!isMuted);
-            } else if (PlayerStateNumber === 2) {
+                applyMute(!isMuted);
+            } else if (playerStateNumber === 2) {
                 setIsPlaying(false);
             }
         }
@@ -109,27 +107,53 @@ const VideoPage: React.FC = () => {
 
     const handleCommand = useCallback(
         (command: string) => {
-            const lower_command = command.toLowerCase();
+            const lowerCommand = command.toLowerCase();
+            let feedbackMessage = '';
 
-            if (lower_command.includes('pause') || lower_command.includes('stop')) {
-                stopVideo();
-            } else if (lower_command.includes('mute')) {
+            if (lowerCommand.includes('pause') || lowerCommand.includes('stop')) {
+                if (!isListening) { 
+                    stopVideo();
+                    // feedbackMessage = 'Pausing video.';
+                }
+            } else if (lowerCommand.includes('mute')) {
                 toggleMute();
-            } else if (lower_command.includes('next')) {
+                feedbackMessage = isMuted ? 'Unmuting video.' : 'Muting video.';
+            } else if (lowerCommand.includes('unmute')) {
+                if (isMuted) {
+                    toggleMute();
+                    feedbackMessage = 'Unmuting video.';
+                } else {
+                    feedbackMessage = 'Video is already unmuted.';
+                }
+            } else if (lowerCommand.includes('next')) {
                 playNextVideo();
-            } else if (lower_command.includes('previous')) {
+                feedbackMessage = 'Playing next video.';
+            } else if (lowerCommand.includes('previous')) {
                 playPreviousVideo();
-            } else if (lower_command.includes('play')) {
+                feedbackMessage = 'Playing previous video.';
+            } else if (lowerCommand.includes('play')) {
                 startVideo();
+                feedbackMessage = 'Playing video.';
+            } else {
+                feedbackMessage = 'Sorry, I didn’t understand that command.';
+            }
+
+            if (feedbackMessage && !isListening) {
+                speak(feedbackMessage);
             }
         },
-        [isPlaying, isMuted]
+        [isPlaying, isMuted, isListening]
     );
+
+    const speak = (text: string) => {
+        const utterance = new SpeechSynthesisUtterance(text);
+        speechSynthesis.speak(utterance);
+    };
 
     const opts: YouTubeProps['opts'] = {
         height: isMobile ? '300' : '400',
         width: '100%',
-        playerVars: {autoplay: 1, controls: 0},
+        playerVars: { autoplay: 1, controls: 0 },
     };
 
     if (error) return <div>{error}</div>;
@@ -144,7 +168,7 @@ const VideoPage: React.FC = () => {
                 width: '100%',
             }}
         >
-            <PageTopTitle pageTitle={guide.name}/>
+            <PageTopTitle pageTitle={guide.name} />
             <Box
                 sx={{
                     display: 'flex',
@@ -171,29 +195,29 @@ const VideoPage: React.FC = () => {
                                     justifyContent="space-between"
                                     alignItems="center"
                                     mt={1}
-                                    sx={{px: '3%', overflow: 'hidden', textOverflow: 'ellipsis'}}
+                                    sx={{ px: '3%', overflow: 'hidden', textOverflow: 'ellipsis' }}
                                 >
                                     <Typography
                                         variant="body1"
-                                        sx={{flexShrink: 0, fontSize: isMobile ? '1rem' : '1.25rem'}}
+                                        sx={{ flexShrink: 0, fontSize: isMobile ? '1rem' : '1.25rem' }}
                                     >
                                         {guide.name}
                                     </Typography>
                                     <Typography
                                         variant="body1"
-                                        sx={{flexShrink: 0, fontSize: isMobile ? '1rem' : '1.25rem'}}
+                                        sx={{ flexShrink: 0, fontSize: isMobile ? '1rem' : '1.25rem' }}
                                     >
                                         Views: {guide.views}
                                     </Typography>
                                     <Typography
                                         variant="body1"
-                                        sx={{flexShrink: 0, fontSize: isMobile ? '1rem' : '1.25rem'}}
+                                        sx={{ flexShrink: 0, fontSize: isMobile ? '1rem' : '1.25rem' }}
                                     >
                                         Currently watching: {guide.videos[currentVideoIndex]?.title}
                                     </Typography>
                                     <Typography
                                         variant="body1"
-                                        sx={{flexShrink: 0, fontSize: isMobile ? '1rem' : '1.25rem'}}
+                                        sx={{ flexShrink: 0, fontSize: isMobile ? '1rem' : '1.25rem' }}
                                     >
                                         {currentVideoIndex + 1} out of {guide.videos.length}
                                     </Typography>
@@ -207,9 +231,9 @@ const VideoPage: React.FC = () => {
                                 <Button
                                     variant="contained"
                                     color="primary"
-                                    onClick={ApplyPlayPause}
+                                    onClick={applyPlayPause}
                                 >
-                                    {isPlaying ? <PauseIcon/> : <PlayArrowIcon/>}
+                                    {isPlaying ? <PauseIcon /> : <PlayArrowIcon />}
                                 </Button>
                             </Grid>
                             <Grid item>
@@ -218,7 +242,7 @@ const VideoPage: React.FC = () => {
                                     color="primary"
                                     onClick={playPreviousVideo}
                                 >
-                                    <SkipPreviousIcon/>
+                                    <SkipPreviousIcon />
                                 </Button>
                             </Grid>
                             <Grid item>
@@ -227,7 +251,7 @@ const VideoPage: React.FC = () => {
                                     color="primary"
                                     onClick={playNextVideo}
                                 >
-                                    <SkipNextIcon/>
+                                    <SkipNextIcon />
                                 </Button>
                             </Grid>
                             <Grid item>
@@ -236,16 +260,18 @@ const VideoPage: React.FC = () => {
                                     color="primary"
                                     onClick={toggleMute}
                                 >
-                                    {isMuted ? <VolumeUpIcon/> : <VolumeOffIcon/>}
+                                    {isMuted ? <VolumeUpIcon /> : <VolumeOffIcon />}
                                 </Button>
                             </Grid>
                         </Grid>
                     </Grid>
                 </Grid>
-                <Box mt={4}>
-                    <SpeechRecognition onCommand={handleCommand}/>
-                </Box>
             </Box>
+            <SpeechRecognition
+                onCommand={handleCommand}
+                onStartListening={() => setIsListening(true)}
+                onStopListening={() => setIsListening(false)}
+            />
         </Box>
     );
 };
