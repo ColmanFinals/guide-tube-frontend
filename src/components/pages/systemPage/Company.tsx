@@ -7,7 +7,7 @@ import {fetchCompanies} from "../../../services/companiesService";
 import PageTopTitle from "../../PageTopTitle";
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
-import { IUser } from "../../../utillity/types";
+import { IUser } from "../../../interfaces/IUser";
 import { fetchAllUsers } from "../../../services/userService";
 
 

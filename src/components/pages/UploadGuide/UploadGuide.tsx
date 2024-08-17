@@ -11,9 +11,11 @@ import { Box, Grid, useMediaQuery, useTheme } from '@mui/material';
 import { addGuideToCompany, addVideoToPlaylist, createPlaylist, uploadVideo } from '../../../services/guideService';
 import { toast, ToastContainer } from 'react-toastify';
 import PlaylistConfiguration from './PlaylistConfiguration';
-import { ICompany, IGuide, INewGuideRequest, IVideo } from '../../../utillity/types';
+import {IGuideData, INewGuideRequest} from "../../../interfaces/INewGuideRequest";
+import { INewVideoRequest } from "../../../interfaces/INewVideoRequest";
 import { fetchMyCompanies } from '../../../services/companiesService';
 import CircularProgress from '@mui/material/CircularProgress';
+import { ICompany } from '../../../interfaces/IPartialCompany';
 
 
 export interface Video {
@@ -69,13 +71,13 @@ const UploadGuidePage = () => {
         setIsSaving(true); // Start loading
         try {
             const privacy = isPrivate ? "unlisted" : "public";
-            const guideData: IGuide = {
+            const guideData: IGuideData = {
                 createdAt: new Date().toISOString(),
                 name: playlistName,
                 views: 0,
                 privacyStatus: privacy
             };
-            const videosData: IVideo[] = [];
+            const videosData: INewVideoRequest[] = [];
 
             // Create the playlist
             const playlist = await createPlaylist(playlistName, isPrivate, "Created by GuideTube!");
