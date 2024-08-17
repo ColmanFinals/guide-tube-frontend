@@ -4,14 +4,15 @@ import {Box, Typography} from '@mui/material';
 
 interface SpeechRecognitionProps {
     onCommand: (command: string) => void;
+    stopVideo: () => void;
 }
 
-const SpeechRecognition: React.FC<SpeechRecognitionProps> = ({onCommand}) => {
+const SpeechRecognition: React.FC<SpeechRecognitionProps> = ({onCommand, stopVideo}) => {
     const mediaRecorderRef: MutableRefObject<MediaRecorder | null> = useRef(null);
     const audioChunksRef: MutableRefObject<Blob[]> = useRef([]);
     const intervalIdRef: MutableRefObject<NodeJS.Timeout | null> = useRef(null);
     const [isUploading, setIsUploading] = useState(false);
-    const [checkGuyTube, setCheckGuyTube] = useState(true);
+    const [checkGuideTube, setCheckGuideTube] = useState(true);
     const [isRecording, setIsRecording] = useState(false);
 
     useEffect(() => {
@@ -52,7 +53,7 @@ const SpeechRecognition: React.FC<SpeechRecognitionProps> = ({onCommand}) => {
                     if (!isUploading) {
                         stopRecording();
                     }
-                }, checkGuyTube ? 4000 : 6000); // Adjust the interval based on checkGuyTube
+                }, checkGuideTube ? 4000 : 6000); // Adjust the interval based on checkGuyTube
 
                 startRecording();
             } catch (error) {
@@ -61,7 +62,7 @@ const SpeechRecognition: React.FC<SpeechRecognitionProps> = ({onCommand}) => {
         };
 
         startListening();
-
+    
         return () => {
             if (mediaRecorderRef.current) {
                 mediaRecorderRef.current.stop();
@@ -71,15 +72,15 @@ const SpeechRecognition: React.FC<SpeechRecognitionProps> = ({onCommand}) => {
                 clearInterval(intervalIdRef.current);
             }
         };
-    }, [isUploading, checkGuyTube]); // Add checkGuyTube to dependencies to reset interval when it changes
+    }, [isUploading, checkGuideTube]);
 
     const sendAudioToBackend = async (audioBlob: Blob) => {
         const formData = new FormData();
         formData.append('file', audioBlob, 'audio.webm');
 
         try {
-
-            const endpoint = checkGuyTube ? 'https://guidetube-ai.cs.colman.ac.il/en/hi_guide_tube' : 'https://guidetube-ai.cs.colman.ac.il/en/transcribe';
+            console.log('Sending audio to backend...');
+            const endpoint = checkGuideTube ? 'https://guidetube-ai.cs.colman.ac.il/en/hi_guide_tube' : 'https://guidetube-ai.cs.colman.ac.il/en/transcribe';
             const response = await fetch(endpoint, {
                 method: 'PUT',
                 body: formData,
@@ -88,15 +89,15 @@ const SpeechRecognition: React.FC<SpeechRecognitionProps> = ({onCommand}) => {
             
             const responseData = await response.json();
 
-            if (checkGuyTube) {
+            if (checkGuideTube) {
                 if (responseData) {
-                    onCommand("stop");
+                    stopVideo();
                     speak("What do you need me to do?");
-                    setCheckGuyTube(false);
+                    setCheckGuideTube(false);
                 }
             } else {
                 onCommand(responseData);
-                setCheckGuyTube(true);
+                setCheckGuideTube(true);
             }
         } catch (error) {
             console.error('Error sending audio to backend:', error);
@@ -122,7 +123,7 @@ const SpeechRecognition: React.FC<SpeechRecognitionProps> = ({onCommand}) => {
 
     return (
         <>
-            {!checkGuyTube && (
+            {!checkGuideTube && (
                 <Box sx={{
                     position: 'fixed',
                     top: 0,

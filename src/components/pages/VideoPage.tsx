@@ -11,6 +11,7 @@ import SkipPreviousIcon from '@mui/icons-material/SkipPrevious';
 import SkipNextIcon from '@mui/icons-material/SkipNext';
 import VolumeOffIcon from '@mui/icons-material/VolumeOff';
 import VolumeUpIcon from '@mui/icons-material/VolumeUp';
+import { IGuide } from '../../interfaces/IGuide';
 
 const VideoPage: React.FC = () => {
     const { guideId } = useParams<{ guideId: string }>();
@@ -82,10 +83,12 @@ const VideoPage: React.FC = () => {
 
     const playNextVideo = () => {
         setCurrentVideoIndex((prevIndex) => (prevIndex + 1) % (guide?.videos.length || 1));
+        startVideo()
     };
 
     const playPreviousVideo = () => {
         setCurrentVideoIndex((prevIndex) => (prevIndex - 1 + (guide?.videos.length || 1)) % (guide?.videos.length || 1));
+        startVideo()
     };
 
     const syncStateChange = (event: { data: number }) => {
@@ -104,7 +107,7 @@ const VideoPage: React.FC = () => {
             }
         }
     };
-
+    
     const handleCommand = useCallback(
         (command: string) => {
             const lowerCommand = command.toLowerCase();
@@ -269,8 +272,7 @@ const VideoPage: React.FC = () => {
             </Box>
             <SpeechRecognition
                 onCommand={handleCommand}
-                onStartListening={() => setIsListening(true)}
-                onStopListening={() => setIsListening(false)}
+                stopVideo={stopVideo}
             />
         </Box>
     );

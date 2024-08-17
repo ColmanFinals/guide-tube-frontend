@@ -17,7 +17,8 @@ import {fetchAllUsers} from "../../services/userService";
 import PageTopTitle from '../PageTopTitle';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
-import {ICompany, IUser} from '../../utillity/types';
+import { IUser } from '../../interfaces/IUser';
+import { ICompany } from '../../interfaces/IPartialCompany';
 
 
 const AdminPage: React.FC = () => {

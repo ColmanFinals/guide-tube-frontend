@@ -1,5 +1,7 @@
 import {youtubeApi} from "./youtubeApi";
-import {INewGuideRequest, IPlaylist, IVideo} from "../utillity/types";
+import {INewGuideRequest} from "../interfaces/INewGuideRequest";
+import {IPlaylist} from "../interfaces/IPlaylist"
+import { INewVideoRequest } from "../interfaces/INewVideoRequest";
 import serverApi from "./serverApi";
 
 export const generateOauth2Token = async (): Promise<string> => {
@@ -111,7 +113,7 @@ export const uploadVideo = async (videoFile: File, videoName: string, isPrivate:
     }
 };
 
-export const addVideoToPlaylist = async (playlistID: string, videoID: string, fragment: number): Promise<IVideo> => {
+export const addVideoToPlaylist = async (playlistID: string, videoID: string, fragment: number): Promise<INewVideoRequest> => {
     try {
         const googleOauth2AccessToken = await getOauth2Token();
         console.log(googleOauth2AccessToken);
@@ -137,7 +139,7 @@ export const addVideoToPlaylist = async (playlistID: string, videoID: string, fr
                 }
             }
         );
-        const video: IVideo = {
+        const video: INewVideoRequest = {
             channelId: response.data.snippet.channelId,
             description: response.data.snippet.description,
             publishedAt: response.data.snippet.publishedAt,
