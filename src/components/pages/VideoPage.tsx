@@ -45,7 +45,6 @@ const VideoPage: React.FC = () => {
 
     const startVideo = () => {
         playerRef.current?.playVideo();
-        applyMute(false)
         setIsPlaying(true);
     };
 
@@ -102,46 +101,50 @@ const VideoPage: React.FC = () => {
                 setIsPlaying(false);
             } else if (playerStateNumber === 1) {
                 setIsPlaying(true);
-                applyMute(!isMuted);
+                setIsMuted(false);
             } else if (playerStateNumber === 2) {
                 setIsPlaying(false);
             }
         }
     };
-
     const handleCommand = useCallback(
         (command: string) => {
             const lowerCommand = command.toLowerCase();
             let feedbackMessage = '';
 
             if (lowerCommand.includes('pause') || lowerCommand.includes('stop')) {
-                if (!isListening) {
+                if (!isListening) { 
                     stopVideo();
-                    feedbackMessage = 'Pausing video.';
-                } else if (lowerCommand.includes('unmute')) {
+                    // feedbackMessage = 'Pausing video.';
+                }
+            } else if (lowerCommand.includes('mute')) {
+                toggleMute();
+                feedbackMessage = isMuted ? 'Unmuting video.' : 'Muting video.';
+            } else if (lowerCommand.includes('unmute')) {
+                if (isMuted) {
                     toggleMute();
-                    feedbackMessage = "Unmuting video"
-                } else if (lowerCommand.includes('mute')) {
-                        feedbackMessage = 'Muting video';
-                } else if (lowerCommand.includes('next')) {
-                    playNextVideo();
-                    feedbackMessage = 'Playing next video.';
-                } else if (lowerCommand.includes('previous')) {
-                    playPreviousVideo();
-                    feedbackMessage = 'Playing previous video.';
-                } else if (lowerCommand.includes('play')) {
-                    startVideo();
-                    feedbackMessage = 'Playing video.';
+                    feedbackMessage = 'Unmuting video.';
                 } else {
-                    feedbackMessage = 'Sorry, I didn’t understand that command.';
+                    feedbackMessage = 'Video is already unmuted.';
                 }
+            } else if (lowerCommand.includes('next')) {
+                playNextVideo();
+                feedbackMessage = 'Playing next video.';
+            } else if (lowerCommand.includes('previous')) {
+                playPreviousVideo();
+                feedbackMessage = 'Playing previous video.';
+            } else if (lowerCommand.includes('play')) {
+                startVideo();
+                feedbackMessage = 'Playing video.';
+            } else {
+                feedbackMessage = 'Sorry, I didn’t understand that command.';
+            }
 
-                if (feedbackMessage && !isListening) {
-                    speak(feedbackMessage);
-                }
+            if (feedbackMessage && !isListening) {
+                speak(feedbackMessage);
             }
         },
-            [isPlaying, isMuted, isListening]
+        [isPlaying, isMuted, isListening]
     );
 
     const speak = (text: string) => {

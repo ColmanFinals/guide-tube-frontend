@@ -33,7 +33,13 @@ const Navbar = () => {
   };
 
   const getUserRole = () => {
-    return JSON.parse(localStorage.getItem('user') || '{}').userData.role;
+    if(localStorage.getItem('user')){
+      return JSON.parse(localStorage.getItem('user') || '{}').userData.role;
+    }
+    else {
+      navigate("/login")
+      return
+    }
   };
 
   useEffect(() => {
