@@ -107,45 +107,40 @@ const VideoPage: React.FC = () => {
             }
         }
     };
-    
+
     const handleCommand = useCallback(
         (command: string) => {
             const lowerCommand = command.toLowerCase();
             let feedbackMessage = '';
 
             if (lowerCommand.includes('pause') || lowerCommand.includes('stop')) {
-                if (!isListening) { 
+                if (!isListening) {
                     stopVideo();
-                    // feedbackMessage = 'Pausing video.';
-                }
-            } else if (lowerCommand.includes('mute')) {
-                toggleMute();
-                feedbackMessage = isMuted ? 'Unmuting video.' : 'Muting video.';
-            } else if (lowerCommand.includes('unmute')) {
-                if (isMuted) {
+                    feedbackMessage = 'Pausing video.';
+                } else if (lowerCommand.includes('unmute')) {
                     toggleMute();
-                    feedbackMessage = 'Unmuting video.';
+                    feedbackMessage = "Unmuting video"
+                } else if (lowerCommand.includes('mute')) {
+                        feedbackMessage = 'Muting video';
+                } else if (lowerCommand.includes('next')) {
+                    playNextVideo();
+                    feedbackMessage = 'Playing next video.';
+                } else if (lowerCommand.includes('previous')) {
+                    playPreviousVideo();
+                    feedbackMessage = 'Playing previous video.';
+                } else if (lowerCommand.includes('play')) {
+                    startVideo();
+                    feedbackMessage = 'Playing video.';
                 } else {
-                    feedbackMessage = 'Video is already unmuted.';
+                    feedbackMessage = 'Sorry, I didn’t understand that command.';
                 }
-            } else if (lowerCommand.includes('next')) {
-                playNextVideo();
-                feedbackMessage = 'Playing next video.';
-            } else if (lowerCommand.includes('previous')) {
-                playPreviousVideo();
-                feedbackMessage = 'Playing previous video.';
-            } else if (lowerCommand.includes('play')) {
-                startVideo();
-                feedbackMessage = 'Playing video.';
-            } else {
-                feedbackMessage = 'Sorry, I didn’t understand that command.';
-            }
 
-            if (feedbackMessage && !isListening) {
-                speak(feedbackMessage);
+                if (feedbackMessage && !isListening) {
+                    speak(feedbackMessage);
+                }
             }
         },
-        [isPlaying, isMuted, isListening]
+            [isPlaying, isMuted, isListening]
     );
 
     const speak = (text: string) => {

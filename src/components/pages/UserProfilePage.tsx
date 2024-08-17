@@ -4,6 +4,7 @@ import {changePassword, getUserData, updateProfilePicture} from '../../services/
 import {useUser} from '../../context/user-context';
 import EditIcon from '@mui/icons-material/Edit';
 import PageTopTitle from '../PageTopTitle';
+import { toast, ToastContainer } from 'react-toastify';
 
 const UserProfile: React.FC = () => {
     const {user: contextUser} = useUser();
@@ -34,12 +35,12 @@ const UserProfile: React.FC = () => {
 
     const handlePasswordChange = async () => {
         if (newPassword !== confirmPassword) {
-            alert('Passwords do not match!');
+            toast.error('Passwords do not match!');
             return;
         }
         try {
             await changePassword(currentPassword, newPassword);
-            alert('Password changed successfully');
+            toast.success('Password changed successfully');
         } catch (error) {
             console.error('Error changing password:', error);
         }
@@ -51,7 +52,7 @@ const UserProfile: React.FC = () => {
             try {
                 if (!contextUser?.userData?._id) return;
                 await updateProfilePicture(contextUser.userData._id, file);
-                alert('Profile picture updated successfully');
+                toast.success('Profile picture updated successfully');
                 setImgUrl(URL.createObjectURL(file));
             } catch (error) {
                 console.error('Error updating profile picture:', error);
@@ -140,6 +141,8 @@ const UserProfile: React.FC = () => {
                     </Button>
                 </Box>
             </Box>
+            <ToastContainer theme="dark" position="top-center" autoClose={5000} hideProgressBar={false}
+                            newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss pauseOnHover/>
         </Box>
     );
 };
