@@ -21,7 +21,8 @@ export interface PlaylistConfigurationProps {
     userCompanies: string[],
     open: boolean,
     setIsOpen: React.Dispatch<React.SetStateAction<boolean>>,
-    handleSave: () => void
+    handleSave: () => void,
+    company: string
 }
 
 const PlaylistConfiguration: React.FC<PlaylistConfigurationProps> = ({
@@ -31,7 +32,8 @@ const PlaylistConfiguration: React.FC<PlaylistConfigurationProps> = ({
                                                                          userCompanies,
                                                                          open,
                                                                          setIsOpen,
-                                                                         handleSave
+                                                                         handleSave,
+                                                                         company
                                                                      }) => {
     const handleSwitchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setIsPrivate(event.target.checked);
@@ -63,7 +65,7 @@ const PlaylistConfiguration: React.FC<PlaylistConfigurationProps> = ({
                     <Select
                         labelId="demo-simple-select-required-label"
                         id="demo-simple-select-required"
-                        value={userCompanies[0]}
+                        value={company}
                         label="company *"
                         onChange={handleCompanyChange}
                     >
