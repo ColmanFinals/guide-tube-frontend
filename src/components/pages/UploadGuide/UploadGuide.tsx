@@ -242,7 +242,7 @@ const UploadGuidePage = () => {
                     <AddCardRoundedIcon fontSize="large" />
                 </Fab>
                 <PlaylistConfiguration handleSave={handleSave} isPrivate={isPrivate} open={openModal} setCompany={setCompany}
-                    setIsOpen={setOpenModal} setIsPrivate={setIsPrivate} userCompanies={userCompanies} />
+                    setIsOpen={setOpenModal} setIsPrivate={setIsPrivate} userCompanies={userCompanies} company={company} />
                 <ToastContainer theme="dark" position="top-center" autoClose={5000} hideProgressBar={false}
                     newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss pauseOnHover />
             </Box>

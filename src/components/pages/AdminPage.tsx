@@ -107,15 +107,15 @@ const AdminPage: React.FC = () => {
         }
     };
 
-
+    const backendUrl = import.meta.env.VITE_SERVER;
     const columns: GridColDef[] = [
         {
-            field: 'imgUrl',
+            field: 'picture',
             headerName: 'Picture',
             width: 100,
             renderCell: (params) => (
                 <img
-                    src={params.value || 'https://via.placeholder.com/40'}
+                    src={`${backendUrl}/${params.value}` || 'https://via.placeholder.com/40'}
                     alt="User"
                     style={{
                         width: '40px',
