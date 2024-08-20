@@ -1,10 +1,10 @@
 import React, {useEffect, useState} from 'react';
 import {ICompany} from '../../interfaces/ICompany';
 import {useNavigate} from 'react-router-dom';
-import api from "../../services/serverApi";
 import {fetchCompanies} from "../../services/companiesService.tsx"
 import {TextField} from '@mui/material';
 import PageTopTitle from "../PageTopTitle.tsx";
+import { useUser } from '../../context/user-context.tsx';
 
 const CompaniesPage: React.FC = () => {
     const [companies, setCompanies] = useState<ICompany[]>([]);
@@ -13,6 +13,7 @@ const CompaniesPage: React.FC = () => {
     const [error, setError] = useState<string | null>(null);
     const [searchQuery, setSearchQuery] = useState<string>('');
     const navigate = useNavigate();
+    const {user} = useUser();
 
     useEffect(() => {
         const loadCompanies = async () => {
@@ -48,6 +49,9 @@ const CompaniesPage: React.FC = () => {
         <div className='h-full w-full'>
             <PageTopTitle pageTitle="Choose a Company"/>
             <div className='sticky top-0 z-10 bg-[#212121] shadow py-2 px-4'>
+                <span className="bg-clip-text text-transparent bg-gradient-to-r from-pink-400 via-purple-500 to-blue-500" style={{fontSize:'3em', fontFamily: "Candara"}}>Hi {user?.fullName},</span>
+                <br/>
+                <span style={{fontSize: "2em", fontFamily: "Candara"}} className="text-white">What would you like to learn today?</span>
                 <TextField
                     label="Search Companies"
                     variant="outlined"

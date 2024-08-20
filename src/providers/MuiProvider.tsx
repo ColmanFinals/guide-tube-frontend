@@ -3,6 +3,9 @@ import {ReactElement} from "react";
 
 // Create a theme instance.
 const theme = createTheme({
+    typography: {
+        fontFamily: 'Wix Madefor Text, sans-serif', // Apply Candara globally in MUI
+    },
     palette: {
         mode: 'dark',
         primary: {

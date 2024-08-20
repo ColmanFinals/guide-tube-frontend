@@ -7,7 +7,6 @@ interface IUserContext {
     login: (user: IUser) => Promise<void>;
     logout: () => void;
     signInViaGoogle: (credentials: JwtPayload) => Promise<void>;
-    //updateUserDetails: (user: IUser) => Promise<void>;
 }
 
 const defaultUserContextVal = undefined
@@ -57,12 +56,6 @@ export const UserProvider = ({children}: { children: ReactNode }) => {
             console.log(e)
         }
     };
-
-    // const updateUserDetails = async(user: IUser) => {
-    //   const response: IUser = await updateUser(user);
-    //   localStorage.setItem('user', JSON.stringify(response));
-    //   setUser(response);
-    // }
     return (
         <UserContext.Provider value={{user, login, signInViaGoogle, logout}}>
             {children}

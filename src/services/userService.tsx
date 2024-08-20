@@ -19,6 +19,36 @@ export interface IAuthResponse {
     refreshToken: string;
 }
 
+interface ILoginUserRes {
+    userData?: {
+        _id?: string;
+        picture?: string;
+        username?: string;
+        password?: string;
+        fullName?: string;
+        role?: string;
+        __v?: number;
+    };
+    _id?: string;
+    accessToken?: string;
+    refreshToken?: string;
+}
+
+function castLoginUserResToIUser(loginUserRes: ILoginUserRes): IUser {
+    return {
+        _id: loginUserRes._id ?? loginUserRes.userData?._id,
+        username: loginUserRes.userData?.username,
+        fullName: loginUserRes.userData?.fullName,
+        role: loginUserRes.userData?.role,
+        password: loginUserRes.userData?.password,
+        picture: loginUserRes.userData?.picture,
+        accessToken: loginUserRes.accessToken,
+        refreshToken: loginUserRes.refreshToken,
+        userData: { _id: loginUserRes.userData?._id }
+    };
+}
+
+
 export const registerUser = (user: IUser) => {
     return new Promise<IUser>((resolve, reject) => {
         api.post("/auth/register", user).then((response) => {
@@ -35,7 +65,8 @@ export const loginUser = (user: IUser) => {
             {username: user.username, password: user.password},
             {headers: {"Content-Type": "application/json"}}
         ).then((response) => {
-            resolve(response.data)
+            const user = castLoginUserResToIUser(response.data);
+            resolve(user);
         }).catch((error) => {
             reject(error)
         })
@@ -57,14 +88,15 @@ export const updateUser = (user: IUser) => {
 export const googleSignIn = (credentials: JwtPayload) => {
     return new Promise<IUser>((resolve, reject) => {
         api.post(import.meta.env.VITE_SERVER_GOOGLE_LOGIN_PATH,
-            {credentials},
-            {headers: {"Content-Type": "application/json"}}
+            { credentials },
+            { headers: { "Content-Type": "application/json" } }
         ).then((response) => {
-            resolve(response.data)
+            const user = castLoginUserResToIUser(response.data);
+            resolve(user);
         }).catch((error) => {
-            reject(error)
-        })
-    })
+            reject(error);
+        });
+    });
 }
 
 export const logoutUser = () => {
