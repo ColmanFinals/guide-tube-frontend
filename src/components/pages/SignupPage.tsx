@@ -4,6 +4,8 @@ import {Button, TextField} from "@mui/material";
 import axios from "axios";
 import api from "../../services/serverApi";
 import Logo from '../../assets/white_guidetube.png'
+import Confetti from 'react-confetti';
+import useWindowSize from 'react-use/lib/useWindowSize';
 
 const SignupPage = () => {
     const [username, setUsername] = useState("");
@@ -11,9 +13,11 @@ const SignupPage = () => {
     const [fullName, setFullName] = useState("");
     const [error, setError] = useState("");
     const navigate = useNavigate();
+    const [showConfetti, setShowConfetti] = useState(false);
+    const { width, height } = useWindowSize();
 
     const handleSignup = async () => {
-        try {
+        try {   
             if (username.length < 5 || password.length < 5) {
                 setError("Username and password must be at least 5 characters long.");
                 return;
@@ -27,7 +31,12 @@ const SignupPage = () => {
 
             console.log(response.data);
 
-            navigate("/login");
+            setShowConfetti(true);
+            setTimeout(() => {
+                setShowConfetti(false);
+                navigate("/login");
+            }, 3500); 
+
         } catch (error) {
             if (axios.isAxiosError(error)) {
                 const serverError = error.response?.data?.error || "Unknown error occurred.";
@@ -100,6 +109,17 @@ const SignupPage = () => {
           </span>
                 </form>
             </div>
+            {showConfetti && (
+                <Confetti
+                    width={width}
+                    height={height}
+                    numberOfPieces={300} 
+                    wind={0}                
+                    recycle={false}             
+                    tweenDuration={1600}  
+                    colors={["#C6878F","#B79D94","#969696","#67697C","#253D5B"]}
+                />
+            )}
         </div>
     );
 };
