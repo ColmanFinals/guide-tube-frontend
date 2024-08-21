@@ -49,9 +49,9 @@ const CompaniesPage: React.FC = () => {
         <div className='h-full w-full'>
             <PageTopTitle pageTitle="Choose a Company"/>
             <div className='sticky top-0 z-10 bg-[#212121] shadow py-2 px-4'>
-                <span className="bg-clip-text text-transparent bg-gradient-to-r from-pink-400 via-purple-500 to-blue-500" style={{fontSize:'3em', fontFamily: "Candara"}}>Hi {user?.fullName},</span>
+                <span className="bg-clip-text text-transparent bg-gradient-to-r" style={{fontSize:'2em', fontFamily: "Candara", backgroundImage: "linear-gradient(to right, #c17982, #C6878F, #969696, #67697C)",}}>Hi {user?.fullName},</span>
                 <br/>
-                <span style={{fontSize: "2em", fontFamily: "Candara"}} className="text-white">What would you like to learn today?</span>
+                <span style={{fontSize: "1em", fontFamily: "Candara"}} className="text-white">What would you like to learn today?</span>
                 <TextField
                     label="Search Companies"
                     variant="outlined"

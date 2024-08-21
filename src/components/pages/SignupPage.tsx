@@ -35,7 +35,7 @@ const SignupPage = () => {
             setTimeout(() => {
                 setShowConfetti(false);
                 navigate("/login");
-            }, 3500); 
+            }, 2500); 
 
         } catch (error) {
             if (axios.isAxiosError(error)) {

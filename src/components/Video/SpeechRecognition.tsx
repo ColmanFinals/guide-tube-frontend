@@ -1,6 +1,8 @@
 import React, {MutableRefObject, useEffect, useRef, useState} from 'react';
 import SiriWave from 'react-siriwave';
 import {Box, Typography} from '@mui/material';
+import { useUser } from '../../context/user-context';
+import { Language } from '../../interfaces/ELanguage';
 
 interface SpeechRecognitionProps {
     onCommand: (command: string) => void;
@@ -14,6 +16,7 @@ const SpeechRecognition: React.FC<SpeechRecognitionProps> = ({onCommand, stopVid
     const [isUploading, setIsUploading] = useState(false);
     const [checkGuideTube, setCheckGuideTube] = useState(true);
     const [isRecording, setIsRecording] = useState(false);
+    const {user} = useUser();
 
     useEffect(() => {
         const startListening = async () => {
@@ -80,7 +83,8 @@ const SpeechRecognition: React.FC<SpeechRecognitionProps> = ({onCommand, stopVid
 
         try {
             console.log('Sending audio to backend...');
-            const endpoint = checkGuideTube ? 'https://guidetube-ai.cs.colman.ac.il/en/hi_guide_tube' : 'https://guidetube-ai.cs.colman.ac.il/en/transcribe';
+            const language = user?.language ? user?.language : Language.ENGLISH;
+            const endpoint = checkGuideTube ? `https://guidetube-ai.cs.colman.ac.il/${language}/hi_guide_tube` : `https://guidetube-ai.cs.colman.ac.il/${language}/transcribe`;
             const response = await fetch(endpoint, {
                 method: 'PUT',
                 body: formData,

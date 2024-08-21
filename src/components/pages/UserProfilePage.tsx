@@ -1,13 +1,15 @@
 import React, {useEffect, useState} from 'react';
-import {Avatar, Box, Button, IconButton, TextField, Typography} from '@mui/material';
+import {Avatar, Box, Button, FormControl, IconButton, InputLabel, MenuItem, Select, SelectChangeEvent, TextField, Typography} from '@mui/material';
 import {changePassword, getUserData, updateProfilePicture} from '../../services/userService';
 import {useUser} from '../../context/user-context';
 import EditIcon from '@mui/icons-material/Edit';
 import PageTopTitle from '../PageTopTitle';
 import { toast, ToastContainer } from 'react-toastify';
+import { Language } from '../../interfaces/ELanguage';
 
 const UserProfile: React.FC = () => {
-    const {user: contextUser} = useUser();
+    const {user: contextUser, updateUserLanguage} = useUser();
+    const [selectedLanguage, setSelectedLanguage] = useState<Language | undefined>(contextUser?.language);
     const [user, setUser] = useState(contextUser || {});
     const [currentPassword, setCurrentPassword] = useState('');
     const [newPassword, setNewPassword] = useState('');
@@ -23,6 +25,7 @@ const UserProfile: React.FC = () => {
                 const pictureUrl: string = userData?.picture != null ? userData?.picture : '';
                 console.log(userData?.picture);
                 setImgUrl(`${import.meta.env.VITE_SERVER}/${pictureUrl}`);
+                setSelectedLanguage(contextUser?.language)
 
             } catch (error) {
                 console.error('Error fetching user data:', error);
@@ -44,6 +47,12 @@ const UserProfile: React.FC = () => {
         } catch (error) {
             console.error('Error changing password:', error);
         }
+    };
+
+    const handleChange = async (event: SelectChangeEvent<Language>) => {
+        const newLanguage = event.target.value as Language;
+        await updateUserLanguage(newLanguage);
+        setSelectedLanguage(newLanguage); 
     };
 
     const handleProfilePictureChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -103,6 +112,22 @@ const UserProfile: React.FC = () => {
                         readOnly: true,
                     }}
                 />
+                <FormControl fullWidth margin="normal">
+                    <InputLabel id="language-select-label">Language</InputLabel>
+                    <Select
+                        labelId="language-select-label"
+                        value={selectedLanguage}
+                        onChange={handleChange}
+                        label="Language"
+                        sx={{ minWidth: 200 }}
+                    >
+                        {Object.values(Language).map((language) => (
+                            <MenuItem value={language} key={language}>
+                                {language}
+                            </MenuItem>
+                        ))}
+                    </Select>
+                </FormControl>
                 <Box sx={{marginTop: 4}}>
                     <Typography variant="h6">Change Password</Typography>
                     <TextField

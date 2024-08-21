@@ -1,12 +1,14 @@
 import {createContext, ReactNode, useContext, useState} from 'react';
-import {googleSignIn, IUser, loginUser, logoutUser} from "../services/userService";
+import {googleSignIn, IUser, loginUser, logoutUser, updateLanguage} from "../services/userService";
 import {JwtPayload} from 'jwt-decode';
+import { Language } from '../interfaces/ELanguage';
 
 interface IUserContext {
     user: IUser | null;
     login: (user: IUser) => Promise<void>;
     logout: () => void;
     signInViaGoogle: (credentials: JwtPayload) => Promise<void>;
+    updateUserLanguage: (newLanguage: Language) => Promise<void>;
 }
 
 const defaultUserContextVal = undefined
@@ -44,6 +46,17 @@ export const UserProvider = ({children}: { children: ReactNode }) => {
         }
     };
 
+    const updateUserLanguage = async (newLanguage: Language) => {
+        try{
+            await updateLanguage(newLanguage);
+            var newUser = {...user}
+            newUser.language = newLanguage;
+            setUser(newUser);
+            localStorage.setItem('user', JSON.stringify(newUser));
+        } catch (e) {
+            console.log(e)
+        }
+    }
     const logout = async () => {
         try {
             await logoutUser();
@@ -57,7 +70,7 @@ export const UserProvider = ({children}: { children: ReactNode }) => {
         }
     };
     return (
-        <UserContext.Provider value={{user, login, signInViaGoogle, logout}}>
+        <UserContext.Provider value={{user, login, signInViaGoogle, logout,updateUserLanguage}}>
             {children}
         </UserContext.Provider>
     );

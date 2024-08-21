@@ -1,3 +1,4 @@
+import { Language } from "../interfaces/ELanguage";
 import api from "./serverApi"
 import {JwtPayload} from "jwt-decode";
 
@@ -11,7 +12,8 @@ export interface IUser {
     _id?: string,
     accessToken?: string,
     refreshToken?: string,
-    picture?: string
+    picture?: string,
+    language?: Language
 }
 
 export interface IAuthResponse {
@@ -28,6 +30,7 @@ interface ILoginUserRes {
         fullName?: string;
         role?: string;
         __v?: number;
+        language?: Language;
     };
     _id?: string;
     accessToken?: string;
@@ -44,6 +47,7 @@ function castLoginUserResToIUser(loginUserRes: ILoginUserRes): IUser {
         picture: loginUserRes.userData?.picture,
         accessToken: loginUserRes.accessToken,
         refreshToken: loginUserRes.refreshToken,
+        language: loginUserRes.userData?.language,
         userData: { _id: loginUserRes.userData?._id }
     };
 }
@@ -173,4 +177,12 @@ export const getIsAdmin = async () => {
     const response = await api.get(`/user/isAdmin`, {
             headers: {'authorization': `Bearer ${accessToken}`}});
     return response.data.isAdmin;
+};
+
+export const updateLanguage = async (newLanguage: string) => {
+    api.put("/user/updateLanguage", {"language": newLanguage}).then((response) => {
+        return response.data
+    }).catch(e => {
+        return e
+    })
 }
