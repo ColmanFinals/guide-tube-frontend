@@ -5,6 +5,7 @@ import {fetchCompanies} from "../../services/companiesService.tsx"
 import {TextField} from '@mui/material';
 import PageTopTitle from "../PageTopTitle.tsx";
 import { useUser } from '../../context/user-context.tsx';
+import LoadingPage from "./LoadingPage.tsx";
 
 const CompaniesPage: React.FC = () => {
     const [companies, setCompanies] = useState<ICompany[]>([]);
@@ -38,7 +39,8 @@ const CompaniesPage: React.FC = () => {
         setFilteredCompanies(filtered);
     }, [searchQuery, companies]);
 
-    if (loading) return <div>Loading...</div>;
+    if (loading)
+        return <LoadingPage/>;
     if (error) return <div>{error}</div>;
 
     const handleNavigate = (companyName: string) => {

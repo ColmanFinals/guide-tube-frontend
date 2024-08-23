@@ -4,6 +4,7 @@ import api from "../../services/serverApi";
 import {IGuide} from "../../interfaces/IGuide";
 import {TextField} from '@mui/material';
 import PageTopTitle from "../PageTopTitle.tsx";
+import LoadingPage from "./LoadingPage.tsx";
 
 const FeedPage: React.FC = () => {
     const {companyName} = useParams<{ companyName: string }>();
@@ -37,7 +38,8 @@ const FeedPage: React.FC = () => {
         setFilteredGuides(filtered);
     }, [searchQuery, guides]);
 
-    if (loading) return <div>Loading...</div>;
+    if (loading)
+        return <LoadingPage/>;
     if (error) return <div>{error}</div>;
 
     const handleNavigate = (guideId: string) => {

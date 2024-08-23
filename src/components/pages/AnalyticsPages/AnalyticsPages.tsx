@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import * as echarts from 'echarts';
 import { Box, Typography } from '@mui/material';
+import LoadingPage from "../LoadingPage.tsx";
 
 interface VideoViewData {
     category: string;
@@ -86,7 +87,7 @@ const AnalyticsPage: React.FC = () => {
     }, [data]);
 
     if (!data) {
-        return <Typography>Loading...</Typography>;
+        return <LoadingPage/>;
     }
 
     return (

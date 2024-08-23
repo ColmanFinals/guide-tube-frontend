@@ -12,6 +12,7 @@ import SkipNextIcon from '@mui/icons-material/SkipNext';
 import VolumeOffIcon from '@mui/icons-material/VolumeOff';
 import VolumeUpIcon from '@mui/icons-material/VolumeUp';
 import { IGuide } from '../../interfaces/IGuide';
+import LoadingPage from "./LoadingPage.tsx";
 
 const VideoPage: React.FC = () => {
     const { guideId } = useParams<{ guideId: string }>();
@@ -159,7 +160,8 @@ const VideoPage: React.FC = () => {
     };
 
     if (error) return <div>{error}</div>;
-    if (!guide) return <div>Loading...</div>;
+    if (!guide)
+        return <LoadingPage/>;
 
     return (
         <Box
