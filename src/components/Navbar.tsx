@@ -34,7 +34,7 @@ const Navbar = () => {
 
   const getUserRole = () => {
     if(localStorage.getItem('user')){
-      return JSON.parse(localStorage.getItem('user') || '{}').userData.role;
+      return JSON.parse(localStorage.getItem('user') || '{}').role;
     }
     else {
       navigate("/login")

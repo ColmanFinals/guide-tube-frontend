@@ -14,7 +14,7 @@ import PlaylistConfiguration from './PlaylistConfiguration';
 import {IGuideData, INewGuideRequest} from "../../../interfaces/INewGuideRequest";
 import { INewVideoRequest } from "../../../interfaces/INewVideoRequest";
 import { fetchMyCompanies } from '../../../services/companiesService';
-import CircularProgress from '@mui/material/CircularProgress';
+import HashLoader from "react-spinners/HashLoader";
 import { ICompany } from '../../../interfaces/IPartialCompany';
 
 
@@ -169,7 +169,12 @@ const UploadGuidePage = () => {
                                 zIndex: 1500,
                             }}
                         >
-                            <CircularProgress color="secondary" />
+                            <HashLoader
+                                color={"#C6878F"}
+                                loading={isSaving}
+                                size={90}
+                                aria-label="Loading Spinner"
+                                data-testid="loader"/>
                         </Box>
                     )}
                     <Grid container spacing={3} alignItems="center" justifyContent="center" sx={{ width: '100%', marginBottom: 2, marginTop: 5 }}>
