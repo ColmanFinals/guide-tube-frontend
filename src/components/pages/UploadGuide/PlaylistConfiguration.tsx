@@ -80,7 +80,7 @@ const PlaylistConfiguration: React.FC<PlaylistConfigurationProps> = ({
                         onChange={handleSwitchChange}
                         inputProps={{'aria-label': 'controlled'}}
                     />
-                    <span>Private</span>
+                    <span>Guide will be {isPrivate ? "Private" : "Public"}</span>
                 </Typography>
                 <Typography className="flex w-full justify-between">
                     <Button

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import {useEffect, useState} from 'react';
 import VideoInput from './VideoInput';
 import PageTopTitle from '../../PageTopTitle';
 import Input from '@mui/material/Input';
@@ -7,15 +7,15 @@ import SaveIcon from '@mui/icons-material/Save';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import Fab from '@mui/material/Fab';
 import Button from '@mui/material/Button';
-import { Box, Grid, useMediaQuery, useTheme } from '@mui/material';
-import { addGuideToCompany, addVideoToPlaylist, createPlaylist, uploadVideo } from '../../../services/guideService';
-import { toast, ToastContainer } from 'react-toastify';
+import {Box, Grid, useMediaQuery, useTheme} from '@mui/material';
+import {addGuideToCompany, addVideoToPlaylist, createPlaylist, uploadVideo} from '../../../services/guideService';
+import {toast, ToastContainer} from 'react-toastify';
 import PlaylistConfiguration from './PlaylistConfiguration';
 import {IGuideData, INewGuideRequest} from "../../../interfaces/INewGuideRequest";
-import { INewVideoRequest } from "../../../interfaces/INewVideoRequest";
-import { fetchMyCompanies } from '../../../services/companiesService';
+import {INewVideoRequest} from "../../../interfaces/INewVideoRequest";
+import {fetchMyCompanies} from '../../../services/companiesService';
 import HashLoader from "react-spinners/HashLoader";
-import { ICompany } from '../../../interfaces/IPartialCompany';
+import {ICompany} from '../../../interfaces/IPartialCompany';
 
 
 export interface Video {
@@ -28,7 +28,7 @@ export interface Video {
 const UploadGuidePage = () => {
     const defaultPlaylistName = "New Guide"
     const [isVideoAdded, setIsVideoAdded] = useState(false)
-    const [videos, setVideos] = useState<Video[]>([{ "file": undefined, "fragment": 1, "source": "", "title": "" }]);
+    const [videos, setVideos] = useState<Video[]>([{"file": undefined, "fragment": 1, "source": "", "title": ""}]);
     const [playlistName, setPlaylistName] = useState(defaultPlaylistName);
     const theme = useTheme();
     const [isPrivate, setIsPrivate] = useState(false);
@@ -55,7 +55,12 @@ const UploadGuidePage = () => {
     const addVideoInput = () => {
         setVideos(prevVideosList => {
             if (prevVideosList.length < 10) {
-                return [...prevVideosList, { "file": undefined, "fragment": prevVideosList.length + 1, "source": "", "title": "" }];
+                return [...prevVideosList, {
+                    "file": undefined,
+                    "fragment": prevVideosList.length + 1,
+                    "source": "",
+                    "title": ""
+                }];
             } else {
                 toast.error("You can only add up to 10 videos");
                 return prevVideosList;
@@ -92,7 +97,7 @@ const UploadGuidePage = () => {
 
                     // Add video to playlist
                     const videoData = await addVideoToPlaylist(playlist.id, videoID, video.fragment - 1);
-                    videosData.push({ ...videoData });
+                    videosData.push({...videoData});
                 }
             }
             if (videosData.length != 0) {
@@ -114,7 +119,7 @@ const UploadGuidePage = () => {
     const handleStartAgain = () => {
         setIsVideoAdded(false)
         setIsPrivate(false);
-        setVideos([{ "file": undefined, "fragment": 1, "source": "", "title": "" }])
+        setVideos([{"file": undefined, "fragment": 1, "source": "", "title": ""}])
     };
 
 
@@ -136,24 +141,19 @@ const UploadGuidePage = () => {
                 flexDirection: 'column',
                 height: '100%',
                 width: '100%',
-            }}
-        >
-            <PageTopTitle pageTitle="Upload Guide" />
+            }}>
+            <PageTopTitle pageTitle="Upload Guide"/>
             <Box
                 sx={{
                     flex: 1,
                     padding: 2,
-                }}
-            >
-
+                }}>
                 <Box
                     sx={{
                         display: 'flex',
                         flexDirection: 'column',
                         flex: 1,
-                        paddingBottom: '6rem',
-                    }}
-                >
+                    }}>
                     {isSaving && (
                         <Box
                             sx={{
@@ -167,8 +167,7 @@ const UploadGuidePage = () => {
                                 bottom: 0,
                                 backgroundColor: 'rgba(0, 0, 0, 0.5)',
                                 zIndex: 1500,
-                            }}
-                        >
+                            }}>
                             <HashLoader
                                 color={"#C6878F"}
                                 loading={isSaving}
@@ -177,11 +176,17 @@ const UploadGuidePage = () => {
                                 data-testid="loader"/>
                         </Box>
                     )}
-                    <Grid container spacing={3} alignItems="center" justifyContent="center" sx={{ width: '100%', marginBottom: 2, marginTop: 5 }}>
+                    <Grid container alignItems="center" justifyContent="center"
+                          sx={{marginBottom: 4}}>
                         <Grid item xs={11} lg={4} container alignItems="center" justifyContent="center">
                             <Input
                                 fullWidth
-                                sx={{ fontSize: '1.2em', padding: '0.5em', mb: 2, border: 'none', maxWidth: isMobile ? '90%' : '300px' }}
+                                sx={{
+                                    fontSize: '1.2em',
+                                    padding: '0.5em',
+                                    border: 'none',
+                                    maxWidth: isMobile ? '90%' : '300px'
+                                }}
                                 defaultValue={defaultPlaylistName}
                                 placeholder="Enter video title"
                                 onChange={(event) => setPlaylistName(event.target.value)}
@@ -191,9 +196,9 @@ const UploadGuidePage = () => {
                             <Button
                                 variant="outlined"
                                 color="secondary"
-                                startIcon={<RestartAltIcon />}
+                                startIcon={<RestartAltIcon/>}
                                 onClick={handleStartAgain}
-                                sx={{ mt: 2 }}
+                                sx={{mt: 2}}
                             >
                                 Start Again
                             </Button>
@@ -230,9 +235,9 @@ const UploadGuidePage = () => {
                     <Button
                         variant="contained"
                         color="primary"
-                        startIcon={<SaveIcon />}
+                        startIcon={<SaveIcon/>}
                         onClick={() => setOpenModal(true)}
-                        sx={{ width: '50%', maxWidth: '300px' }}
+                        sx={{width: '50%', maxWidth: '300px', minWidth: '100px'}}
                     >
                         Finish
                     </Button>
@@ -242,14 +247,16 @@ const UploadGuidePage = () => {
                     size="large"
                     color="secondary"
                     onClick={addVideoInput}
-                    sx={{ position: 'fixed', right: '2em', bottom: '80px', zIndex: 1300 }}
+                    sx={{position: 'fixed', right: '2em', bottom: '80px', zIndex: 1300}}
                 >
-                    <AddCardRoundedIcon fontSize="large" />
+                    <AddCardRoundedIcon fontSize="large"/>
                 </Fab>
-                <PlaylistConfiguration handleSave={handleSave} isPrivate={isPrivate} open={openModal} setCompany={setCompany}
-                    setIsOpen={setOpenModal} setIsPrivate={setIsPrivate} userCompanies={userCompanies} company={company} />
+                <PlaylistConfiguration handleSave={handleSave} isPrivate={isPrivate} open={openModal}
+                                       setCompany={setCompany}
+                                       setIsOpen={setOpenModal} setIsPrivate={setIsPrivate}
+                                       userCompanies={userCompanies} company={company}/>
                 <ToastContainer theme="dark" position="top-center" autoClose={5000} hideProgressBar={false}
-                    newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss pauseOnHover />
+                                newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss pauseOnHover/>
             </Box>
         </Box>
     );
