@@ -34,9 +34,9 @@ const CompanyManager = () => {
         videos: [],
     });
     const [companies, setCompanies] = useState<ICompanyCreator[]>([]);
-    const [adminId, setAdminId] = useState<string>("");
+    const [, setAdminId] = useState<string>("");
     const [availableUsers, setAvailableUsers] = useState<IUser[]>([]);
-    const [filteredUsers, setFilteredUsers] = useState<IUser[]>([]);
+    const [, setFilteredUsers] = useState<IUser[]>([]);
     const [searchTerm, setSearchTerm] = useState<string>('');
     const [showAddAdminInput, setShowAddAdminInput] = useState<string | null>(
         null
@@ -107,8 +107,7 @@ const CompanyManager = () => {
 
     const handleAddAdmin = async (companyId: string, username:string) => {
         try {
-            // Ensure adminId is a string
-            if (username.trim() !== "") {    
+            if (username.trim() !== "") {
                 console.log("asdasdasdasd");
                             
                 await api.put("/company/addAdmin", {companyId, username});
@@ -250,8 +249,10 @@ const CompanyManager = () => {
                                                     }}
                                                 />
                                             )}
-                                            onChange={(_event, value:any) => {
-                                                handleAddAdmin(company._id,value.username);
+                                            onChange={(_event, value: string | IUser | null) => {
+                                                if (value && typeof value === 'object' && 'username' in value) {
+                                                    handleAddAdmin(company._id, value.username);
+                                                }
                                             }}
                                         />
                                     ) : (
