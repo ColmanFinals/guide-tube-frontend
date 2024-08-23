@@ -26,8 +26,6 @@ const AdminPage: React.FC = () => {
     const [selectedCompany, setSelectedCompany] = useState<string>('');
     const [users, setUsers] = useState<IUser[]>([]);
     const [loading, setLoading] = useState<boolean>(false);
-    const [searchTerm, setSearchTerm] = useState<string>('');
-    const [, setFilteredUsers] = useState<IUser[]>([]);
     const [availableUsers, setAvailableUsers] = useState<IUser[]>([]);
 
     useEffect(() => {
@@ -49,7 +47,6 @@ const AdminPage: React.FC = () => {
                 try {
                     const companyData = await getCompanyById(selectedCompany);
                     setUsers(companyData.users.concat(companyData.admins) || []);
-                    setFilteredUsers(companyData.users.concat(companyData.admins) || []);
                 } catch (error) {
                     console.error("Error fetching users:", error);
                 } finally {
@@ -71,14 +68,6 @@ const AdminPage: React.FC = () => {
         };
         loadAvailableUsers();
     }, []);
-
-    useEffect(() => {
-        setFilteredUsers(
-            (availableUsers || []).filter(user =>
-                user.username.toLowerCase().includes(searchTerm.toLowerCase())
-            )
-        );
-    }, [searchTerm, availableUsers]);
 
     const handleDeleteUser = async (userId: string) => {
         try {
@@ -189,7 +178,6 @@ const AdminPage: React.FC = () => {
                                     {...params}
                                     label="Search Users"
                                     variant="outlined"
-                                    onChange={(e) => setSearchTerm(e.target.value)}
                                     InputProps={{
                                         ...params.InputProps,
                                         startAdornment: (

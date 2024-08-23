@@ -34,10 +34,7 @@ const CompanyManager = () => {
         videos: [],
     });
     const [companies, setCompanies] = useState<ICompanyCreator[]>([]);
-    const [, setAdminId] = useState<string>("");
     const [availableUsers, setAvailableUsers] = useState<IUser[]>([]);
-    const [, setFilteredUsers] = useState<IUser[]>([]);
-    const [searchTerm, setSearchTerm] = useState<string>('');
     const [showAddAdminInput, setShowAddAdminInput] = useState<string | null>(
         null
     ); // Store companyId when showing input
@@ -82,14 +79,6 @@ const CompanyManager = () => {
         loadAvailableUsers();
     }, []);
 
-    useEffect(() => {
-        setFilteredUsers(
-            (availableUsers || []).filter(user =>
-                user.username.toLowerCase().includes(searchTerm.toLowerCase())
-            )
-        );
-    }, [searchTerm, availableUsers]);
-
     const handleDeleteCompany = async (id: string) => {
         try {
             console.log(id);
@@ -112,7 +101,6 @@ const CompanyManager = () => {
                             
                 await api.put("/company/addAdmin", {companyId, username});
                 toast.success("Admin added successfully!");
-                setAdminId(""); // Clear the input field
                 setShowAddAdminInput(null); // Hide the input field
                 // Fetch updated list of companies
                 const response = await api.get("/company/getAll");
@@ -238,7 +226,6 @@ const CompanyManager = () => {
                                                     {...params}
                                                     label="Search Users"
                                                     variant="outlined"
-                                                    onChange={(e) => setSearchTerm(e.target.value)}
                                                     InputProps={{
                                                         ...params.InputProps,
                                                         startAdornment: (
