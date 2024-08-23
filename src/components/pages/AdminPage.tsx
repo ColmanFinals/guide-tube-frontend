@@ -27,7 +27,7 @@ const AdminPage: React.FC = () => {
     const [users, setUsers] = useState<IUser[]>([]);
     const [loading, setLoading] = useState<boolean>(false);
     const [searchTerm, setSearchTerm] = useState<string>('');
-    const [filteredUsers, setFilteredUsers] = useState<IUser[]>([]);
+    const [, setFilteredUsers] = useState<IUser[]>([]);
     const [availableUsers, setAvailableUsers] = useState<IUser[]>([]);
 
     useEffect(() => {
