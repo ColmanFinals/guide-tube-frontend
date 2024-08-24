@@ -26,8 +26,8 @@ export interface Video {
 }
 
 const UploadGuidePage = () => {
-    const defaultPlaylistName = "New Guide"
-    const [isVideoAdded, setIsVideoAdded] = useState(false)
+    const defaultPlaylistName = "New Guide";
+    const [isVideoAdded, setIsVideoAdded] = useState(false);
     const [videos, setVideos] = useState<Video[]>([{"file": undefined, "fragment": 1, "source": "", "title": ""}]);
     const [playlistName, setPlaylistName] = useState(defaultPlaylistName);
     const theme = useTheme();
@@ -35,7 +35,7 @@ const UploadGuidePage = () => {
     const [userCompanies, setUserCompanies] = useState<string[]>([]);
     const [company, setCompany] = useState<string>("");
     const [openModal, setOpenModal] = useState(false);
-    const [isSaving, setIsSaving] = useState(false)
+    const [isSaving, setIsSaving] = useState(false);
     const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
     useEffect(() => {

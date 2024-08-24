@@ -19,9 +19,10 @@ const LearnMore = () => {
                         </Button>
                     </Shake>
                 </Link>
-                <Link to={PROJECT_DESIGN_PAGE} className="bg-white text-black px-6 py-3 rounded-lg mt-4 flex justify-between w-full">
-                        <span className="flex items-center" style={{fontSize: "0.8em"}} >Learn More</span>
-                        <span className="flex items-center ml-auto"><ArrowRightAltIcon/></span>
+                <Link to={PROJECT_DESIGN_PAGE}
+                      className="bg-white text-black px-6 py-3 rounded-lg mt-4 flex justify-between w-full">
+                    <span className="flex items-center" style={{fontSize: "0.8em"}}>Learn More</span>
+                    <span className="flex items-center ml-auto"><ArrowRightAltIcon/></span>
                 </Link>
             </div>
         </div>

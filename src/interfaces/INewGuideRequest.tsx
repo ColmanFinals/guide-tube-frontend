@@ -1,4 +1,4 @@
-import { IPlaylist } from "./IPlaylist";
+import {IPlaylist} from "./IPlaylist";
 import {INewVideoRequest} from "./INewVideoRequest";
 
 export interface IGuideData {

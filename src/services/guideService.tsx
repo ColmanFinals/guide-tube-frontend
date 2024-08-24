@@ -1,7 +1,7 @@
 import {youtubeApi} from "./youtubeApi";
 import {INewGuideRequest} from "../interfaces/INewGuideRequest";
 import {IPlaylist} from "../interfaces/IPlaylist"
-import { INewVideoRequest } from "../interfaces/INewVideoRequest";
+import {INewVideoRequest} from "../interfaces/INewVideoRequest";
 import serverApi from "./serverApi";
 
 export const generateOauth2Token = async (): Promise<string> => {
@@ -22,7 +22,7 @@ export const generateOauth2Token = async (): Promise<string> => {
 };
 
 export const getOauth2Token = async (): Promise<string> => {
-    var googleOauth2AccessToken = localStorage.getItem('googleOauth2AccessToken');
+    let googleOauth2AccessToken = localStorage.getItem('googleOauth2AccessToken');
     if (!googleOauth2AccessToken) {
         googleOauth2AccessToken = await generateOauth2Token()
     }

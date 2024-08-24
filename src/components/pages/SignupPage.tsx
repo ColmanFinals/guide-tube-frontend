@@ -14,10 +14,10 @@ const SignupPage = () => {
     const [error, setError] = useState("");
     const navigate = useNavigate();
     const [showConfetti, setShowConfetti] = useState(false);
-    const { width, height } = useWindowSize();
+    const {width, height} = useWindowSize();
 
     const handleSignup = async () => {
-        try {   
+        try {
             if (username.length < 5 || password.length < 5) {
                 setError("Username and password must be at least 5 characters long.");
                 return;
@@ -35,7 +35,7 @@ const SignupPage = () => {
             setTimeout(() => {
                 setShowConfetti(false);
                 navigate("/login");
-            }, 2500); 
+            }, 2500);
 
         } catch (error) {
             if (axios.isAxiosError(error)) {
@@ -51,10 +51,10 @@ const SignupPage = () => {
     return (
         <div>
             <Link to="/" className="flex justify-center">
-                <img src={Logo} style={{width: 100, height: 100}}/>
+                <img src={Logo} style={{width: 100, height: 100}} alt='logo'/>
             </Link>
             <div className="mb-5">
-                <h2 className="mt-0 mx-0 p-0 text-white text-center text-2xl mt-[5vh] p-[15px] translate-x--1/2 translate-y--1/3">
+                <h2 className="mx-0 text-white text-center text-2xl mt-[5vh] p-[15px] translate-x--1/2 translate-y--1/3">
                     Join to GuideTube
                 </h2>
                 <h3 className="text-center">Create and share videos in seconds.</h3>
@@ -113,11 +113,11 @@ const SignupPage = () => {
                 <Confetti
                     width={width}
                     height={height}
-                    numberOfPieces={300} 
-                    wind={0}                
-                    recycle={false}             
-                    tweenDuration={1600}  
-                    colors={["#C6878F","#B79D94","#969696","#67697C","#253D5B"]}
+                    numberOfPieces={300}
+                    wind={0}
+                    recycle={false}
+                    tweenDuration={1600}
+                    colors={["#C6878F", "#B79D94", "#969696", "#67697C", "#253D5B"]}
                 />
             )}
         </div>

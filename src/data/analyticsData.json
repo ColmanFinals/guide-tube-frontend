@@ -1,14 +1,38 @@
 {
-    "videoViews": [
-        { "category": "Tutorial", "views": 120 },
-        { "category": "Review", "views": 80 },
-        { "category": "Vlog", "views": 50 },
-        { "category": "Live Stream", "views": 30 }
-    ],
-    "adminLogins": [
-        { "admin": "Alice", "logins": 15 },
-        { "admin": "Bob", "logins": 12 },
-        { "admin": "Charlie", "logins": 8 },
-        { "admin": "David", "logins": 5 }
-    ]
+  "videoViews": [
+    {
+      "category": "Tutorial",
+      "views": 120
+    },
+    {
+      "category": "Review",
+      "views": 80
+    },
+    {
+      "category": "Vlog",
+      "views": 50
+    },
+    {
+      "category": "Live Stream",
+      "views": 30
+    }
+  ],
+  "adminLogins": [
+    {
+      "admin": "Alice",
+      "logins": 15
+    },
+    {
+      "admin": "Bob",
+      "logins": 12
+    },
+    {
+      "admin": "Charlie",
+      "logins": 8
+    },
+    {
+      "admin": "David",
+      "logins": 5
+    }
+  ]
 }

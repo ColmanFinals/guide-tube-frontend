@@ -17,8 +17,8 @@ import {fetchAllUsers} from "../../services/userService";
 import PageTopTitle from '../PageTopTitle';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
-import { IUser } from '../../interfaces/IUser';
-import { ICompany } from '../../interfaces/IPartialCompany';
+import {IUser} from '../../interfaces/IUser';
+import {ICompany} from '../../interfaces/IPartialCompany';
 
 
 const AdminPage: React.FC = () => {
@@ -168,8 +168,8 @@ const AdminPage: React.FC = () => {
                 <Grid container spacing={2} alignItems="center" marginTop={2} justifyContent="center">
                     <Grid item xs={12} md={4} container justifyContent="center">
                         <Autocomplete
-                        disabled={!selectedCompany}
-                            sx={{ width: '100%' }}
+                            disabled={!selectedCompany}
+                            sx={{width: '100%'}}
                             freeSolo
                             options={availableUsers}
                             getOptionLabel={(option) => typeof option === 'string' ? option : `${option.username} (${option.fullName})`}

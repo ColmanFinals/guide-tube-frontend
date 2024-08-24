@@ -1,4 +1,4 @@
-import { Language } from "../interfaces/ELanguage";
+import {Language} from "../interfaces/ELanguage";
 import api from "./serverApi"
 import {JwtPayload} from "jwt-decode";
 
@@ -48,7 +48,7 @@ function castLoginUserResToIUser(loginUserRes: ILoginUserRes): IUser {
         accessToken: loginUserRes.accessToken,
         refreshToken: loginUserRes.refreshToken,
         language: loginUserRes.userData?.language,
-        userData: { _id: loginUserRes.userData?._id }
+        userData: {_id: loginUserRes.userData?._id}
     };
 }
 
@@ -92,8 +92,8 @@ export const updateUser = (user: IUser) => {
 export const googleSignIn = (credentials: JwtPayload) => {
     return new Promise<IUser>((resolve, reject) => {
         api.post(import.meta.env.VITE_SERVER_GOOGLE_LOGIN_PATH,
-            { credentials },
-            { headers: { "Content-Type": "application/json" } }
+            {credentials},
+            {headers: {"Content-Type": "application/json"}}
         ).then((response) => {
             const user = castLoginUserResToIUser(response.data);
             resolve(user);
@@ -175,7 +175,8 @@ export const fetchAllUsers = async () => {
 export const getIsAdmin = async () => {
     const accessToken = localStorage.getItem('accessToken');
     const response = await api.get(`/user/isAdmin`, {
-            headers: {'authorization': `Bearer ${accessToken}`}});
+        headers: {'authorization': `Bearer ${accessToken}`}
+    });
     return response.data.isAdmin;
 };
 

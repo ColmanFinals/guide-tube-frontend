@@ -1,8 +1,8 @@
 import React, {MutableRefObject, useEffect, useRef, useState} from 'react';
 import SiriWave from 'react-siriwave';
 import {Box, Typography} from '@mui/material';
-import { useUser } from '../../context/user-context';
-import { Language } from '../../interfaces/ELanguage';
+import {useUser} from '../../context/user-context';
+import {Language} from '../../interfaces/ELanguage';
 
 interface SpeechRecognitionProps {
     onCommand: (command: string) => void;
@@ -65,7 +65,7 @@ const SpeechRecognition: React.FC<SpeechRecognitionProps> = ({onCommand, stopVid
         };
 
         startListening();
-    
+
         return () => {
             if (mediaRecorderRef.current) {
                 mediaRecorderRef.current.stop();
@@ -90,7 +90,7 @@ const SpeechRecognition: React.FC<SpeechRecognitionProps> = ({onCommand, stopVid
                 body: formData,
             });
 
-            
+
             const responseData = await response.json();
 
             if (checkGuideTube) {

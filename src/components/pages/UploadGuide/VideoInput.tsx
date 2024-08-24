@@ -1,4 +1,4 @@
-import {ChangeEvent, useRef} from "react";
+import {ChangeEvent, Dispatch, SetStateAction, useRef} from "react";
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
@@ -12,12 +12,12 @@ import {Video} from "./UploadGuide";
 
 type VideoInputProps = {
     video: Video;
-    setIsVideoAdded : React.Dispatch<React.SetStateAction<boolean>>;
-    setVideos: React.Dispatch<React.SetStateAction<Video[]>>;
+    setIsVideoAdded: Dispatch<SetStateAction<boolean>>;
+    setVideos: Dispatch<SetStateAction<Video[]>>;
     onDelete: () => void;
 };
 
-export default function VideoInput({video, setIsVideoAdded ,setVideos, onDelete}: VideoInputProps) {
+export default function VideoInput({video, setIsVideoAdded, setVideos, onDelete}: VideoInputProps) {
     const inputRef = useRef<HTMLInputElement>(null);
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down('sm'));

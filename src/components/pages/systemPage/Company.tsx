@@ -1,5 +1,15 @@
 import {useEffect, useState} from "react";
-import {Box, Button, Grid, IconButton, TextField, Typography, useTheme,Autocomplete,InputAdornment} from "@mui/material";
+import {
+    Autocomplete,
+    Box,
+    Button,
+    Grid,
+    IconButton,
+    InputAdornment,
+    TextField,
+    Typography,
+    useTheme
+} from "@mui/material";
 import {toast, ToastContainer} from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import api from "../../../services/serverApi";
@@ -7,8 +17,8 @@ import {fetchCompanies} from "../../../services/companiesService";
 import PageTopTitle from "../../PageTopTitle";
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
-import { IUser } from "../../../interfaces/IUser";
-import { fetchAllUsers } from "../../../services/userService";
+import {IUser} from "../../../interfaces/IUser";
+import {fetchAllUsers} from "../../../services/userService";
 
 
 interface ICompanyCreator {
@@ -19,8 +29,6 @@ interface ICompanyCreator {
     admins: { _id: string; username: string }[];
     videos: string[];
 }
-
-
 
 
 const CompanyManager = () => {
@@ -82,7 +90,7 @@ const CompanyManager = () => {
     const handleDeleteCompany = async (id: string) => {
         try {
             console.log(id);
-            
+
             await api.delete(`/company/delete/${id}`); // Pass companyId as part of the URL
             toast.success("Company deleted successfully!");
             // Fetch updated list of companies
@@ -94,11 +102,11 @@ const CompanyManager = () => {
         }
     };
 
-    const handleAddAdmin = async (companyId: string, username:string) => {
+    const handleAddAdmin = async (companyId: string, username: string) => {
         try {
             if (username.trim() !== "") {
                 console.log("asdasdasdasd");
-                            
+
                 await api.put("/company/addAdmin", {companyId, username});
                 toast.success("Admin added successfully!");
                 setShowAddAdminInput(null); // Hide the input field
@@ -116,7 +124,7 @@ const CompanyManager = () => {
 
     const handleRemoveAdmin = async (companyId: string, adminId: string) => {
         try {
-            await api.put("/company/removeAdmin", { companyId, adminId });
+            await api.put("/company/removeAdmin", {companyId, adminId});
             toast.success("Admin removed successfully!");
             // Fetch updated list of companies
             const response = await api.get("/company/getAll");
@@ -145,26 +153,26 @@ const CompanyManager = () => {
             >
                 <Box sx={{marginTop: '5rem', marginBottom: '2rem'}}>
                     <Grid container spacing={2} alignItems="center"><Grid item xs={12} md={6}>
-                            <TextField
-                                label="Company Name"
-                                fullWidth
-                                value={newCompany.name || ""}
-                                onChange={(e) =>
-                                    setNewCompany({...newCompany, name: e.target.value})
-                                }
-                                variant="outlined"
-                                sx={{mb: 1}}
-                            />
-                            <TextField
-                                label="Company Logo URL"
-                                fullWidth
-                                value={newCompany.logo || ""}
-                                onChange={(e) =>
-                                    setNewCompany({...newCompany, logo: e.target.value})
-                                }
-                                variant="outlined"
-                            />
-                        </Grid>
+                        <TextField
+                            label="Company Name"
+                            fullWidth
+                            value={newCompany.name || ""}
+                            onChange={(e) =>
+                                setNewCompany({...newCompany, name: e.target.value})
+                            }
+                            variant="outlined"
+                            sx={{mb: 1}}
+                        />
+                        <TextField
+                            label="Company Logo URL"
+                            fullWidth
+                            value={newCompany.logo || ""}
+                            onChange={(e) =>
+                                setNewCompany({...newCompany, logo: e.target.value})
+                            }
+                            variant="outlined"
+                        />
+                    </Grid>
                         <Grid item xs={12} md={6}>
                             <Button
                                 variant="contained"
@@ -217,7 +225,7 @@ const CompanyManager = () => {
 
                                     {showAddAdminInput === company._id ? (
                                         <Autocomplete
-                                            sx={{ width: '100%' }}
+                                            sx={{width: '100%'}}
                                             freeSolo
                                             options={availableUsers}
                                             getOptionLabel={(option) => typeof option === 'string' ? option : `${option.username} (${option.fullName})`}
@@ -247,7 +255,7 @@ const CompanyManager = () => {
                                             variant="outlined"
                                             color="primary"
                                             onClick={() =>
-                                                
+
                                                 setShowAddAdminInput(company._id)
                                             }
                                             fullWidth

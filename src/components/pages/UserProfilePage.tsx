@@ -1,11 +1,23 @@
 import React, {useEffect, useState} from 'react';
-import {Avatar, Box, Button, FormControl, IconButton, InputLabel, MenuItem, Select, SelectChangeEvent, TextField, Typography} from '@mui/material';
+import {
+    Avatar,
+    Box,
+    Button,
+    FormControl,
+    IconButton,
+    InputLabel,
+    MenuItem,
+    Select,
+    SelectChangeEvent,
+    TextField,
+    Typography
+} from '@mui/material';
 import {changePassword, getUserData, updateProfilePicture} from '../../services/userService';
 import {useUser} from '../../context/user-context';
 import EditIcon from '@mui/icons-material/Edit';
 import PageTopTitle from '../PageTopTitle';
-import { toast, ToastContainer } from 'react-toastify';
-import { Language } from '../../interfaces/ELanguage';
+import {toast, ToastContainer} from 'react-toastify';
+import {Language} from '../../interfaces/ELanguage';
 
 const UserProfile: React.FC = () => {
     const {user: contextUser, updateUserLanguage} = useUser();
@@ -52,7 +64,7 @@ const UserProfile: React.FC = () => {
     const handleChange = async (event: SelectChangeEvent<Language>) => {
         const newLanguage = event.target.value as Language;
         await updateUserLanguage(newLanguage);
-        setSelectedLanguage(newLanguage); 
+        setSelectedLanguage(newLanguage);
     };
 
     const handleProfilePictureChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -119,7 +131,7 @@ const UserProfile: React.FC = () => {
                         value={selectedLanguage}
                         onChange={handleChange}
                         label="Language"
-                        sx={{ minWidth: 200 }}
+                        sx={{minWidth: 200}}
                     >
                         {Object.values(Language).map((language) => (
                             <MenuItem value={language} key={language}>

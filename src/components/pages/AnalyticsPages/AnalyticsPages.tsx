@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import * as echarts from 'echarts';
-import { Box, Typography } from '@mui/material';
+import {Box} from '@mui/material';
 import LoadingPage from "../LoadingPage.tsx";
+import PageTopTitle from "../../PageTopTitle.tsx";
 
 interface VideoViewData {
     category: string;
@@ -35,7 +36,13 @@ const AnalyticsPage: React.FC = () => {
             videoViewsChart.setOption({
                 title: {
                     text: 'Video Views',
-                    left: 'center'
+                    left: 'center',
+                    textStyle: {
+                        color: '#333333',
+                        fontSize: 22, // Slightly bigger font size for the title
+                        textBorderColor: '#f0f0f0',
+                        textBorderWidth: 4
+                    }
                 },
                 tooltip: {
                     trigger: 'item'
@@ -45,7 +52,13 @@ const AnalyticsPage: React.FC = () => {
                         name: 'Views',
                         type: 'pie',
                         radius: '50%',
-                        data: data.videoViews.map(view => ({ value: view.views, name: view.category })),
+                        data: data.videoViews.map(view => ({value: view.views, name: view.category})),
+                        label: {
+                            color: '#333333',
+                            fontSize: 18,
+                            textBorderColor: '#f0f0f0',
+                            textBorderWidth: 4
+                        },
                         emphasis: {
                             itemStyle: {
                                 shadowBlur: 10,
@@ -62,7 +75,13 @@ const AnalyticsPage: React.FC = () => {
             adminLoginsChart.setOption({
                 title: {
                     text: 'Admin Logins',
-                    left: 'center'
+                    left: 'center',
+                    textStyle: {
+                        color: '#333333',
+                        fontSize: 22, // Slightly bigger font size for the title
+                        textBorderColor: '#f0f0f0',
+                        textBorderWidth: 4
+                    }
                 },
                 tooltip: {
                     trigger: 'item'
@@ -72,7 +91,13 @@ const AnalyticsPage: React.FC = () => {
                         name: 'Logins',
                         type: 'pie',
                         radius: '50%',
-                        data: data.adminLogins.map(login => ({ value: login.logins, name: login.admin })),
+                        data: data.adminLogins.map(login => ({value: login.logins, name: login.admin})),
+                        label: {
+                            color: '#333333',
+                            fontSize: 18,
+                            textBorderColor: '#f0f0f0',
+                            textBorderWidth: 4
+                        },
                         emphasis: {
                             itemStyle: {
                                 shadowBlur: 10,
@@ -91,13 +116,12 @@ const AnalyticsPage: React.FC = () => {
     }
 
     return (
-        <Box>
-            <Typography variant="h4" align="center" gutterBottom>
-                Analytics Dashboard
-            </Typography>
-            <Box id="videoViewsChart" style={{ width: '600px', height: '400px', margin: '0 auto' }}></Box>
-            <Box id="adminLoginsChart" style={{ width: '600px', height: '400px', margin: '0 auto', marginTop: '40px' }}></Box>
-        </Box>
+        <div className='h-full w-full'>
+            <PageTopTitle pageTitle="Analytics"/>
+            <Box id="videoViewsChart" style={{width: '600px', height: '400px', margin: '0 auto', paddingTop: '1%'}}/>
+            <Box id="adminLoginsChart"
+                 style={{width: '600px', height: '400px', margin: '0 auto', marginTop: '40px'}}/>
+        </div>
     );
 };
 

@@ -4,7 +4,7 @@ import {useNavigate} from 'react-router-dom';
 import {fetchCompanies} from "../../services/companiesService.tsx"
 import {TextField} from '@mui/material';
 import PageTopTitle from "../PageTopTitle.tsx";
-import { useUser } from '../../context/user-context.tsx';
+import {useUser} from '../../context/user-context.tsx';
 import LoadingPage from "./LoadingPage.tsx";
 
 const CompaniesPage: React.FC = () => {
@@ -51,7 +51,11 @@ const CompaniesPage: React.FC = () => {
         <div className='h-full w-full'>
             <PageTopTitle pageTitle="Choose a Company"/>
             <div className='sticky top-0 z-10 bg-[#212121] shadow py-2 px-4'>
-                <span className="bg-clip-text text-transparent bg-gradient-to-r" style={{fontSize:'2em', fontFamily: "Candara", backgroundImage: "linear-gradient(to right, #c17982, #C6878F, #969696, #67697C)",}}>Hi {user?.fullName},</span>
+                <span className="bg-clip-text text-transparent bg-gradient-to-r" style={{
+                    fontSize: '2em',
+                    fontFamily: "Candara",
+                    backgroundImage: "linear-gradient(to right, #c17982, #C6878F, #969696, #67697C)",
+                }}>Hi {user?.fullName},</span>
                 <br/>
                 <span style={{fontSize: "1em", fontFamily: "Candara"}} className="text-white">What would you like to learn today?</span>
                 <TextField
@@ -71,7 +75,8 @@ const CompaniesPage: React.FC = () => {
                         onClick={() => handleNavigate(company.name)}
                     >
                         <div
-                            className='w-[250px] h-[250px] rounded-2xl p-5 shadow-lg flex flex-col items-center' style={{backgroundColor:"#ffffff17"}}>
+                            className='w-[250px] h-[250px] rounded-2xl p-5 shadow-lg flex flex-col items-center'
+                            style={{backgroundColor: "#ffffff17"}}>
                             <img
                                 src={company.logo}
                                 alt={`${company.name} logo`}
