@@ -52,6 +52,7 @@ const VideoPage: React.FC = () => {
     const stopVideo = () => {
         playerRef.current?.pauseVideo();
         setIsPlaying(false);
+        speak('Pausing video.');
     };
 
     const applyPlayPause = () => {
