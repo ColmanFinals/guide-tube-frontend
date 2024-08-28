@@ -215,14 +215,20 @@ const AnalyticsPage: React.FC = () => {
     }
 
     return (
-        <Container>
-            <PageTopTitle title="Analytics" />
-            <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center">
+        <Box
+        sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            height: '100%',
+            width: '100%',
+        }}>
+            <PageTopTitle pageTitle="Analytics" />
+            <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center" style={{marginTop:"2em"}}>
                 <Box id="videoViewsChart" style={{ height: '400px', width: '100%', marginBottom: '20px' }} />
                 <Box id="companiesChart" style={{ height: '400px', width: '100%', marginBottom: '20px' }} />
                 <Box id="adminLoginsChart" style={{ height: '400px', width: '100%', marginBottom: '20px' }} />
             </Box>
-        </Container>
+        </Box>
     );
 };
 
