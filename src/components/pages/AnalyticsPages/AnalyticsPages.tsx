@@ -1,6 +1,6 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect } from 'react';
 import * as echarts from 'echarts';
-import {Box} from '@mui/material';
+import { Box, useTheme } from '@mui/material';
 import LoadingPage from "../LoadingPage.tsx";
 import PageTopTitle from "../../PageTopTitle.tsx";
 
@@ -20,14 +20,21 @@ interface AnalyticsData {
 }
 
 const AnalyticsPage: React.FC = () => {
-    const [data, setData] = useState<AnalyticsData | null>(null);
-
-    useEffect(() => {
-        fetch('/src/data/analyticsData.json')
-            .then(response => response.json())
-            .then(data => setData(data))
-            .catch(error => console.error('Error fetching analytics data:', error));
-    }, []);
+    const theme = useTheme();
+    const data: AnalyticsData = {
+        videoViews: [
+            { category: "Tutorial", views: 120 },
+            { category: "Review", views: 80 },
+            { category: "Vlog", views: 50 },
+            { category: "Live Stream", views: 30 }
+        ],
+        adminLogins: [
+            { admin: "Alice", logins: 15 },
+            { admin: "Bob", logins: 12 },
+            { admin: "Charlie", logins: 8 },
+            { admin: "David", logins: 5 }
+        ]
+    };
 
     useEffect(() => {
         if (data) {
@@ -38,9 +45,9 @@ const AnalyticsPage: React.FC = () => {
                     text: 'Video Views',
                     left: 'center',
                     textStyle: {
-                        color: '#333333',
-                        fontSize: 22, // Slightly bigger font size for the title
-                        textBorderColor: '#f0f0f0',
+                        color: theme.palette.text.primary,
+                        fontSize: 22,
+                        textBorderColor: theme.palette.background.paper,
                         textBorderWidth: 4
                     }
                 },
@@ -52,11 +59,11 @@ const AnalyticsPage: React.FC = () => {
                         name: 'Views',
                         type: 'pie',
                         radius: '50%',
-                        data: data.videoViews.map(view => ({value: view.views, name: view.category})),
+                        data: data.videoViews.map(view => ({ value: view.views, name: view.category })),
                         label: {
-                            color: '#333333',
+                            color: theme.palette.text.primary,
                             fontSize: 18,
-                            textBorderColor: '#f0f0f0',
+                            textBorderColor: theme.palette.background.paper,
                             textBorderWidth: 4
                         },
                         emphasis: {
@@ -77,9 +84,9 @@ const AnalyticsPage: React.FC = () => {
                     text: 'Admin Logins',
                     left: 'center',
                     textStyle: {
-                        color: '#333333',
-                        fontSize: 22, // Slightly bigger font size for the title
-                        textBorderColor: '#f0f0f0',
+                        color: theme.palette.text.primary,
+                        fontSize: 22,
+                        textBorderColor: theme.palette.background.paper,
                         textBorderWidth: 4
                     }
                 },
@@ -91,11 +98,11 @@ const AnalyticsPage: React.FC = () => {
                         name: 'Logins',
                         type: 'pie',
                         radius: '50%',
-                        data: data.adminLogins.map(login => ({value: login.logins, name: login.admin})),
+                        data: data.adminLogins.map(login => ({ value: login.logins, name: login.admin })),
                         label: {
-                            color: '#333333',
+                            color: theme.palette.text.primary,
                             fontSize: 18,
-                            textBorderColor: '#f0f0f0',
+                            textBorderColor: theme.palette.background.paper,
                             textBorderWidth: 4
                         },
                         emphasis: {
@@ -109,18 +116,13 @@ const AnalyticsPage: React.FC = () => {
                 ]
             });
         }
-    }, [data]);
-
-    if (!data) {
-        return <LoadingPage/>;
-    }
+    }, [data, theme]);
 
     return (
         <div className='h-full w-full'>
-            <PageTopTitle pageTitle="Analytics"/>
-            <Box id="videoViewsChart" style={{width: '600px', height: '400px', margin: '0 auto', paddingTop: '1%'}}/>
-            <Box id="adminLoginsChart"
-                 style={{width: '600px', height: '400px', margin: '0 auto', marginTop: '40px'}}/>
+            <PageTopTitle pageTitle="Analytics" />
+            <Box id="videoViewsChart" sx={{ width: '600px', height: '400px', margin: '0 auto', paddingTop: '1%' }} />
+            <Box id="adminLoginsChart" sx={{ width: '600px', height: '400px', margin: '0 auto', marginTop: '40px' }} />
         </div>
     );
 };
