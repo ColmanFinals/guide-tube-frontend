@@ -71,7 +71,7 @@ const FeedPage: React.FC = () => {
                             <div className='w-[250px] h-[450px] rounded-2xl overflow-hidden'>
                                 <img
                                     className="w-full h-full object-cover"
-                                    src={`https://i.ytimg.com/vi_webp/${guide.videos[0]?.id}/maxresdefault.webp`}
+                                    src={`https://img.youtube.com/vi/${guide.videos[0]?.id}/frame0.jpg`}
                                     alt={guide.name}
                                 />
                             </div>
