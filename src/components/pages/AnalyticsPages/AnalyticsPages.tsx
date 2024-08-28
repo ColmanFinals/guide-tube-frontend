@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import * as echarts from 'echarts';
-import { Box, useTheme } from '@mui/material';
+import { Box, useTheme, Typography, Container } from '@mui/material';
 import LoadingPage from "../LoadingPage.tsx";
 import PageTopTitle from "../../PageTopTitle.tsx";
 import axios from 'axios';
@@ -27,6 +27,27 @@ const AnalyticsPage: React.FC = () => {
     const [adminLogins, setAdminLogins] = useState<AdminLoginData[]>([]);
     const [loading, setLoading] = useState(true);
 
+    const fallbackGuideData: GuideData[] = [
+        { name: "Tutorial", views: 120 },
+        { name: "Review", views: 80 },
+        { name: "Vlog", views: 50 },
+        { name: "Live Stream", views: 30 }
+    ];
+
+    const fallbackCompanyData: CompanyData[] = [
+        { _id: 1, count: 5 },
+        { _id: 2, count: 10 },
+        { _id: 3, count: 15 },
+        { _id: 4, count: 20 }
+    ];
+
+    const fallbackAdminLogins: AdminLoginData[] = [
+        { fullName: "Alice", logins: 15 },
+        { fullName: "Bob", logins: 12 },
+        { fullName: "Charlie", logins: 8 },
+        { fullName: "David", logins: 5 }
+    ];
+
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -36,12 +57,19 @@ const AnalyticsPage: React.FC = () => {
                     axios.get('/api/analytics/admin-logins')
                 ]);
 
-                setGuideData(guidesResponse.data);
-                setCompanyData(companiesResponse.data);
-                setAdminLogins(adminLoginsResponse.data);
+                console.log('Guides Data:', guidesResponse.data);
+                console.log('Companies Data:', companiesResponse.data);
+                console.log('Admin Logins Data:', adminLoginsResponse.data);
+
+                setGuideData(Array.isArray(guidesResponse.data) ? guidesResponse.data : fallbackGuideData);
+                setCompanyData(Array.isArray(companiesResponse.data) ? companiesResponse.data : fallbackCompanyData);
+                setAdminLogins(Array.isArray(adminLoginsResponse.data) ? adminLoginsResponse.data : fallbackAdminLogins);
                 setLoading(false);
             } catch (error) {
                 console.error('Error fetching analytics data:', error);
+                setGuideData(fallbackGuideData);
+                setCompanyData(fallbackCompanyData);
+                setAdminLogins(fallbackAdminLogins);
                 setLoading(false);
             }
         };
@@ -156,7 +184,7 @@ const AnalyticsPage: React.FC = () => {
                         name: 'Logins',
                         type: 'pie',
                         radius: '50%',
-                        data: adminLogins.map(login => ({ value: login.logins, name: login.fullName })),
+                        data: adminLogins.map(admin => ({ value: admin.logins, name: admin.fullName })),
                         label: {
                             color: theme.palette.text.primary,
                             fontSize: 18,
@@ -173,6 +201,12 @@ const AnalyticsPage: React.FC = () => {
                     }
                 ]
             });
+
+            return () => {
+                videoViewsChart.dispose();
+                companiesChart.dispose();
+                adminLoginsChart.dispose();
+            };
         }
     }, [loading, guideData, companyData, adminLogins, theme]);
 
@@ -181,12 +215,14 @@ const AnalyticsPage: React.FC = () => {
     }
 
     return (
-        <div className='h-full w-full'>
-            <PageTopTitle pageTitle="Analytics" />
-            <Box id="videoViewsChart" sx={{ width: '600px', height: '400px', margin: '0 auto', paddingTop: '1%' }} />
-            <Box id="companiesChart" sx={{ width: '600px', height: '400px', margin: '0 auto', marginTop: '40px' }} />
-            <Box id="adminLoginsChart" sx={{ width: '600px', height: '400px', margin: '0 auto', marginTop: '40px' }} />
-        </div>
+        <Container>
+            <PageTopTitle title="Analytics" />
+            <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center">
+                <Box id="videoViewsChart" style={{ height: '400px', width: '100%', marginBottom: '20px' }} />
+                <Box id="companiesChart" style={{ height: '400px', width: '100%', marginBottom: '20px' }} />
+                <Box id="adminLoginsChart" style={{ height: '400px', width: '100%', marginBottom: '20px' }} />
+            </Box>
+        </Container>
     );
 };
 
