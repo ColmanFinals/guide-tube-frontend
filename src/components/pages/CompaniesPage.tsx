@@ -46,7 +46,16 @@ const CompaniesPage: React.FC = () => {
     const handleNavigate = (companyName: string) => {
         navigate(`/feed/${companyName}`);
     };
-
+    function capitalizeName(name : string | undefined) {
+        if(name)
+            return name
+            .split(' ')
+            .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+            .join(' ');
+        else {
+            return ''
+        }
+      }
     return (
         <div className='h-full w-full'>
             <PageTopTitle pageTitle="Choose a Company"/>
@@ -55,7 +64,7 @@ const CompaniesPage: React.FC = () => {
                     fontSize: '2em',
                     fontFamily: "Candara",
                     backgroundImage: "linear-gradient(to right, #c17982, #C6878F, #969696, #67697C)",
-                }}>Hi {user?.fullName},</span>
+                }}>Hi {capitalizeName(user?.fullName)},</span>
                 <br/>
                 <span style={{fontSize: "1em", fontFamily: "Candara"}} className="text-white">What would you like to learn today?</span>
                 <TextField

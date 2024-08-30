@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import * as echarts from 'echarts';
-import { Box, useTheme, Container, AppBar, Toolbar, Typography } from '@mui/material';
+import { Box, useTheme, Typography, Container } from '@mui/material';
 import LoadingPage from "../LoadingPage.tsx";
 import PageTopTitle from "../../PageTopTitle.tsx";
 import axios from 'axios';
@@ -57,6 +57,10 @@ const AnalyticsPage: React.FC = () => {
                     axios.get('/api/analytics/admin-logins')
                 ]);
 
+                console.log('Guides Data:', guidesResponse.data);
+                console.log('Companies Data:', companiesResponse.data);
+                console.log('Admin Logins Data:', adminLoginsResponse.data);
+
                 setGuideData(Array.isArray(guidesResponse.data) ? guidesResponse.data : fallbackGuideData);
                 setCompanyData(Array.isArray(companiesResponse.data) ? companiesResponse.data : fallbackCompanyData);
                 setAdminLogins(Array.isArray(adminLoginsResponse.data) ? adminLoginsResponse.data : fallbackAdminLogins);
@@ -75,10 +79,7 @@ const AnalyticsPage: React.FC = () => {
 
     useEffect(() => {
         if (!loading) {
-            const resizeCharts = (chart: echarts.ECharts) => {
-                window.addEventListener('resize', chart.resize);
-            };
-
+            // Video views pie chart
             const videoViewsChart = echarts.init(document.getElementById('videoViewsChart') as HTMLDivElement);
             videoViewsChart.setOption({
                 title: {
@@ -87,6 +88,8 @@ const AnalyticsPage: React.FC = () => {
                     textStyle: {
                         color: theme.palette.text.primary,
                         fontSize: 22,
+                        textBorderColor: theme.palette.background.paper,
+                        textBorderWidth: 4
                     }
                 },
                 tooltip: {
@@ -96,11 +99,13 @@ const AnalyticsPage: React.FC = () => {
                     {
                         name: 'Views',
                         type: 'pie',
-                        radius: ['40%', '70%'],
+                        radius: '50%',
                         data: guideData.map(guide => ({ value: guide.views, name: guide.name })),
                         label: {
                             color: theme.palette.text.primary,
                             fontSize: 18,
+                            textBorderColor: theme.palette.background.paper,
+                            textBorderWidth: 4
                         },
                         emphasis: {
                             itemStyle: {
@@ -112,8 +117,8 @@ const AnalyticsPage: React.FC = () => {
                     }
                 ]
             });
-            resizeCharts(videoViewsChart);
 
+            // Companies over time chart
             const companiesChart = echarts.init(document.getElementById('companiesChart') as HTMLDivElement);
             companiesChart.setOption({
                 title: {
@@ -122,6 +127,8 @@ const AnalyticsPage: React.FC = () => {
                     textStyle: {
                         color: theme.palette.text.primary,
                         fontSize: 22,
+                        textBorderColor: theme.palette.background.paper,
+                        textBorderWidth: 4
                     }
                 },
                 tooltip: {
@@ -142,6 +149,8 @@ const AnalyticsPage: React.FC = () => {
                         label: {
                             color: theme.palette.text.primary,
                             fontSize: 18,
+                            textBorderColor: theme.palette.background.paper,
+                            textBorderWidth: 4
                         },
                         emphasis: {
                             itemStyle: {
@@ -153,8 +162,8 @@ const AnalyticsPage: React.FC = () => {
                     }
                 ]
             });
-            resizeCharts(companiesChart);
 
+            // Admin logins pie chart
             const adminLoginsChart = echarts.init(document.getElementById('adminLoginsChart') as HTMLDivElement);
             adminLoginsChart.setOption({
                 title: {
@@ -163,6 +172,8 @@ const AnalyticsPage: React.FC = () => {
                     textStyle: {
                         color: theme.palette.text.primary,
                         fontSize: 22,
+                        textBorderColor: theme.palette.background.paper,
+                        textBorderWidth: 4
                     }
                 },
                 tooltip: {
@@ -172,11 +183,13 @@ const AnalyticsPage: React.FC = () => {
                     {
                         name: 'Logins',
                         type: 'pie',
-                        radius: ['40%', '70%'],
+                        radius: '50%',
                         data: adminLogins.map(admin => ({ value: admin.logins, name: admin.fullName })),
                         label: {
                             color: theme.palette.text.primary,
                             fontSize: 18,
+                            textBorderColor: theme.palette.background.paper,
+                            textBorderWidth: 4
                         },
                         emphasis: {
                             itemStyle: {
@@ -188,7 +201,6 @@ const AnalyticsPage: React.FC = () => {
                     }
                 ]
             });
-            resizeCharts(adminLoginsChart);
 
             return () => {
                 videoViewsChart.dispose();
@@ -203,20 +215,12 @@ const AnalyticsPage: React.FC = () => {
     }
 
     return (
-        <Container maxWidth="xl" sx={{ paddingTop: '64px' }}>
-            <AppBar position="fixed">
-                <Toolbar>
-                    <Typography variant="h6">Analytics</Typography>
-                </Toolbar>
-            </AppBar>
+        <Container>
             <PageTopTitle title="Analytics" />
             <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center">
-                {/* Increase padding to 80 rows (80 x 8px = 640px) before the first chart */}
-                <Box sx={{ height: '640px' }} />
-
-                <Box id="videoViewsChart" sx={{ height: { xs: '300px', md: '400px' }, width: '100%', marginBottom: '20px' }} />
-                <Box id="companiesChart" sx={{ height: { xs: '300px', md: '400px' }, width: '100%', marginBottom: '20px' }} />
-                <Box id="adminLoginsChart" sx={{ height: { xs: '300px', md: '400px' }, width: '100%', marginBottom: '20px' }} />
+                <Box id="videoViewsChart" style={{ height: '400px', width: '100%', marginBottom: '20px' }} />
+                <Box id="companiesChart" style={{ height: '400px', width: '100%', marginBottom: '20px' }} />
+                <Box id="adminLoginsChart" style={{ height: '400px', width: '100%', marginBottom: '20px' }} />
             </Box>
         </Container>
     );
