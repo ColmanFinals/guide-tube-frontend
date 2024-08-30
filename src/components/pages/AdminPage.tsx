@@ -104,7 +104,7 @@ const AdminPage: React.FC = () => {
             width: 100,
             renderCell: (params) => (
                 <img
-                    src={`${backendUrl}/${params.value}` || 'https://via.placeholder.com/40'}
+                    src={`${params.value}` || 'https://via.placeholder.com/40'}
                     alt="User"
                     style={{
                         width: '40px',
