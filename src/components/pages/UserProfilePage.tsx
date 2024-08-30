@@ -36,7 +36,7 @@ const UserProfile: React.FC = () => {
                 setUser(userData);
                 const pictureUrl: string = userData?.picture != null ? userData?.picture : '';
                 console.log(userData?.picture);
-                setImgUrl(`${import.meta.env.VITE_SERVER}/${pictureUrl}`);
+                setImgUrl(`${pictureUrl}`);
                 setSelectedLanguage(contextUser?.language)
 
             } catch (error) {
