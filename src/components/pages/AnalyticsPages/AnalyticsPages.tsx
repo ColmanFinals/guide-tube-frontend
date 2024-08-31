@@ -222,21 +222,35 @@ const AnalyticsPage: React.FC = () => {
                 flexDirection: 'column',
                 height: '100%',
                 width: '100%',
+                position: 'relative', // Add this line to allow absolute positioning of the button
             }}>
             <PageTopTitle pageTitle="Analytics" />
-            <Button
-                variant="contained"
-                color="primary"
-                onClick={() => setUseFakeData(prev => !prev)}
-                sx={{ margin: '20px' }}
+            <Box
+                display="flex"
+                flexDirection="column"
+                alignItems="center"
+                justifyContent="center"
+                className="p-5"
+                sx={{ flexGrow: 1 }} // Allows the charts to take available space
             >
-                {useFakeData ? 'Show Real Data' : 'Show Fake Data'}
-            </Button>
-            <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center" className="p-5">
                 <Box id="videoViewsChart" sx={{ height: { xs: '300px', md: '400px' }, width: '100%', marginBottom: '20px' }} />
                 <Box id="companiesChart" sx={{ height: { xs: '300px', md: '400px' }, width: '100%', marginBottom: '20px' }} />
                 <Box id="adminLoginsChart" sx={{ height: { xs: '300px', md: '400px' }, width: '100%', marginBottom: '20px' }} />
             </Box>
+            <Button
+                variant="contained"
+                color="primary"
+                onClick={() => setUseFakeData(prev => !prev)}
+                sx={{
+                    position: 'absolute',
+                    bottom: '20px',
+                    right: '20px',
+                    fontSize: '12px', // Smaller font size
+                    padding: '6px 12px', // Smaller padding
+                }}
+            >
+                {useFakeData ? 'Show Real Data' : 'Show Fake Data'}
+            </Button>
         </Box>
     );
 };
