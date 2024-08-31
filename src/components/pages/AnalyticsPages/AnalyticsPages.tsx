@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import * as echarts from 'echarts';
-import { Box, useTheme, Container, AppBar, Toolbar, Typography } from '@mui/material';
+import { Box, useTheme } from '@mui/material';
 import LoadingPage from "../LoadingPage.tsx";
 import PageTopTitle from "../../PageTopTitle.tsx";
 import axios from 'axios';
@@ -203,22 +203,20 @@ const AnalyticsPage: React.FC = () => {
     }
 
     return (
-        <Container maxWidth="xl" sx={{ paddingTop: '64px' }}>
-            <AppBar position="fixed">
-                <Toolbar>
-                    <Typography variant="h6">Analytics</Typography>
-                </Toolbar>
-            </AppBar>
-            <PageTopTitle title="Analytics" />
-            <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center">
-                {/* Increase padding to 80 rows (80 x 8px = 640px) before the first chart */}
-                <Box sx={{ height: '640px' }} />
-
+        <Box
+            sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                height: '100%',
+                width: '100%',
+            }}>
+            <PageTopTitle pageTitle="Analytics" />
+            <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center" className="p-5">
                 <Box id="videoViewsChart" sx={{ height: { xs: '300px', md: '400px' }, width: '100%', marginBottom: '20px' }} />
                 <Box id="companiesChart" sx={{ height: { xs: '300px', md: '400px' }, width: '100%', marginBottom: '20px' }} />
                 <Box id="adminLoginsChart" sx={{ height: { xs: '300px', md: '400px' }, width: '100%', marginBottom: '20px' }} />
             </Box>
-        </Container>
+        </Box>
     );
 };
 
