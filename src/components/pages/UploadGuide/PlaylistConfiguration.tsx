@@ -58,7 +58,7 @@ const PlaylistConfiguration: React.FC<PlaylistConfigurationProps> = ({
             <Box className="flex justify-center items-center flex-col min-w-fit"
                  sx={{backgroundColor: "black", width: '30vw', height: '40vh'}}>
                 <Typography id="modal-modal-title" variant="h6" component="h2" sx={{fontSize: '1em'}}>
-                    Almoust finished...
+                    Almost finished...
                 </Typography>
                 <FormControl required sx={{m: 1, minWidth: 120}}>
                     <InputLabel id="demo-simple-select-required-label">company</InputLabel>
@@ -99,7 +99,7 @@ const PlaylistConfiguration: React.FC<PlaylistConfigurationProps> = ({
                         sx={{maxWidth: '300px', margin: 'auto', width: '7em'}}
                     >
                         <CloseIcon/>
-                        Cancle
+                        Cancel
                     </Button>
                 </Typography>
             </Box>
