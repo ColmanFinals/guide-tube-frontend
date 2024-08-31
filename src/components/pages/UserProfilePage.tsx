@@ -58,6 +58,7 @@ const UserProfile: React.FC = () => {
             toast.success('Password changed successfully');
         } catch (error) {
             console.error('Error changing password:', error);
+            toast.error('Failed to change password. Please try again.'); // Show error notification
         }
     };
 
@@ -77,6 +78,7 @@ const UserProfile: React.FC = () => {
                 setImgUrl(URL.createObjectURL(file));
             } catch (error) {
                 console.error('Error updating profile picture:', error);
+                toast.error('Failed to update profile picture. Please try again.');
             }
         }
     };
@@ -167,7 +169,6 @@ const UserProfile: React.FC = () => {
                         margin="normal"
                     />
                     <Button
-
                         variant="contained"
                         color="primary"
                         onClick={handlePasswordChange}

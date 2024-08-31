@@ -1,22 +1,18 @@
 import React, {MutableRefObject, useEffect, useRef, useState} from 'react';
 import SiriWave from 'react-siriwave';
 import {Box, Typography} from '@mui/material';
-import {useUser} from '../../context/user-context';
-import {Language} from '../../interfaces/ELanguage';
 
 interface SpeechRecognitionProps {
     onCommand: (command: string) => void;
-    stopVideo: () => void;
 }
 
-const SpeechRecognition: React.FC<SpeechRecognitionProps> = ({onCommand, stopVideo}) => {
+const SpeechRecognition: React.FC<SpeechRecognitionProps> = ({onCommand}) => {
     const mediaRecorderRef: MutableRefObject<MediaRecorder | null> = useRef(null);
     const audioChunksRef: MutableRefObject<Blob[]> = useRef([]);
     const intervalIdRef: MutableRefObject<NodeJS.Timeout | null> = useRef(null);
     const [isUploading, setIsUploading] = useState(false);
-    const [checkGuideTube, setCheckGuideTube] = useState(true);
+    const [checkGuyTube, setCheckGuyTube] = useState(true);
     const [isRecording, setIsRecording] = useState(false);
-    const {user} = useUser();
 
     useEffect(() => {
         const startListening = async () => {
@@ -52,11 +48,13 @@ const SpeechRecognition: React.FC<SpeechRecognitionProps> = ({onCommand, stopVid
                     }
                 };
 
-                intervalIdRef.current = setInterval(() => {
-                    if (!isUploading) {
-                        stopRecording();
-                    }
-                }, checkGuideTube ? 4000 : 6000); // Adjust the interval based on checkGuyTube
+                setTimeout(() => {
+                    intervalIdRef.current = setInterval(() => {
+                        if (!isUploading) {
+                            stopRecording();
+                        }
+                        }, checkGuyTube ? 4000 : 6000);
+                }, 1000);
 
                 startRecording();
             } catch (error) {
@@ -75,33 +73,32 @@ const SpeechRecognition: React.FC<SpeechRecognitionProps> = ({onCommand, stopVid
                 clearInterval(intervalIdRef.current);
             }
         };
-    }, [isUploading, checkGuideTube]);
+    }, [isUploading, checkGuyTube]); // Add checkGuyTube to dependencies to reset interval when it changes
 
     const sendAudioToBackend = async (audioBlob: Blob) => {
         const formData = new FormData();
         formData.append('file', audioBlob, 'audio.webm');
 
         try {
-            console.log('Sending audio to backend...');
-            const language = user?.language ? user?.language : Language.ENGLISH;
-            const endpoint = checkGuideTube ? `https://guidetube-ai.cs.colman.ac.il/${language}/hi_guide_tube` : `https://guidetube-ai.cs.colman.ac.il/${language}/transcribe`;
+
+            const endpoint = checkGuyTube ? 'https://guidetube-ai.cs.colman.ac.il/en/hi_guide_tube' : 'https://guidetube-ai.cs.colman.ac.il/en/transcribe';
             const response = await fetch(endpoint, {
                 method: 'PUT',
                 body: formData,
             });
 
-
+            
             const responseData = await response.json();
 
-            if (checkGuideTube) {
+            if (checkGuyTube) {
                 if (responseData) {
-                    stopVideo();
+                    onCommand("stop");
                     speak("What do you need me to do?");
-                    setCheckGuideTube(false);
+                    setCheckGuyTube(false);
                 }
             } else {
                 onCommand(responseData);
-                setCheckGuideTube(true);
+                setCheckGuyTube(true);
             }
         } catch (error) {
             console.error('Error sending audio to backend:', error);
@@ -127,7 +124,7 @@ const SpeechRecognition: React.FC<SpeechRecognitionProps> = ({onCommand, stopVid
 
     return (
         <>
-            {!checkGuideTube && (
+            {!checkGuyTube && (
                 <Box sx={{
                     position: 'fixed',
                     top: 0,
