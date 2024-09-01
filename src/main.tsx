@@ -16,7 +16,6 @@ import AdminPage from './components/pages/AdminPage.tsx';
 import UserProfile from './components/pages/UserProfilePage.tsx';
 import CompaniesPage from "./components/pages/CompaniesPage.tsx";
 import FeedPage from "./components/pages/FeedPage.tsx";
-import AnalyticsPage from './components/pages/AnalyticsPages/AnalyticsPages.tsx';
 
 const router = createBrowserRouter([
     {
@@ -63,10 +62,6 @@ const router = createBrowserRouter([
             {
                 path: 'profile',
                 element: <ProtectedRoute> <UserProfile/> </ProtectedRoute>,
-            },
-            {
-                path: 'analytics',
-                element: <ProtectedRoute> <AnalyticsPage/> </ProtectedRoute>,
             },
             {
                 path: 'error',
